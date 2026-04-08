@@ -7,7 +7,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl">Nerra Hub</CardTitle>
-          <CardDescription>Logg inn for a fortsette</CardDescription>
+          <CardDescription>Logg inn for å fortsette</CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4">
           <LoginButton />

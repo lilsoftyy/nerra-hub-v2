@@ -17,7 +17,7 @@ export default async function DashboardPage() {
         <CardContent>
           <p>Innlogget som {user?.user_metadata?.full_name ?? user?.email}</p>
           <p className="mt-2 text-sm text-muted-foreground">
-            Hub er under utvikling. Kundemodul, oppgaver og godkjenningsko kommer i neste fase.
+            Hub er under utvikling. Kundemodul, oppgaver og godkjenningskø kommer i neste fase.
           </p>
         </CardContent>
       </Card>
