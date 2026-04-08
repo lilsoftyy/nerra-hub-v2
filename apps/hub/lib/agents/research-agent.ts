@@ -61,7 +61,9 @@ Skriv deretter en research-rapport (på norsk bokmål, markdown-formatering) med
 4. **Drone-potensial** — hvis relevant: vurdering av hvor egnet de er for dronebasert fasadevask
 5. **Anbefalinger** — konkrete neste steg for Nerra
 
-Skill tydelig mellom det du har funnet på nett og dine egne vurderinger. Hvis du ikke finner noe om firmaet, si det eksplisitt.`;
+Skill tydelig mellom det du har funnet på nett og dine egne vurderinger. Hvis du ikke finner noe om firmaet, si det eksplisitt.
+
+VIKTIG: Skriv KUN selve rapporten. Ingen innledning om hva du skal søke etter, ingen forklaring av prosessen, ingen "la meg søke"-tekst. Start direkte med overskriften "# Research: ${company.name}" og gå rett på innholdet.`;
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',

@@ -8,47 +8,47 @@ interface MarkdownContentProps {
 
 export function MarkdownContent({ content }: MarkdownContentProps) {
   return (
-    <article className="max-w-none text-base leading-7 text-foreground">
+    <article className="max-w-none text-sm leading-6 text-foreground">
       <ReactMarkdown
         components={{
           h1: ({ children }) => (
-            <h1 className="text-2xl font-semibold mt-8 mb-4 first:mt-0">{children}</h1>
+            <h1 className="text-lg font-semibold mt-5 mb-2 first:mt-0">{children}</h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-xl font-semibold mt-8 mb-3 first:mt-0">{children}</h2>
+            <h2 className="text-base font-semibold mt-5 mb-2 first:mt-0">{children}</h2>
           ),
           h3: ({ children }) => (
-            <h3 className="text-lg font-semibold mt-6 mb-2">{children}</h3>
+            <h3 className="text-sm font-semibold mt-4 mb-1">{children}</h3>
           ),
           h4: ({ children }) => (
-            <h4 className="text-base font-semibold mt-5 mb-2">{children}</h4>
+            <h4 className="text-sm font-semibold mt-3 mb-1">{children}</h4>
           ),
           p: ({ children }) => (
-            <p className="mb-4 leading-7">{children}</p>
+            <p className="mb-3 leading-6">{children}</p>
           ),
           ul: ({ children }) => (
-            <ul className="mb-4 ml-6 list-disc space-y-2">{children}</ul>
+            <ul className="mb-3 ml-5 list-disc space-y-1">{children}</ul>
           ),
           ol: ({ children }) => (
-            <ol className="mb-4 ml-6 list-decimal space-y-2">{children}</ol>
+            <ol className="mb-3 ml-5 list-decimal space-y-1">{children}</ol>
           ),
           li: ({ children }) => (
-            <li className="leading-7">{children}</li>
+            <li className="leading-6">{children}</li>
           ),
           strong: ({ children }) => (
             <strong className="font-semibold">{children}</strong>
           ),
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-muted-foreground/30 pl-4 my-4 italic text-muted-foreground">
+            <blockquote className="border-l-3 border-muted-foreground/30 pl-3 my-3 italic text-muted-foreground">
               {children}
             </blockquote>
           ),
-          hr: () => <hr className="my-8 border-border" />,
+          hr: () => <hr className="my-5 border-border" />,
           code: ({ children }) => (
-            <code className="bg-muted px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>
+            <code className="bg-muted px-1 py-0.5 rounded text-xs font-mono">{children}</code>
           ),
           pre: ({ children }) => (
-            <pre className="bg-muted rounded-lg p-4 my-4 overflow-x-auto text-sm">{children}</pre>
+            <pre className="bg-muted rounded-lg p-3 my-3 overflow-x-auto text-xs">{children}</pre>
           ),
         }}
       >
