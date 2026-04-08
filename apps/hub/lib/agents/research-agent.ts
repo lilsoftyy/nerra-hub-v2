@@ -21,18 +21,12 @@ export async function runResearchAgent(companyId: string): Promise<ResearchResul
     return { document_id: null, error: 'Kunde ikke funnet' };
   }
 
-  // Check if research document already exists
-  const { data: existing } = await supabase
+  // Delete existing research documents so a fresh one can be generated
+  await supabase
     .from('documents')
-    .select('id')
+    .delete()
     .eq('company_id', companyId)
-    .eq('kind', 'research')
-    .limit(1);
-
-  const firstExisting = existing?.[0];
-  if (firstExisting) {
-    return { document_id: firstExisting.id, error: 'Research-dokument finnes allerede' };
-  }
+    .eq('kind', 'research');
 
   const anthropic = getAnthropicClient();
 
