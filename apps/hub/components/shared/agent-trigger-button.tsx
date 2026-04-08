@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 
 interface AgentTriggerButtonProps {
@@ -12,6 +13,7 @@ interface AgentTriggerButtonProps {
 }
 
 export function AgentTriggerButton({ agent, label, companyId, variant = 'outline', size = 'sm' }: AgentTriggerButtonProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
@@ -29,10 +31,13 @@ export function AgentTriggerButton({ agent, label, companyId, variant = 'outline
         setResult(`Feil: ${data.error}`);
       } else if (data.proposals_created !== undefined) {
         setResult(`Ferdig. ${data.proposals_created} forslag opprettet.`);
+        router.refresh();
       } else if (data.document_id) {
         setResult('Research-dokument opprettet.');
+        router.refresh();
       } else {
         setResult('Ferdig.');
+        router.refresh();
       }
     } catch {
       setResult('Noe gikk galt.');

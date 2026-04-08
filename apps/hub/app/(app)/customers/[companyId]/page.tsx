@@ -7,6 +7,8 @@ import { PhaseChecklist } from '@/components/customers/phase-checklist';
 import { ActivityLog } from '@/components/shared/activity-log';
 import { GdprSection } from '@/components/customers/gdpr-section';
 import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
+import { CustomerEditForm } from '@/components/customers/customer-edit-form';
+import { ContactList } from '@/components/customers/contact-list';
 
 const phaseLabels: Record<string, string> = {
   lead: 'Lead',
@@ -92,81 +94,10 @@ export default async function CustomerDetailPage({
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Main info */}
         <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Firmainformasjon</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <dl className="grid grid-cols-2 gap-4 text-sm">
-                {company.org_number && (
-                  <>
-                    <dt className="text-muted-foreground">Org.nr</dt>
-                    <dd>{company.org_number}</dd>
-                  </>
-                )}
-                {company.website && (
-                  <>
-                    <dt className="text-muted-foreground">Nettside</dt>
-                    <dd><a href={company.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline">{company.website}</a></dd>
-                  </>
-                )}
-                {company.operational_area && (
-                  <>
-                    <dt className="text-muted-foreground">Operasjonsomr&#229;de</dt>
-                    <dd>{company.operational_area}</dd>
-                  </>
-                )}
-                {company.employee_count && (
-                  <>
-                    <dt className="text-muted-foreground">Ansatte</dt>
-                    <dd>{company.employee_count}</dd>
-                  </>
-                )}
-                {company.facade_team_size && (
-                  <>
-                    <dt className="text-muted-foreground">Fasadeteam</dt>
-                    <dd>{company.facade_team_size} personer</dd>
-                  </>
-                )}
-                {company.notes && (
-                  <>
-                    <dt className="text-muted-foreground col-span-2">Notater</dt>
-                    <dd className="col-span-2 whitespace-pre-wrap">{company.notes}</dd>
-                  </>
-                )}
-              </dl>
-            </CardContent>
-          </Card>
+          <CustomerEditForm company={company} />
 
           {/* Contacts */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Kontaktpersoner</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {contacts && contacts.length > 0 ? (
-                <div className="space-y-3">
-                  {contacts.map((contact) => (
-                    <div key={contact.id} className="flex items-start justify-between p-3 rounded-lg border">
-                      <div>
-                        <p className="font-medium">
-                          {contact.full_name}
-                          {contact.is_primary && (
-                            <Badge variant="outline" className="ml-2 text-xs">Hovedkontakt</Badge>
-                          )}
-                        </p>
-                        {contact.role && <p className="text-sm text-muted-foreground">{contact.role}</p>}
-                        {contact.email && <p className="text-sm">{contact.email}</p>}
-                        {contact.phone && <p className="text-sm">{contact.phone}</p>}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-sm text-muted-foreground">Ingen kontaktpersoner registrert.</p>
-              )}
-            </CardContent>
-          </Card>
+          <ContactList contacts={contacts ?? []} companyId={company.id} />
 
           {/* Activity log */}
           <ActivityLog companyId={company.id} />
