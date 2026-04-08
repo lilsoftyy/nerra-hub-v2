@@ -25,6 +25,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <Link href="/customers" className="text-muted-foreground hover:text-foreground transition-colors">
                 Kunder
               </Link>
+              <Link href="/tasks" className="text-muted-foreground hover:text-foreground transition-colors">
+                Oppgaver
+              </Link>
             </nav>
           </div>
           <span className="text-sm text-muted-foreground">{user.email}</span>
