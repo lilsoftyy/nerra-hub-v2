@@ -28,6 +28,12 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <Link href="/tasks" className="text-muted-foreground hover:text-foreground transition-colors">
                 Oppgaver
               </Link>
+              <Link href="/documents" className="text-muted-foreground hover:text-foreground transition-colors">
+                Dokumenter
+              </Link>
+              <Link href="/contracts" className="text-muted-foreground hover:text-foreground transition-colors">
+                Kontrakter
+              </Link>
             </nav>
           </div>
           <span className="text-sm text-muted-foreground">{user.email}</span>

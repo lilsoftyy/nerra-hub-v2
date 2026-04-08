@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { PhaseChangeButton } from '@/components/customers/phase-change-button';
 import { PhaseChecklist } from '@/components/customers/phase-checklist';
 import { ActivityLog } from '@/components/shared/activity-log';
+import { GdprSection } from '@/components/customers/gdpr-section';
 
 const phaseLabels: Record<string, string> = {
   lead: 'Lead',
@@ -173,6 +174,7 @@ export default async function CustomerDetailPage({
         {/* Sidebar */}
         <div className="space-y-6">
           <PhaseChecklist items={checklistItems ?? []} companyId={company.id} />
+          <GdprSection companyId={company.id} companyName={company.name} />
         </div>
       </div>
     </div>

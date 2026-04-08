@@ -54,3 +54,35 @@ export const taskCategoryLabels: Record<string, string> = {
   research: 'Research',
   other: 'Annet',
 };
+
+export const documentKindLabels: Record<string, string> = {
+  research: 'Research',
+  customer_report: 'Kunderapport',
+  welcome_package: 'Velkomstpakke',
+  contract: 'Kontrakt',
+  briefing: 'Briefing',
+  other: 'Annet',
+};
+
+export const documentVisibilityLabels: Record<string, string> = {
+  internal: 'Intern',
+  customer_shareable: 'Kundesynlig',
+};
+
+export const contractStatusLabels: Record<string, string> = {
+  draft: 'Utkast',
+  sent: 'Sendt',
+  viewed: 'Sett',
+  signed: 'Signert',
+  declined: 'Avsl\u00e5tt',
+  expired: 'Utl\u00f8pt',
+};
+
+export const contractStatusColors: Record<string, string> = {
+  draft: 'bg-gray-100 text-gray-800',
+  sent: 'bg-blue-100 text-blue-800',
+  viewed: 'bg-yellow-100 text-yellow-800',
+  signed: 'bg-green-100 text-green-800',
+  declined: 'bg-red-100 text-red-800',
+  expired: 'bg-gray-100 text-gray-800',
+};
