@@ -9,6 +9,7 @@ import { GdprSection } from '@/components/customers/gdpr-section';
 import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 import { CustomerEditForm } from '@/components/customers/customer-edit-form';
 import { ContactList } from '@/components/customers/contact-list';
+import { QualificationResponse } from '@/components/customers/qualification-response';
 
 const phaseLabels: Record<string, string> = {
   lead: 'Lead',
@@ -62,6 +63,12 @@ export default async function CustomerDetailPage({
     .eq('phase', company.phase)
     .order('sort_order');
 
+  const { data: qualificationResponse } = await supabase
+    .from('qualification_form_responses')
+    .select('*')
+    .eq('company_id', companyId)
+    .single();
+
   const currentPhaseIndex = phases.indexOf(company.phase);
   const nextPhase = currentPhaseIndex < phases.length - 1 ? phases[currentPhaseIndex + 1] : null;
 
@@ -98,6 +105,11 @@ export default async function CustomerDetailPage({
 
           {/* Contacts */}
           <ContactList contacts={contacts ?? []} companyId={company.id} />
+
+          {/* Qualification response */}
+          {qualificationResponse && (
+            <QualificationResponse response={qualificationResponse} />
+          )}
 
           {/* Activity log */}
           <ActivityLog companyId={company.id} />

@@ -14,7 +14,8 @@ export function IntegratedForm() {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      const res = await fetch('/api/submit', {
+      const hubUrl = process.env.NEXT_PUBLIC_HUB_URL || 'https://nerra-hub.vercel.app';
+      const res = await fetch(`${hubUrl}/api/public/qualification`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(data),
