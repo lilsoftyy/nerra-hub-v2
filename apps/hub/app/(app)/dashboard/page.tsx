@@ -1,13 +1,13 @@
 import { createClient } from '@/lib/supabase/server';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import {
   phaseLabels,
   taskPriorityLabels,
   taskPriorityColors,
 } from '@/lib/labels';
 import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
+import { ProposalActions } from '@/components/dashboard/proposal-actions';
 
 const phaseDotColors: Record<string, string> = {
   lead: 'bg-gray-400',
@@ -224,14 +224,7 @@ export default async function DashboardPage() {
                             {formatRelativeTime(proposal.created_at)}
                           </p>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Button size="sm" variant="default">
-                            Godkjenn
-                          </Button>
-                          <Button size="sm" variant="outline">
-                            Avvis
-                          </Button>
-                        </div>
+                        <ProposalActions proposalId={proposal.id} />
                       </div>
                     );
                   })}

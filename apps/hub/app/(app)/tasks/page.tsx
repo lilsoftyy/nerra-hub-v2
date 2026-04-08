@@ -17,6 +17,7 @@ import {
   taskPriorityColors,
   taskCategoryLabels,
 } from '@/lib/labels';
+import { TaskStatusButton } from '@/components/tasks/task-status-button';
 
 interface TasksPageProps {
   searchParams: Promise<{ status?: string }>;
@@ -84,6 +85,7 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
               <TableHead>Kategori</TableHead>
               <TableHead>Forfallsdato</TableHead>
               <TableHead>Kunde</TableHead>
+              <TableHead>Handling</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -116,6 +118,9 @@ export default async function TasksPage({ searchParams }: TasksPageProps) {
                   </TableCell>
                   <TableCell className="text-muted-foreground">
                     {company?.name ?? '-'}
+                  </TableCell>
+                  <TableCell>
+                    <TaskStatusButton taskId={task.id} currentStatus={task.status} />
                   </TableCell>
                 </TableRow>
               );

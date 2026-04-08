@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { createClient } from '@/lib/supabase/server';
 import { Badge } from '@/components/ui/badge';
 import {
@@ -44,7 +45,11 @@ export default async function DocumentsPage() {
                 const company = doc.companies as unknown as { name: string } | null;
                 return (
                   <TableRow key={doc.id}>
-                    <TableCell className="font-medium">{doc.title}</TableCell>
+                    <TableCell>
+                      <Link href={`/documents/${doc.id}`} className="font-medium hover:underline">
+                        {doc.title}
+                      </Link>
+                    </TableCell>
                     <TableCell>
                       <Badge variant="secondary">
                         {documentKindLabels[doc.kind] ?? doc.kind}
