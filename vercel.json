@@ -1,6 +1,5 @@
 {
-  "buildCommand": "pnpm --filter @nerra/hub build",
+  "buildCommand": "cd apps/hub && pnpm run build",
   "installCommand": "pnpm install",
-  "framework": "nextjs",
-  "outputDirectory": "apps/hub/.next"
+  "framework": "nextjs"
 }
