@@ -137,3 +137,35 @@ export async function addContact(companyId: string, formData: FormData) {
   if (error) return { error: error.message };
   return { success: true };
 }
+
+export async function updateContact(contactId: string, formData: FormData) {
+  const supabase = await createClient();
+
+  const fullName = formData.get('full_name') as string;
+  if (!fullName) return { error: 'Navn er påkrevd' };
+
+  const { error } = await supabase
+    .from('contacts')
+    .update({
+      full_name: fullName,
+      email: (formData.get('email') as string) || null,
+      phone: (formData.get('phone') as string) || null,
+      role: (formData.get('role') as string) || null,
+    })
+    .eq('id', contactId);
+
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function deleteContact(contactId: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase
+    .from('contacts')
+    .delete()
+    .eq('id', contactId);
+
+  if (error) return { error: error.message };
+  return { success: true };
+}
