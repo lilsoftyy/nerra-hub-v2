@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server';
 import { updateSession } from '@/lib/supabase/middleware';
 
-const ALLOWED_EMAILS = ['magnus@nerra.com', 'martin@nerra.com'];
+const ALLOWED_EMAILS = ['magnus@nerra.no', 'martin@nerra.no'];
 
 const PUBLIC_ROUTES = ['/login', '/auth/callback', '/api/health'];
 
