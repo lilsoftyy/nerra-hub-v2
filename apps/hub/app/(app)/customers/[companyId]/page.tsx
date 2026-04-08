@@ -6,6 +6,7 @@ import { PhaseChangeButton } from '@/components/customers/phase-change-button';
 import { PhaseChecklist } from '@/components/customers/phase-checklist';
 import { ActivityLog } from '@/components/shared/activity-log';
 import { GdprSection } from '@/components/customers/gdpr-section';
+import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 
 const phaseLabels: Record<string, string> = {
   lead: 'Lead',
@@ -175,6 +176,21 @@ export default async function CustomerDetailPage({
         <div className="space-y-6">
           <PhaseChecklist items={checklistItems ?? []} companyId={company.id} />
           <GdprSection companyId={company.id} companyName={company.name} />
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">AI-agenter</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <AgentTriggerButton
+                agent="agent_6_lead_research"
+                label="Generer research"
+                companyId={company.id}
+              />
+              <p className="text-xs text-muted-foreground mt-1">
+                Bruker AI til å lage en research-rapport for denne kunden.
+              </p>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

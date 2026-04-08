@@ -7,6 +7,7 @@ import {
   taskPriorityLabels,
   taskPriorityColors,
 } from '@/lib/labels';
+import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 
 const phaseDotColors: Record<string, string> = {
   lead: 'bg-gray-400',
@@ -238,6 +239,22 @@ export default async function DashboardPage() {
               ) : (
                 <p className="text-sm text-muted-foreground">Ingen ventende godkjenninger</p>
               )}
+            </CardContent>
+          </Card>
+
+          {/* Agenter */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Agenter</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              <AgentTriggerButton
+                agent="agent_3_project"
+                label="Kjør prosjektagent"
+              />
+              <p className="text-xs text-muted-foreground">
+                Sjekker alle kunder og foreslår faseoverganger basert på fullførte sjekkpunkter.
+              </p>
             </CardContent>
           </Card>
         </div>
