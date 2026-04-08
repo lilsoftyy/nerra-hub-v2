@@ -4,6 +4,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { documentKindLabels, documentVisibilityLabels } from '@/lib/labels';
 import Link from 'next/link';
+import { MarkdownContent } from '@/components/shared/markdown-content';
 
 export default async function DocumentDetailPage({
   params,
@@ -51,9 +52,7 @@ export default async function DocumentDetailPage({
       <Card>
         <CardContent className="pt-6">
           {doc.content_markdown ? (
-            <div className="prose prose-sm max-w-none whitespace-pre-wrap">
-              {doc.content_markdown}
-            </div>
+            <MarkdownContent content={doc.content_markdown} />
           ) : (
             <p className="text-muted-foreground">Ingen innhold tilgjengelig.</p>
           )}
