@@ -1,0 +1,24 @@
+{
+  "name": "@nerra/qualification-form",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "next dev --port 3001 --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "next": "^15.3.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
+  },
+  "devDependencies": {
+    "@nerra/config": "workspace:*",
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "typescript": "^5.8.0"
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "name": "@nerra/ui",
+  "private": true,
+  "version": "0.0.0",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "^19.1.0"
+  },
+  "devDependencies": {
+    "@nerra/config": "workspace:*",
+    "@types/react": "^19.1.0",
+    "typescript": "^5.8.0"
+  }
+}
