@@ -6,6 +6,12 @@ const ALLOWED_EMAILS = ['magnus@nerra.no', 'martin@nerra.no'];
 const PUBLIC_ROUTES = ['/login', '/auth/callback', '/api/health'];
 
 export async function middleware(request: NextRequest) {
+  // Skip auth entirely on localhost for faster development
+  const host = request.headers.get('host') ?? '';
+  if (host.startsWith('localhost') || host.startsWith('127.0.0.1')) {
+    return NextResponse.next();
+  }
+
   const { pathname } = request.nextUrl;
   if (PUBLIC_ROUTES.some((route) => pathname.startsWith(route))) {
     const { supabaseResponse } = await updateSession(request);

@@ -1,15 +1,25 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const headersList = await headers();
+  const host = headersList.get('host') ?? '';
+  const isDev = host.startsWith('localhost') || host.startsWith('127.0.0.1');
 
-  if (!user) {
-    redirect('/login');
+  let userEmail = 'dev@localhost';
+
+  if (!isDev) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      redirect('/login');
+    }
+    userEmail = user.email ?? '';
   }
 
   return (
@@ -19,7 +29,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
           <div className="flex items-center gap-6">
             <h1 className="text-lg font-semibold">Nerra Hub</h1>
             <nav className="flex items-center gap-4 text-sm">
-              <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+              <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
                 Dashboard
               </Link>
               <Link href="/customers" className="text-muted-foreground hover:text-foreground transition-colors">
@@ -36,7 +46,7 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               </Link>
             </nav>
           </div>
-          <span className="text-sm text-muted-foreground">{user.email}</span>
+          <span className="text-sm text-muted-foreground">{userEmail}</span>
         </div>
       </header>
       <main className="p-6">{children}</main>

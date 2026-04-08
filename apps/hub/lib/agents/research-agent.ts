@@ -33,38 +33,66 @@ export async function runResearchAgent(companyId: string): Promise<ResearchResul
   const contacts = company.contacts as Array<{ full_name: string; role?: string; email?: string }> ?? [];
   const contactInfo = contacts.map((c) => `${c.full_name}${c.role ? ` (${c.role})` : ''}`).join(', ');
 
-  const prompt = `Du er en research-agent for Nerra AS, et B2B-konsulentselskap som hjelper fasadevaskfirmaer med å ta i bruk droner.
+  const prompt = `Du er en research-agent for Nerra AS, et B2B-konsulentselskap som hjelper fasadevaskfirmaer med å ta i bruk droner (Drone Wash Academy).
 
-Generer en research-rapport (på norsk bokmål) for følgende firma:
+Bruk nettsøk til å finne informasjon om følgende firma. Søk på firmanavnet, nettsiden deres, og relevante bransjedetaljer.
 
-Firmanavn: ${company.name}
-Land: ${company.country}
-${company.operational_area ? `Operasjonsområde: ${company.operational_area}` : ''}
-${company.website ? `Nettside: ${company.website}` : ''}
-${company.employee_count ? `Ansatte: ${company.employee_count}` : ''}
-${company.facade_team_size ? `Fasadeteam: ${company.facade_team_size} personer` : ''}
-${contactInfo ? `Kontakter: ${contactInfo}` : ''}
-${company.notes ? `Notater: ${company.notes}` : ''}
+Firma vi skal undersøke:
+- Firmanavn: ${company.name}
+- Land: ${company.country}
+${company.operational_area ? `- Operasjonsområde: ${company.operational_area}` : ''}
+${company.website ? `- Nettside: ${company.website}` : ''}
+${company.employee_count ? `- Ansatte: ${company.employee_count}` : ''}
+${company.facade_team_size ? `- Fasadeteam: ${company.facade_team_size} personer` : ''}
+${contactInfo ? `- Kontakter: ${contactInfo}` : ''}
+${company.notes ? `- Notater: ${company.notes}` : ''}
 
-Rapporten skal inneholde:
-1. **Oppsummering** — kort om firmaet og deres potensial som DWA-kunde
-2. **Markedsposisjon** — hva vi vet om deres posisjon i fasadevaskmarkedet
-3. **Drone-potensial** — vurdering av hvor egnet de er for dronebasert fasadevask
-4. **Anbefalinger** — konkrete neste steg for Nerra
+Søk aktivt på internett etter informasjon om dette firmaet. Finn ut:
+- Hva firmaet gjør og hvilke tjenester de tilbyr
+- Størrelse, omsetning og markedsposisjon hvis tilgjengelig
+- Om de driver med fasadevask, bygningsvedlikehold, eller relaterte tjenester
+- Relevante nyheter eller prosjekter
 
-Hold deg til det du faktisk vet fra dataene over. Ikke finn opp fakta. Hvis du mangler informasjon, si det eksplisitt. Bruk markdown-formatering.`;
+Skriv deretter en research-rapport (på norsk bokmål, markdown-formatering) med disse seksjonene:
+
+1. **Oppsummering** — hvem firmaet er og hva de gjør, basert på det du fant på nett
+2. **Tjenester og kompetanse** — hva de tilbyr, hvilke markeder de opererer i
+3. **Relevans for Nerra** — vurdering av om og hvordan dette firmaet er relevant for Nerra (som kunde, partner, eller annet)
+4. **Drone-potensial** — hvis relevant: vurdering av hvor egnet de er for dronebasert fasadevask
+5. **Anbefalinger** — konkrete neste steg for Nerra
+
+Skill tydelig mellom det du har funnet på nett og dine egne vurderinger. Hvis du ikke finner noe om firmaet, si det eksplisitt.`;
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
-    max_tokens: 1500,
+    max_tokens: 4096,
+    tools: [
+      {
+        type: 'web_search_20250305',
+        name: 'web_search',
+        max_uses: 10,
+      },
+    ],
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const firstBlock = message.content[0];
-  const content = firstBlock?.type === 'text' ? firstBlock.text : '';
+  // Extract text from the response (may contain multiple blocks due to tool use)
+  const content = message.content
+    .filter((block) => block.type === 'text')
+    .map((block) => 'text' in block ? block.text : '')
+    .join('\n\n');
 
-  // Generate summary (first paragraph)
-  const summary = content.split('\n\n')[0]?.replace(/[#*]/g, '').trim().slice(0, 200) ?? '';
+  if (!content) {
+    return { document_id: null, error: 'Agenten genererte ingen tekst' };
+  }
+
+  // Generate summary (first meaningful paragraph)
+  const summary = content
+    .split('\n\n')
+    .find((p) => p.length > 20)
+    ?.replace(/[#*]/g, '')
+    .trim()
+    .slice(0, 200) ?? '';
 
   // Save document
   const docId = uuidv7();
