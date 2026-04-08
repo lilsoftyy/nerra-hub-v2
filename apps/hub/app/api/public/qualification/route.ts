@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/lib/supabase/server';
+import { createServiceClient } from '@/lib/supabase/service';
 import { v7 as uuidv7 } from 'uuid';
 import { z } from 'zod';
 import crypto from 'crypto';
@@ -37,7 +37,7 @@ export async function POST(request: Request) {
     }
 
     const data = parsed.data;
-    const supabase = await createClient();
+    const supabase = createServiceClient();
 
     // 1. Create company
     const companyId = uuidv7();
