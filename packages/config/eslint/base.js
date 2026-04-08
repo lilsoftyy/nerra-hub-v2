@@ -42,6 +42,7 @@ export default [
       '**/app/api/webhooks/**',
       '**/app/api/cron/**',
       '**/app/api/agent-auth/**',
+      '**/app/api/public/**',
     ],
     rules: {
       'no-restricted-imports': 'off',
