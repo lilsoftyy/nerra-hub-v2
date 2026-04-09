@@ -110,29 +110,27 @@ export function AIContactLookup() {
                 onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
               />
             </div>
-            <div className="flex items-end gap-2">
-              <div className="flex-1 space-y-2">
-                <Label htmlFor="lookup-company">Selskap</Label>
-                <Input
-                  id="lookup-company"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
-                />
-              </div>
-              <button
-                onClick={handleSearch}
-                disabled={searching || !name.trim() || !company.trim()}
-                className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-[opacity] duration-150 hover:opacity-80 disabled:opacity-40"
-                aria-label="Søk"
-              >
-                {searching ? (
-                  <Loader2 className="size-4 animate-spin" />
-                ) : (
-                  <Search className="size-4" strokeWidth={1.75} />
-                )}
-              </button>
+            <div className="space-y-2">
+              <Label htmlFor="lookup-company">Selskap</Label>
+              <Input
+                id="lookup-company"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+              />
             </div>
+            <button
+              onClick={handleSearch}
+              disabled={searching || !name.trim() || !company.trim()}
+              className="flex size-9 mx-auto items-center justify-center rounded-full bg-primary text-primary-foreground transition-[opacity] duration-150 hover:opacity-80 disabled:opacity-40"
+              aria-label="Søk"
+            >
+              {searching ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Search className="size-4" strokeWidth={1.75} />
+              )}
+            </button>
             {error && <p className="text-xs text-red-600">{error}</p>}
           </div>
         )}
