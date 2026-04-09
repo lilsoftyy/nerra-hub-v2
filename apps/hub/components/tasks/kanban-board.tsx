@@ -158,9 +158,9 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                     onDragStart={(e) => handleDragStart(e, task.id)}
                     onDragEnd={handleDragEnd}
                     onClick={() => handleCardClick(task)}
-                    className={`cursor-grab p-3 transition-[opacity,box-shadow] duration-150 active:cursor-grabbing ${
+                    className={`cursor-grab p-3 !shadow-none border transition-[opacity] duration-150 active:cursor-grabbing ${
                       isDragging ? 'opacity-50' : ''
-                    } ${isUpdating ? 'opacity-70' : ''} hover:shadow-sm hover:border-border`}
+                    } ${isUpdating ? 'opacity-70' : ''}`}
                   >
                     <div className="flex items-start gap-2">
                       <GripVertical
