@@ -15,9 +15,12 @@ interface LookupResult {
   person_email: string | null;
   person_role: string | null;
   person_phone: string | null;
+  person_linkedin: string | null;
   company_name: string;
   company_country: string | null;
   company_website: string | null;
+  company_email: string | null;
+  company_phone: string | null;
   company_employee_count: number | null;
   company_description: string | null;
   company_operational_area: string | null;
@@ -106,20 +109,27 @@ export function AIContactLookup() {
       )}
 
       {step === 'review' && result && (
-        <div className="space-y-4">
+        <div className="space-y-3">
           <h3 className="text-base font-semibold">Bekreft</h3>
-          <div className="rounded-xl bg-muted/30 px-4 py-3">
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-1.5">Person</p>
-            <p className="text-sm font-medium">{result.person_name}</p>
-            {result.person_role && <p className="text-xs text-muted-foreground">{result.person_role}</p>}
-            {result.person_email && <p className="text-xs text-muted-foreground">{result.person_email}</p>}
-            {result.person_phone && <p className="text-xs text-muted-foreground">{result.person_phone}</p>}
+
+          <div className="rounded-xl bg-muted/30 px-4 py-3 space-y-2">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Person</p>
+            <div className="grid grid-cols-2 gap-2">
+              <Input value={result.person_name} onChange={(e) => setResult({ ...result, person_name: e.target.value })} className="h-8 text-xs" />
+              <Input value={result.person_role ?? ''} onChange={(e) => setResult({ ...result, person_role: e.target.value || null })} placeholder="Rolle" className="h-8 text-xs" />
+              <Input value={result.person_email ?? ''} onChange={(e) => setResult({ ...result, person_email: e.target.value || null })} placeholder="E-post" className="h-8 text-xs" />
+              <Input value={result.person_phone ?? ''} onChange={(e) => setResult({ ...result, person_phone: e.target.value || null })} placeholder="Telefon" className="h-8 text-xs" />
+            </div>
+            {result.person_linkedin && (
+              <a href={result.person_linkedin} target="_blank" rel="noopener noreferrer" className="text-xs text-primary hover:underline">LinkedIn-profil</a>
+            )}
           </div>
-          <div className="rounded-xl bg-muted/30 px-4 py-3">
-            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-1.5">Selskap</p>
+
+          <div className="rounded-xl bg-muted/30 px-4 py-3 space-y-2">
+            <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground">Selskap</p>
             <p className="text-sm font-medium">{result.company_name}</p>
-            {result.company_description && <p className="text-xs text-muted-foreground mt-0.5">{result.company_description}</p>}
-            <div className="mt-1.5 flex flex-wrap gap-x-2 text-xs text-muted-foreground">
+            {result.company_description && <p className="text-xs text-muted-foreground">{result.company_description}</p>}
+            <div className="flex flex-wrap gap-x-2 text-xs text-muted-foreground">
               {result.company_country && <span>{result.company_country}</span>}
               {result.company_employee_count && <span>· {result.company_employee_count} ansatte</span>}
               {result.company_website && (
@@ -128,7 +138,14 @@ export function AIContactLookup() {
                 </a>
               )}
             </div>
+            {(result.company_email || result.company_phone) && (
+              <div className="flex flex-wrap gap-x-3 text-xs text-muted-foreground">
+                {result.company_email && <span>{result.company_email}</span>}
+                {result.company_phone && <span>{result.company_phone}</span>}
+              </div>
+            )}
           </div>
+
           <div className="flex items-center gap-2">
             <Checkbox id="is-potential-customer" checked={isPotentialCustomer} onCheckedChange={(v) => setIsPotentialCustomer(v === true)} />
             <Label htmlFor="is-potential-customer" className="text-sm">Potensiell kunde</Label>
@@ -136,7 +153,7 @@ export function AIContactLookup() {
           {error && <p className="text-xs text-red-600">{error}</p>}
           <div className="flex gap-2">
             <Button variant="outline" size="sm" className="flex-1" onClick={() => { setStep('search'); setResult(null); }}>Søk på nytt</Button>
-            <Button size="sm" className="flex-1" onClick={handleSave} disabled={saving}>{saving ? 'Lagrer...' : 'Lagre kontakt'}</Button>
+            <Button size="sm" className="flex-1" onClick={handleSave} disabled={saving}>{saving ? 'Lagrer...' : 'Lagre'}</Button>
           </div>
         </div>
       )}

@@ -163,9 +163,12 @@ export async function createContactFromLookup(data: {
   person_email: string | null;
   person_role: string | null;
   person_phone: string | null;
+  person_linkedin?: string | null;
   company_name: string;
   company_country: string | null;
   company_website: string | null;
+  company_email?: string | null;
+  company_phone?: string | null;
   company_employee_count: number | null;
   company_description: string | null;
   company_operational_area: string | null;
@@ -181,7 +184,7 @@ export async function createContactFromLookup(data: {
     website: data.company_website || null,
     employee_count: data.company_employee_count || null,
     operational_area: data.company_operational_area || null,
-    notes: data.company_description || null,
+    notes: [data.company_description, data.company_email ? `E-post: ${data.company_email}` : null, data.company_phone ? `Tlf: ${data.company_phone}` : null].filter(Boolean).join('\n') || null,
     phase: data.is_potential_customer ? 'lead' : 'operational',
   });
 

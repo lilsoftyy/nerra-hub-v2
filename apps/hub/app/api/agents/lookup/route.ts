@@ -36,16 +36,25 @@ export async function POST(request: NextRequest) {
 Personnavn: ${name}
 Selskap: ${company}
 
-Søk på nettet og returner følgende i JSON-format (ingenting annet, bare ren JSON):
+Søkestrategi:
+1. Søk etter personens LinkedIn-profil: "${name} ${company} LinkedIn"
+2. Søk etter personens direkte e-post og telefonnummer
+3. Søk etter selskapets nettside og generell info
+4. Søk etter selskapets generelle e-post/kontaktinfo (f.eks. post@selskap.com)
+
+Returner følgende i JSON-format (ingenting annet, bare ren JSON):
 
 {
   "person_name": "Fullt navn",
-  "person_email": "e-post hvis funnet, ellers null",
+  "person_email": "personens DIREKTE e-postadresse hvis funnet, ellers null. IKKE selskapets generelle e-post (post@, info@, kontakt@). Kun personlig e-post som fornavn@selskap.com eller lignende.",
   "person_role": "stilling/rolle hvis funnet, ellers null",
-  "person_phone": "telefon hvis funnet, ellers null",
+  "person_phone": "personens direkte telefonnummer hvis funnet, ellers null. IKKE selskapets sentralbord.",
+  "person_linkedin": "URL til LinkedIn-profil hvis funnet, ellers null",
   "company_name": "Offisielt firmanavn",
   "company_country": "Land (ISO 2-bokstavs kode, f.eks. NO, SE, DE)",
   "company_website": "URL til nettside hvis funnet, ellers null",
+  "company_email": "selskapets generelle e-postadresse (post@, info@, kontakt@) hvis funnet, ellers null",
+  "company_phone": "selskapets hovednummer hvis funnet, ellers null",
   "company_employee_count": tall eller null,
   "company_description": "Kort beskrivelse av hva selskapet gjør (1-2 setninger)",
   "company_operational_area": "Geografisk operasjonsområde hvis relevant, ellers null"
