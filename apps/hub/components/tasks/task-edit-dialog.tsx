@@ -126,7 +126,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
                 id="edit-priority"
                 name="priority"
                 defaultValue={task.priority}
-                className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 {Object.entries(taskPriorityLabels).map(([value, label]) => (
                   <option key={value} value={value}>{label}</option>
@@ -140,7 +140,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
                 id="edit-category"
                 name="category"
                 defaultValue={task.category ?? ''}
-                className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 <option value="">Ingen kategori</option>
                 {Object.entries(taskCategoryLabels).map(([value, label]) => (
@@ -157,7 +157,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
                 id="edit-company"
                 name="company_id"
                 defaultValue={task.company_id ?? ''}
-                className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               >
                 <option value="">Ingen kunde</option>
                 {companies.map((c) => (

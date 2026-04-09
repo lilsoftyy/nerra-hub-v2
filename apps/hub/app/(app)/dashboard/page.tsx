@@ -10,6 +10,7 @@ import {
 } from '@/lib/labels';
 import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 import { ProposalActions } from '@/components/dashboard/proposal-actions';
+import { TaskCreateDialog } from '@/components/tasks/task-create-dialog';
 import {
   Bell,
   Calendar,
@@ -86,6 +87,7 @@ export default async function DashboardPage() {
     proposalsListResult,
     pipelineResult,
     activityResult,
+    companiesListResult,
   ] = await Promise.all([
     supabase
       .from('companies')
@@ -140,7 +142,14 @@ export default async function DashboardPage() {
       .select('id, action, actor_name, actor_type, company_id, created_at, companies(name)')
       .order('created_at', { ascending: false })
       .limit(8),
+    supabase
+      .from('companies')
+      .select('id, name')
+      .is('deleted_at', null)
+      .order('name'),
   ]);
+
+  const allCompanies = (companiesListResult.data ?? []).map((c) => ({ id: c.id, name: c.name }));
 
   const activeCompaniesCount = companiesResult.count ?? 0;
   const openTasksCount = openTasksResult.count ?? 0;
@@ -239,13 +248,7 @@ export default async function DashboardPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-3">
               <CardTitle className="text-sm font-medium">Mine oppgaver</CardTitle>
-              <Link
-                href="/tasks/new"
-                className="flex items-center gap-1 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
-              >
-                <Plus className="size-3" strokeWidth={2} aria-hidden="true" />
-                Ny oppgave
-              </Link>
+              <TaskCreateDialog companies={allCompanies} />
             </CardHeader>
             <CardContent className="pt-0">
               {myTasks.length > 0 ? (

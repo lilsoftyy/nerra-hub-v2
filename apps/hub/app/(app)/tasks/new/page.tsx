@@ -53,7 +53,7 @@ export default async function NewTaskPage() {
                   id="priority"
                   name="priority"
                   defaultValue="medium"
-                  className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                 >
                   {Object.entries(taskPriorityLabels).map(([value, label]) => (
                     <option key={value} value={value}>
@@ -69,7 +69,7 @@ export default async function NewTaskPage() {
                   id="category"
                   name="category"
                   defaultValue=""
-                  className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                 >
                   <option value="">Velg kategori...</option>
                   {Object.entries(taskCategoryLabels).map(([value, label]) => (
@@ -88,7 +88,7 @@ export default async function NewTaskPage() {
                   id="company_id"
                   name="company_id"
                   defaultValue=""
-                  className="flex h-8 w-full rounded-lg border border-input bg-transparent px-2.5 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
                 >
                   <option value="">Ingen kunde</option>
                   {companies?.map((company) => (
