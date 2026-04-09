@@ -199,7 +199,7 @@ export default async function DashboardPage() {
   const todayHasContent = todayTasks.length > 0 || overdueTasks.length > 0 || pendingProposalsCount > 0 || todayEvents.length > 0;
 
   const stats = [
-    { label: 'Aktive kunder', value: activeCompaniesCount, href: '/customers' },
+    { label: 'Aktive kontakter', value: activeCompaniesCount, href: '/customers' },
     { label: 'Åpne oppgaver', value: openTasksCount, href: '/tasks' },
     { label: 'Godkjenninger', value: pendingProposalsCount, href: undefined },
     { label: 'I opplæring', value: trainingCompaniesCount, href: '/customers' },
@@ -408,7 +408,7 @@ export default async function DashboardPage() {
                 href="/customers"
                 className="flex items-center gap-1 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
               >
-                Alle kunder
+                Alle kontakter
                 <ArrowRight className="size-3" strokeWidth={2} aria-hidden="true" />
               </Link>
             </CardHeader>

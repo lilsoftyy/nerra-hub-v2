@@ -158,6 +158,62 @@ export async function updateContact(contactId: string, formData: FormData) {
   return { success: true };
 }
 
+export async function createContactFromLookup(data: {
+  person_name: string;
+  person_email: string | null;
+  person_role: string | null;
+  person_phone: string | null;
+  company_name: string;
+  company_country: string | null;
+  company_website: string | null;
+  company_employee_count: number | null;
+  company_description: string | null;
+  company_operational_area: string | null;
+  is_potential_customer: boolean;
+}) {
+  const supabase = await createClient();
+  const companyId = uuidv7();
+
+  const { error: companyError } = await supabase.from('companies').insert({
+    id: companyId,
+    name: data.company_name,
+    country: data.company_country || 'NO',
+    website: data.company_website || null,
+    employee_count: data.company_employee_count || null,
+    operational_area: data.company_operational_area || null,
+    notes: data.company_description || null,
+    phase: data.is_potential_customer ? 'lead' : 'operational',
+  });
+
+  if (companyError) return { error: companyError.message };
+
+  await supabase.from('contacts').insert({
+    id: uuidv7(),
+    company_id: companyId,
+    full_name: data.person_name,
+    email: data.person_email || null,
+    phone: data.person_phone || null,
+    role: data.person_role || null,
+    is_primary: true,
+  });
+
+  await supabase.from('activity_log').insert({
+    id: uuidv7(),
+    actor_type: 'human',
+    action: 'contact.created_via_ai_lookup',
+    entity_type: 'company',
+    entity_id: companyId,
+    company_id: companyId,
+    details: {
+      person: data.person_name,
+      company: data.company_name,
+      is_potential_customer: data.is_potential_customer,
+    },
+  });
+
+  return { success: true, companyId };
+}
+
 export async function deleteContact(contactId: string) {
   const supabase = await createClient();
 

@@ -24,9 +24,9 @@ const navGroups = [
     ],
   },
   {
-    label: 'Kunder',
+    label: 'CRM',
     items: [
-      { href: '/customers', label: 'Kunder', icon: Users },
+      { href: '/customers', label: 'Kontakter', icon: Users },
       { href: '/tasks', label: 'Oppgaver', icon: CheckSquare },
     ],
   },
