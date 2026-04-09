@@ -7,6 +7,7 @@ import {
   LayoutDashboard,
   Inbox,
   Users,
+  Building2,
   CheckSquare,
   FileText,
   FileSignature,
@@ -27,6 +28,7 @@ const navGroups = [
     label: 'CRM',
     items: [
       { href: '/customers', label: 'Personer', icon: Users },
+      { href: '/companies', label: 'Firma', icon: Building2 },
       { href: '/tasks', label: 'Oppgaver', icon: CheckSquare },
     ],
   },
