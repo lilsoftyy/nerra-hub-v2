@@ -149,12 +149,6 @@ export function PersonsList({ persons }: { persons: Person[] }) {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-10">
-                <Checkbox
-                  checked={selected.size === filtered.length && filtered.length > 0}
-                  onCheckedChange={toggleAll}
-                />
-              </TableHead>
               <TableHead className={headClass} onClick={() => handleSort('full_name')}>
                 Navn<SortIcon col="full_name" />
               </TableHead>
@@ -166,6 +160,12 @@ export function PersonsList({ persons }: { persons: Person[] }) {
               <TableHead>Type</TableHead>
               <TableHead>Land</TableHead>
               <TableHead className="w-16" />
+              <TableHead className="w-10">
+                <Checkbox
+                  checked={selected.size === filtered.length && filtered.length > 0}
+                  onCheckedChange={toggleAll}
+                />
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -174,12 +174,6 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                 const isPotentialCustomer = p.company_phase ? potentialCustomerPhases.includes(p.company_phase) : false;
                 return (
                   <TableRow key={p.id} className={selected.has(p.id) ? 'bg-primary/[0.03]' : ''}>
-                    <TableCell>
-                      <Checkbox
-                        checked={selected.has(p.id)}
-                        onCheckedChange={() => toggleSelect(p.id)}
-                      />
-                    </TableCell>
                     <TableCell>
                       <div>
                         <p className="text-sm font-medium">{p.full_name}</p>
@@ -212,6 +206,12 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                         {p.email && <QuickEmailButton email={p.email} name={p.full_name} />}
                         <PersonEditButton contactId={p.id} fullName={p.full_name} email={p.email} phone={p.phone} role={p.role} />
                       </div>
+                    </TableCell>
+                    <TableCell>
+                      <Checkbox
+                        checked={selected.has(p.id)}
+                        onCheckedChange={() => toggleSelect(p.id)}
+                      />
                     </TableCell>
                   </TableRow>
                 );
