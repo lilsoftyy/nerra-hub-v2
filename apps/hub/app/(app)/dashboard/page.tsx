@@ -109,7 +109,6 @@ export default async function DashboardPage() {
       .from('tasks')
       .select('id, title, priority, due_date, status, company_id, companies(name)')
       .in('status', ['open', 'in_progress'])
-      .eq('assignee_id', user?.id ?? '')
       .order('due_date', { ascending: true, nullsFirst: false })
       .limit(10),
     supabase
