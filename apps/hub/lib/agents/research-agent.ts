@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { notifyResearchComplete } from '@/lib/slack/notifications';
 import { loadSkill } from '@/lib/agents/skill-loader';
-import { cleanAgentContent } from '@/lib/agents/utils';
+import { cleanAgentContent, getAgentMemory } from '@/lib/agents/utils';
 import { v7 as uuidv7 } from 'uuid';
 
 export interface ResearchResult {
@@ -38,7 +38,9 @@ export async function runResearchAgent(companyId: string): Promise<ResearchResul
 
   const skill = loadSkill('research');
 
-  const prompt = `${skill}
+  const memory = await getAgentMemory(supabase, 'agent_6_lead_research');
+
+  const prompt = `${skill}${memory}
 
 ---
 

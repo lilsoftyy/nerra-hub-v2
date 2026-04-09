@@ -1,7 +1,7 @@
 import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { notifyResearchComplete } from '@/lib/slack/notifications';
 import { loadSkill } from '@/lib/agents/skill-loader';
-import { cleanAgentContent } from '@/lib/agents/utils';
+import { cleanAgentContent, getAgentMemory } from '@/lib/agents/utils';
 import { v7 as uuidv7 } from 'uuid';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -64,7 +64,9 @@ export async function runCustomerResearchAgent(
 
   const qualification = qualificationData?.responses as Record<string, string> | null;
 
-  const prompt = `${skill}
+  const memory = await getAgentMemory(supabase, 'customer_research_agent');
+
+  const prompt = `${skill}${memory}
 
 ---
 

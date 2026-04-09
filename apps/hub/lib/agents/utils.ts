@@ -1,4 +1,20 @@
 import type Anthropic from '@anthropic-ai/sdk';
+import { SupabaseClient } from '@supabase/supabase-js';
+
+/** Hent agentens lærdom fra tidligere redigeringer */
+export async function getAgentMemory(supabase: SupabaseClient, agentName: string): Promise<string> {
+  const { data } = await supabase
+    .from('agent_memory')
+    .select('category, learning')
+    .eq('agent_name', agentName)
+    .order('created_at', { ascending: false })
+    .limit(20);
+
+  if (!data || data.length === 0) return '';
+
+  const lines = data.map((m) => `- [${m.category}] ${m.learning}`).join('\n');
+  return `\n\n---\n\n## Lærdom fra tidligere redigeringer\n\nBrukeren har tidligere redigert dokumenter du har generert. Her er hva du bør ta hensyn til:\n\n${lines}\n\nBruk denne lærdommen til å tilpasse tone, innhold og struktur.`;
+}
 
 /** Clean AI-generated content: remove citations, zero-width chars, excess whitespace */
 export function cleanAgentContent(message: Anthropic.Message): { content: string; summary: string } {
