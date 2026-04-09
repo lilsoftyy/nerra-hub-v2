@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createServiceClient } from '@/lib/supabase/service';
 import { notifyNewCustomer } from '@/lib/slack/notifications';
+import { runCustomerResearchAgent } from '@/lib/agents/customer-research-agent';
 import { v7 as uuidv7 } from 'uuid';
 import { z } from 'zod';
 import crypto from 'crypto';
@@ -99,12 +100,17 @@ export async function POST(request: Request) {
       details: { submitter: data.contact_name, company: data.company_name },
     });
 
-    // Notify Slack (non-blocking — don't fail the request if Slack is down)
+    // Notify Slack (non-blocking)
     try {
       await notifyNewCustomer(data.company_name, companyId, data.contact_name);
     } catch {
-      // Slack notification failed — log but don't break the flow
+      // Non-blocking
     }
+
+    // Auto-trigger kunderesearch (non-blocking — kjører i bakgrunnen)
+    runCustomerResearchAgent(companyId, supabase, { isAutoTriggered: true }).catch(() => {
+      // Research-feil skal ikke blokkere kvalifiserings-responsen
+    });
 
     return NextResponse.json(
       { success: true, company_id: companyId },

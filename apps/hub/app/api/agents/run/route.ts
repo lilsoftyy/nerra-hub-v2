@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { runProjectAgent } from '@/lib/agents/project-agent';
 import { runResearchAgent } from '@/lib/agents/research-agent';
+import { runCustomerResearchAgent } from '@/lib/agents/customer-research-agent';
 
 export async function POST(request: NextRequest) {
   // Verify user is authenticated
@@ -26,6 +27,13 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: 'company_id er påkrevd for research-agenten' }, { status: 400 });
         }
         const result = await runResearchAgent(company_id);
+        return NextResponse.json(result);
+      }
+      case 'customer_research_agent': {
+        if (!company_id) {
+          return NextResponse.json({ error: 'company_id er påkrevd for kunderesearch-agenten' }, { status: 400 });
+        }
+        const result = await runCustomerResearchAgent(company_id, supabase);
         return NextResponse.json(result);
       }
       default:

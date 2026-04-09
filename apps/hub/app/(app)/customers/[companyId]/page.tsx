@@ -124,15 +124,27 @@ export default async function CustomerDetailPage({
             <CardHeader>
               <CardTitle className="text-base">AI-agenter</CardTitle>
             </CardHeader>
-            <CardContent>
-              <AgentTriggerButton
-                agent="agent_6_lead_research"
-                label="Generer research"
-                companyId={company.id}
-              />
-              <p className="text-xs text-muted-foreground mt-1">
-                Bruker AI til å lage en research-rapport for denne kunden.
-              </p>
+            <CardContent className="space-y-3">
+              <div>
+                <AgentTriggerButton
+                  agent="agent_6_lead_research"
+                  label="Enkel research"
+                  companyId={company.id}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Rask research-rapport basert på nettsøk.
+                </p>
+              </div>
+              <div>
+                <AgentTriggerButton
+                  agent="customer_research_agent"
+                  label="Dyp kunderesearch"
+                  companyId={company.id}
+                />
+                <p className="text-xs text-muted-foreground mt-1">
+                  Grundig rapport med regulatorisk kontekst, konkurrenter og markedsanalyse.
+                </p>
+              </div>
             </CardContent>
           </Card>
           <CreateContractForm companyId={company.id} companyName={company.name} />
