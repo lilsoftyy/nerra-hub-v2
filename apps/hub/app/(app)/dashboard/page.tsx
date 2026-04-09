@@ -425,7 +425,6 @@ export default async function DashboardPage() {
               {activities.length > 0 ? (
                 <div className="space-y-2">
                   {activities.map((activity) => {
-                    const company = activity.companies as unknown as { name: string } | null;
                     return (
                       <div key={activity.id} className="flex items-baseline justify-between gap-3">
                         <p className="min-w-0 flex-1 truncate text-sm">
