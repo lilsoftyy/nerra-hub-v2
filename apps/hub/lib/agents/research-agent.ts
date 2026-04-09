@@ -57,7 +57,18 @@ ${company.facade_team_size ? `- Fasadeteam: ${company.facade_team_size} personer
 ${contactInfo ? `- Kontakter: ${contactInfo}` : ''}
 ${company.notes ? `- Notater: ${company.notes}` : ''}
 
-Start direkte med "# Research: ${company.name}" og følg instruksjonene i skillen over.`;
+## VIKTIG: Format og stil
+
+Skriv en KORT, LESBAR rapport for en forretningsperson.
+
+Regler:
+1. Start med "# ${company.name}" som hovedtittel
+2. Første avsnitt: 2-3 setninger som oppsummerer hvem selskapet er
+3. Maksimalt 3-4 korte seksjoner, under 500 ord totalt
+4. Skriv i hele setninger, IKKE bare punktlister
+5. Norsk, profesjonell men vennlig tone
+6. IKKE inkluder regulatorisk info, kilder eller tekniske detaljer
+7. Fokus: hvem er de, hva gjør de, og er de relevante for Nerra?`;
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
