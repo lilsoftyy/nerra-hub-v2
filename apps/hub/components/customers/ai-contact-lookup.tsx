@@ -1,20 +1,12 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Search, Loader2 } from 'lucide-react';
+import { Search, Loader2, X } from 'lucide-react';
 import { createContactFromLookup } from '@/app/(app)/customers/actions';
 
 interface LookupResult {
@@ -33,6 +25,8 @@ interface LookupResult {
 export function AIContactLookup() {
   const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  const [closing, setClosing] = useState(false);
   const [step, setStep] = useState<'search' | 'review' | 'saving'>('search');
   const [searching, setSearching] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -41,6 +35,52 @@ export function AIContactLookup() {
   const [isPotentialCustomer, setIsPotentialCustomer] = useState(false);
   const [result, setResult] = useState<LookupResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  // Animate in after open
+  useEffect(() => {
+    if (open) {
+      requestAnimationFrame(() => setMounted(true));
+    }
+  }, [open]);
+
+  const handleClose = () => {
+    setClosing(true);
+    setTimeout(() => {
+      setOpen(false);
+      setMounted(false);
+      setClosing(false);
+      resetState();
+    }, 200);
+  };
+
+  // Close on click outside
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: MouseEvent) => {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(e.target as Node) &&
+        triggerRef.current &&
+        !triggerRef.current.contains(e.target as Node)
+      ) {
+        handleClose();
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  });
+
+  // Close on Escape
+  useEffect(() => {
+    if (!open) return;
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose();
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  });
 
   const handleSearch = async () => {
     if (!name.trim() || !company.trim()) return;
@@ -82,8 +122,7 @@ export function AIContactLookup() {
       setError(res.error);
       setStep('review');
     } else {
-      setOpen(false);
-      resetState();
+      handleClose();
       router.refresh();
     }
     setSaving(false);
@@ -98,9 +137,12 @@ export function AIContactLookup() {
     setIsPotentialCustomer(false);
   };
 
+  const isVisible = open && mounted && !closing;
+
   return (
-    <>
+    <div className="relative">
       <Button
+        ref={triggerRef}
         size="sm"
         onClick={() => { resetState(); setOpen(true); }}
       >
@@ -108,47 +150,68 @@ export function AIContactLookup() {
         AI-søk
       </Button>
 
-      <Dialog open={open} onOpenChange={(v) => { if (!v) resetState(); setOpen(v); }}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>
-              {step === 'search' && 'Finn kontakt'}
-              {step === 'review' && 'Bekreft informasjon'}
-              {step === 'saving' && 'Lagrer...'}
-            </DialogTitle>
-            <DialogDescription>
-              {step === 'search' && 'Skriv inn navn og selskap — AI finner resten.'}
-              {step === 'review' && 'Sjekk at informasjonen stemmer før du lagrer.'}
-            </DialogDescription>
-          </DialogHeader>
+      {open && (
+        <>
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 z-40 bg-black/5 backdrop-blur-[1px]"
+            style={{
+              opacity: isVisible ? 1 : 0,
+              transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)',
+            }}
+          />
 
-          {step === 'search' && (
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="lookup-name">Navn *</Label>
-                <Input
-                  id="lookup-name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="F.eks. Johan Eriksson"
-                  autoFocus
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lookup-company">Selskap *</Label>
-                <Input
-                  id="lookup-company"
-                  value={company}
-                  onChange={(e) => setCompany(e.target.value)}
-                  placeholder="F.eks. Kärcher Sverige"
-                />
-              </div>
-              {error && <p className="text-sm text-red-600">{error}</p>}
-              <div className="flex justify-end gap-2 pt-2">
-                <DialogClose render={<Button type="button" variant="outline" size="sm" />}>
-                  Avbryt
-                </DialogClose>
+          {/* Panel */}
+          <div
+            ref={panelRef}
+            className="absolute right-0 top-full z-50 mt-2 w-[400px] rounded-2xl bg-popover p-5 text-sm ring-1 ring-foreground/10"
+            style={{
+              transformOrigin: 'top right',
+              transform: isVisible ? 'scale(1)' : 'scale(0.95)',
+              opacity: isVisible ? 1 : 0,
+              transition: 'transform 200ms cubic-bezier(0.23, 1, 0.32, 1), opacity 150ms cubic-bezier(0.23, 1, 0.32, 1)',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)',
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={handleClose}
+              className="absolute top-3 right-3 text-muted-foreground/50 transition-[color] duration-150 hover:text-foreground"
+              aria-label="Lukk"
+            >
+              <X className="size-4" strokeWidth={1.75} />
+            </button>
+
+            {step === 'search' && (
+              <div className="space-y-4">
+                <div>
+                  <h3 className="text-base font-semibold">Finn kontakt</h3>
+                  <p className="mt-0.5 text-xs text-muted-foreground">Skriv inn navn og selskap — AI finner resten.</p>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lookup-name">Navn</Label>
+                  <Input
+                    id="lookup-name"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder="F.eks. Johan Eriksson"
+                    autoFocus
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="lookup-company">Selskap</Label>
+                  <Input
+                    id="lookup-company"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="F.eks. Kärcher Sverige"
+                    onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+                  />
+                </div>
+                {error && <p className="text-xs text-red-600">{error}</p>}
                 <Button
+                  className="w-full"
                   size="sm"
                   onClick={handleSearch}
                   disabled={searching || !name.trim() || !company.trim()}
@@ -166,67 +229,67 @@ export function AIContactLookup() {
                   )}
                 </Button>
               </div>
-            </div>
-          )}
+            )}
 
-          {step === 'review' && result && (
-            <div className="space-y-4">
-              {/* Person */}
-              <div className="rounded-xl bg-muted/30 px-4 py-3">
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2">Person</p>
-                <p className="text-sm font-medium">{result.person_name}</p>
-                {result.person_role && <p className="text-xs text-muted-foreground">{result.person_role}</p>}
-                {result.person_email && <p className="text-xs text-muted-foreground">{result.person_email}</p>}
-                {result.person_phone && <p className="text-xs text-muted-foreground">{result.person_phone}</p>}
-              </div>
+            {step === 'review' && result && (
+              <div className="space-y-4">
+                <h3 className="text-base font-semibold">Bekreft</h3>
 
-              {/* Selskap */}
-              <div className="rounded-xl bg-muted/30 px-4 py-3">
-                <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-2">Selskap</p>
-                <p className="text-sm font-medium">{result.company_name}</p>
-                {result.company_description && <p className="text-xs text-muted-foreground mt-0.5">{result.company_description}</p>}
-                <div className="mt-2 flex flex-wrap gap-2 text-xs text-muted-foreground">
-                  {result.company_country && <span>{result.company_country}</span>}
-                  {result.company_employee_count && <span>· {result.company_employee_count} ansatte</span>}
-                  {result.company_website && (
-                    <a href={result.company_website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                      {result.company_website.replace(/^https?:\/\//, '')}
-                    </a>
-                  )}
+                <div className="rounded-xl bg-muted/30 px-4 py-3">
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-1.5">Person</p>
+                  <p className="text-sm font-medium">{result.person_name}</p>
+                  {result.person_role && <p className="text-xs text-muted-foreground">{result.person_role}</p>}
+                  {result.person_email && <p className="text-xs text-muted-foreground">{result.person_email}</p>}
+                  {result.person_phone && <p className="text-xs text-muted-foreground">{result.person_phone}</p>}
                 </div>
-              </div>
 
-              {/* Type */}
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="is-potential-customer"
-                  checked={isPotentialCustomer}
-                  onCheckedChange={(v) => setIsPotentialCustomer(v === true)}
-                />
-                <Label htmlFor="is-potential-customer" className="text-sm">
-                  Potensiell kunde
-                </Label>
-              </div>
+                <div className="rounded-xl bg-muted/30 px-4 py-3">
+                  <p className="text-xs font-medium uppercase tracking-wider text-muted-foreground mb-1.5">Selskap</p>
+                  <p className="text-sm font-medium">{result.company_name}</p>
+                  {result.company_description && <p className="text-xs text-muted-foreground mt-0.5">{result.company_description}</p>}
+                  <div className="mt-1.5 flex flex-wrap gap-x-2 text-xs text-muted-foreground">
+                    {result.company_country && <span>{result.company_country}</span>}
+                    {result.company_employee_count && <span>· {result.company_employee_count} ansatte</span>}
+                    {result.company_website && (
+                      <a href={result.company_website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
+                        {result.company_website.replace(/^https?:\/\//, '')}
+                      </a>
+                    )}
+                  </div>
+                </div>
 
-              {error && <p className="text-sm text-red-600">{error}</p>}
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="is-potential-customer"
+                    checked={isPotentialCustomer}
+                    onCheckedChange={(v) => setIsPotentialCustomer(v === true)}
+                  />
+                  <Label htmlFor="is-potential-customer" className="text-sm">
+                    Potensiell kunde
+                  </Label>
+                </div>
 
-              <div className="flex justify-between pt-2">
-                <Button type="button" variant="outline" size="sm" onClick={() => { setStep('search'); setResult(null); }}>
-                  Søk på nytt
-                </Button>
+                {error && <p className="text-xs text-red-600">{error}</p>}
+
                 <div className="flex gap-2">
-                  <DialogClose render={<Button type="button" variant="outline" size="sm" />}>
-                    Avbryt
-                  </DialogClose>
-                  <Button size="sm" onClick={handleSave} disabled={saving}>
+                  <Button variant="outline" size="sm" className="flex-1" onClick={() => { setStep('search'); setResult(null); }}>
+                    Søk på nytt
+                  </Button>
+                  <Button size="sm" className="flex-1" onClick={handleSave} disabled={saving}>
                     {saving ? 'Lagrer...' : 'Lagre kontakt'}
                   </Button>
                 </div>
               </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
-    </>
+            )}
+
+            {step === 'saving' && (
+              <div className="flex items-center justify-center py-8">
+                <Loader2 className="size-5 animate-spin text-muted-foreground" />
+              </div>
+            )}
+          </div>
+        </>
+      )}
+    </div>
   );
 }
