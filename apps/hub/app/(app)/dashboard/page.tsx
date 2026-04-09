@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
+import { fetchUpcomingEvents } from '@/lib/calendar/fetch-events';
 import {
   phaseLabels,
   taskPriorityLabels,
@@ -150,6 +151,8 @@ export default async function DashboardPage() {
   ]);
 
   const allCompanies = (companiesListResult.data ?? []).map((c) => ({ id: c.id, name: c.name }));
+
+  const calendarEvents = await fetchUpcomingEvents(5);
 
   const activeCompaniesCount = companiesResult.count ?? 0;
   const openTasksCount = openTasksResult.count ?? 0;
@@ -405,16 +408,43 @@ export default async function DashboardPage() {
             </CardContent>
           </Card>
 
-          {/* Kalender-placeholder */}
+          {/* Kalender */}
           <Card>
-            <CardHeader className="pb-3">
+            <CardHeader className="flex flex-row items-center justify-between pb-3">
               <div className="flex items-center gap-2">
                 <Calendar className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" />
                 <CardTitle className="text-sm font-medium">Kalender</CardTitle>
               </div>
+              <Link
+                href="/calendar"
+                className="flex items-center gap-1 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
+              >
+                Alle hendelser
+                <ArrowRight className="size-3" strokeWidth={2} aria-hidden="true" />
+              </Link>
             </CardHeader>
             <CardContent className="pt-0">
-              <p className="text-sm text-muted-foreground">Kobles til Google Calendar snart.</p>
+              {calendarEvents.length > 0 ? (
+                <div className="space-y-2">
+                  {calendarEvents.map((event) => (
+                    <div key={event.id} className="flex items-baseline justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm">{event.title}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {event.isAllDay
+                            ? 'Hele dagen'
+                            : `${new Date(event.start).toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })} – ${new Date(event.end).toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`}
+                        </p>
+                      </div>
+                      <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
+                        {new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' }).format(new Date(event.start))}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">Ingen kommende hendelser.</p>
+              )}
             </CardContent>
           </Card>
 

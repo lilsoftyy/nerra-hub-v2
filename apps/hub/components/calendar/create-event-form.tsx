@@ -15,9 +15,13 @@ export function CreateEventForm() {
   const [saving, setSaving] = useState(false);
   const [result, setResult] = useState<string | null>(null);
 
-  const handleSubmit = async (formData: FormData) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (saving) return;
     setSaving(true);
     setResult(null);
+
+    const formData = new FormData(e.currentTarget);
     const res = await createCalendarEvent(formData);
     if (res.error) {
       setResult(`Feil: ${res.error}`);
@@ -43,10 +47,10 @@ export function CreateEventForm() {
         <CardTitle className="text-base">Ny kalenderhendelse</CardTitle>
       </CardHeader>
       <CardContent>
-        <form action={handleSubmit} className="space-y-3">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div>
             <Label htmlFor="title">Tittel *</Label>
-            <Input id="title" name="title" required placeholder="f.eks. Møte med Martin" />
+            <Input id="title" name="title" required placeholder="f.eks. Mote med Martin" />
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div>
