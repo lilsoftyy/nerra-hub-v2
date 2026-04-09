@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import { executeProposal } from '@/lib/proposals/execute';
+import { notifyProposalDecided } from '@/lib/slack/notifications';
 import { revalidatePath } from 'next/cache';
 
 export async function approveProposal(proposalId: string) {
@@ -16,6 +17,14 @@ export async function approveProposal(proposalId: string) {
 
   if (!result.ok) {
     return { error: result.error ?? 'Eksekvering feilet' };
+  }
+
+  // Notify Slack (non-blocking)
+  try {
+    const { data: proposal } = await supabase.from('proposals').select('title').eq('id', proposalId).single();
+    await notifyProposalDecided(proposal?.title ?? 'Ukjent', 'approved', user.email ?? 'Ukjent');
+  } catch {
+    // Non-blocking
   }
 
   return { success: true };
@@ -39,6 +48,14 @@ export async function rejectProposal(proposalId: string, reason?: string) {
     .eq('status', 'pending_approval');
 
   if (error) return { error: error.message };
+
+  // Notify Slack (non-blocking)
+  try {
+    const { data: proposal } = await supabase.from('proposals').select('title').eq('id', proposalId).single();
+    await notifyProposalDecided(proposal?.title ?? 'Ukjent', 'rejected', user.email ?? 'Ukjent');
+  } catch {
+    // Non-blocking
+  }
 
   revalidatePath('/dashboard');
   return { success: true };

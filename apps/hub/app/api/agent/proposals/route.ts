@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { authenticateAgent, requireScope } from '@/lib/agent-auth/middleware';
+import { notifyProposalCreated } from '@/lib/slack/notifications';
 import { createClient } from '@/lib/supabase/server';
 import { v7 as uuidv7 } from 'uuid';
 import { z } from 'zod';
@@ -69,6 +70,22 @@ export async function POST(request: NextRequest) {
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+
+  // Notify Slack (non-blocking)
+  try {
+    let companyName: string | null = null;
+    if (parsed.data.company_id) {
+      const { data: company } = await supabase
+        .from('companies')
+        .select('name')
+        .eq('id', parsed.data.company_id)
+        .single();
+      companyName = company?.name ?? null;
+    }
+    await notifyProposalCreated(parsed.data.title, auth.agentName, companyName);
+  } catch {
+    // Non-blocking
   }
 
   return NextResponse.json(data, { status: 201 });

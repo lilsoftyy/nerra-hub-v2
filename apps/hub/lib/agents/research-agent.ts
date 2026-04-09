@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { getAnthropicClient } from '@/lib/ai/anthropic';
+import { notifyResearchComplete } from '@/lib/slack/notifications';
 import { v7 as uuidv7 } from 'uuid';
 
 export interface ResearchResult {
@@ -134,6 +135,13 @@ VIKTIG: Skriv KUN selve rapporten. Ingen innledning om hva du skal søke etter, 
     company_id: companyId,
     details: { kind: 'research', title: `Research: ${company.name}` },
   });
+
+  // Notify Slack (non-blocking)
+  try {
+    await notifyResearchComplete(company.name, companyId);
+  } catch {
+    // Non-blocking
+  }
 
   return { document_id: docId };
 }
