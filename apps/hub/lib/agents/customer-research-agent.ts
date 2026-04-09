@@ -95,12 +95,37 @@ ${qualification ? `### Kvalifiseringssvar
 - Ønsket oppstart: ${qualification.desired_start_date ?? 'ikke oppgitt'}
 ${qualification.additional_info ? `- Tilleggsinformasjon: ${qualification.additional_info}` : ''}` : ''}
 
-Følg instruksjonene i skillen nøyaktig — spesielt søkestrategien og rapportformatet. Start med "# ${company.name}".`;
+---
+
+## OBLIGATORISK FORMAT (brudd på dette er feil)
+
+Du SKAL skrive rapporten som et lesbart dokument for en forretningsperson. IKKE et datadump.
+
+REGLER:
+1. Start med "# ${company.name}" — ingenting før dette
+2. Første avsnitt: 2-3 setninger som oppsummerer selskapet
+3. Bruk ## for hovedseksjoner, ### for underseksjoner
+4. Skriv i HELE SETNINGER og AVSNITT — IKKE bare punktlister overalt
+5. Punktlister KUN for kontaktinfo og konkrete handlingspunkter
+6. Maks 5 hovedseksjoner, maks 1000 ord totalt
+7. Norsk, profesjonell men vennlig tone
+8. INGEN kildehenvisninger, fotnoter eller referanser
+9. INGEN tekniske detaljer som org.nr., stammkapital, eierstruktur-detaljer
+10. Tenk: "Hva trenger Magnus å vite før han ringer denne personen?"
+
+Seksjonene skal være:
+## Om selskapet (2-3 avsnitt)
+## Nøkkelpersoner (kort om hver person)
+## Relevans for Nerra (2-3 setninger)
+## Neste steg (2-3 konkrete handlinger)
+## Landspesifikk info (kun hvis potensiell kunde — droneregulering, klima, lokale ressurser)
+
+START NÅ med "# ${company.name}".`;
 
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
-    max_tokens: 8192,
+    max_tokens: 4096,
     tools: [
       {
         type: 'web_search_20250305',
