@@ -95,25 +95,7 @@ ${qualification ? `### Kvalifiseringssvar
 - Ønsket oppstart: ${qualification.desired_start_date ?? 'ikke oppgitt'}
 ${qualification.additional_info ? `- Tilleggsinformasjon: ${qualification.additional_info}` : ''}` : ''}
 
-## VIKTIG: Format og stil
-
-Skriv rapporten som et LESBART DOKUMENT for en forretningsperson, IKKE som et teknisk datadump.
-
-Regler:
-1. Start med "# ${company.name}" som hovedtittel
-2. Første avsnitt: 2-3 setninger som oppsummerer hvem selskapet er og hvorfor de er relevante for Nerra
-3. Bruk korte, tydelige seksjoner med overskrifter
-4. Skriv i hele setninger og avsnitt — IKKE punktlister for alt
-5. Maksimalt 4-5 hovedseksjoner:
-   - **Om selskapet** — kort beskrivelse, størrelse, posisjonering
-   - **Nøkkelpersoner** — hvem vi skal snakke med, rolle og kontaktinfo
-   - **Relevans for Nerra** — hvorfor dette selskapet er interessant, synergier
-   - **Neste steg** — konkrete forslag til handling
-6. Hold rapporten under 800 ord
-7. Skriv på norsk med en profesjonell men vennlig tone
-8. IKKE inkluder regulatorisk info, kjemikalieleverandører, klimadata, eller tekniske EASA-detaljer — det er irrelevant for Magnus
-9. IKKE list opp kilder eller referanser
-10. Tenk: "Hva trenger Magnus å vite før han ringer denne personen?"`;
+Følg instruksjonene i skillen nøyaktig — spesielt søkestrategien og rapportformatet. Start med "# ${company.name}".`;
 
 
   const message = await anthropic.messages.create({

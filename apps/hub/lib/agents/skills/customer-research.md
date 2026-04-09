@@ -1,88 +1,116 @@
 # Skill: Kunderesearch
 
 ## Formål
-Gjennomfører dyp, kontekstuell research på ett spesifikt selskap. Målet er å gi Magnus og Martin et solid beslutnings- og møtegrunnlag — ikke bare fakta, men tolket informasjon som er direkte nyttig i en salgssituasjon eller oppstartsfase.
+Gi Magnus og Martin et solid beslutnings- og møtegrunnlag om et selskap. Rapporten skal være lesbar, konkret og nyttig — ikke et teknisk datadump.
+
+---
+
+## Søkestrategi
+
+Agenten skal aktivt søke på disse kildene i denne rekkefølgen:
+
+1. **Selskapets nettside** — les "Om oss", nyheter, tjenester, prosjekter
+2. **LinkedIn** — selskapets side og kontaktpersonens profil. Se på nylige poster og aktivitet
+3. **Nyheter** — søk etter selskapets navn i nyhetsartikler siste 12 måneder
+4. **Bransjesider** — se etter selskapet i bransjeoversikter eller fagmedia
+
+Prioriter fersk informasjon. Hva selskapet gjør *nå* er viktigere enn hva de gjorde for 5 år siden.
+
+---
+
+## Del 1: Selskapet (alltid med)
+
+Skriv 2-3 avsnitt (ikke punktlister) som svarer på:
+
+- Hva gjør selskapet? Ikke bare hva de kaller seg, men hva de faktisk driver med
+- Hvor store er de? Ansatte, lokasjoner, markeder
+- Hva har skjedd nylig? Ekspansjon, nye tjenester, oppkjøp, ansettelser
+- Har de publisert noe interessant på nettside eller LinkedIn siste 60 dager?
+
+## Del 2: Nøkkelpersoner (alltid med)
+
+For hver relevant kontaktperson:
+
+- Navn, rolle, tid i selskapet
+- LinkedIn-profil (lenke hvis funnet)
+- Hva de har publisert eller uttalt seg om nylig
+- Kommunikasjonsstil: formell eller uformell?
+- Direkte e-post og telefon hvis tilgjengelig
+
+## Del 3: Relevans for Nerra (alltid med)
+
+Kort vurdering (2-3 setninger):
+
+- Hvorfor er dette selskapet interessant for Drone Wash Academy?
+- Finnes det konkrete synergier eller partnershipsmuligheter?
+- Er det noe som tyder på at de er åpne for dronebaserte løsninger?
+
+## Del 4: Foreslåtte neste steg (alltid med)
+
+2-3 konkrete handlinger Magnus eller Martin kan gjøre:
+
+- Hvem bør kontaktes først, og med hvilket budskap?
+- Er det en spesifikk nyhet eller hendelse å referere til i outreach?
+- Bør vi vente på noe, eller handle raskt?
+
+---
+
+## Del 5: Landspesifikk info (kun ved potensielle kunder)
+
+Denne delen inkluderes kun når selskapet er en potensiell kunde for DWA-implementering. Skriv det som lesbare avsnitt, ikke tekniske lister.
+
+### Droneregulering i kundens land
+- Hvilken luftfartsmyndighet gjelder?
+- Er EASA-rammeverket implementert? Spesifikke nasjonale krav?
+- Hva trengs praktisk for å fly droner kommersielt der?
+- Er det enklere eller vanskeligere enn i Norge?
+
+### Klima og operasjonsforhold
+- Typisk vær: temperatur, nedbør, vindforhold gjennom året
+- Hvilke sesonger er best/verst for utendørs fasadearbeid?
+- Er det spesielle klimautfordringer (mye fukt = mer algevekst)?
+
+### Lokale ressurser
+- DJI-distributører eller droneforhandlere i regionen
+- Leverandører av rengjøringskjemikalier for fasader
+- Typiske bygningstyper og fasadematerialer i markedet
+
+### Konkurranselandskap
+- Finnes det andre som tilbyr dronebasert fasadevask i dette landet?
+- Er markedet umodent (mulighet) eller mettet (utfordring)?
+
+---
+
+## Rapportformat
+
+Regler for hele rapporten:
+
+1. Start med selskapets navn som hovedtittel
+2. Første avsnitt oppsummerer selskapet i 2-3 setninger
+3. Skriv i hele setninger og avsnitt — punktlister kun der det er naturlig
+4. Hold Del 1-4 under 600 ord (kort og konkret)
+5. Del 5 kan være litt lenger, men maks 400 ord
+6. Skriv på norsk med profesjonell men vennlig tone
+7. Ingen kildehenvisninger eller fotnoter
+8. Tenk: "Hva trenger Magnus å vite før han ringer denne personen?"
 
 ---
 
 ## Triggere
 
-### 1. Automatisk — etter innkommet kvalifiseringsskjema
-Når en potensiell kunde fyller ut kvalifiseringsskjemaet, trigges agenten automatisk. Skjemadataene brukes aktivt som input — agenten vet allerede hva selskapet driver med, hvilke fasadetyper de vasker, droneerfaring, mål og forventet oppstart. Researchet bygger videre på dette og fyller hullene.
+### 1. Automatisk — etter kvalifiseringsskjema
+Inkluder Del 1-5. Bruk kvalifiseringssvarene aktivt som kontekst.
 
-Output: Full initial kunderapport.
+### 2. Manuell kjøring
+Inkluder Del 1-4. Del 5 kun hvis selskapet er markert som potensiell kunde.
 
-### 2. Manuell — Magnus eller Martin trigger fra Nerra Hub
-Kan kjøres på et hvilket som helst selskap, også før første kontakt. Nyttig når et interessant prospekt dukker opp og man vil vite mer før outreach.
-
-Output: Kompakt prospektrapport — raskere og mindre detaljert enn full kunderapport.
-
----
-
-## Hva agenten researcher
-
-### Om selskapet
-- Offisielt firmanavn, org.nr., eierstruktur (familieid, PE-støttet, børsnotert)
-- Estimert omsetning og antall ansatte
-- Kjernetjenester — hva de faktisk gjør, ikke bare hva de kaller seg
-- Geografisk dekningsområde og operasjonsland
-- Selskapets historie og vekstbane
-- Nylige nyheter, oppkjøp, strategiske signaler eller pressemeldinger
-- Hva selskapet har publisert på LinkedIn og nettside siste 60 dager
-
-### Om kontaktperson og beslutningstager
-- Navn, tittel, LinkedIn-profil
-- Tid i selskapet og karrierebakgrunn
-- Eventuelle offentlige uttalelser om teknologi, automasjon eller bransjetrend
-- Kommunikasjonsstil basert på innhold de har publisert — formell eller uformell
-
-### Regulatorisk kontekst for kundens land
-- Hvilken nasjonal luftfartsmyndighet som gjelder
-- EASA-rammeverk: spesifikk kategori, PDRA-S01, nasjonale særkrav og unntak
-- Hvor modent dronemarkedet er i landet — etablert regulering, eller uklart landskap
-- Kjente operatører i landet som referansepunkt
-
-### Lokale forhold
-- Utstyrsleverandører for DJI Matrice 300/350 i regionen
-- Kjemikalie- og forbruksvareleverandører lokalt
-- Typiske bygningstyper og fasadematerialer i markedet
-- Klimatiske forhold som påvirker operasjoner (vind, temperatur, nedbør)
-
-### Konkurranselandskap
-- Finnes det andre selskaper i regionen som allerede tilbyr dronebasert fasadevask?
-- Er prospektet kjent med eller i dialog med konkurrerende tilbydere?
-- Eventuelle referanser til at prospektet selv har testet eller vurdert droner
-
----
-
-## Output
-
-### Full initial kunderapport (trigger 1 — etter kvalifiseringsskjema)
-Omfattende dokument lagret som Markdown i Supabase, knyttet til kundeprofilen. Inneholder:
-
-- Selskapsprofil med all informasjon listet over
-- Tolkning av kvalifiseringsskjema-svarene — hva er sterke sider, hva mangler, hva bør avklares
-- Kulturell og forretningsmessig kontekst for landet
-- Regulatorisk landskap og hva det betyr praktisk for implementering
-- Lokale leverandører og infrastruktur
-- Eventuelle red flags notert eksplisitt
-- Forslag til samtaleemner og konkrete spørsmål til første møte
-
-Magnus og Martin varsles i Nerra Hub når rapporten er klar.
-
-### Kompakt prospektrapport (trigger 2 — manuell kjøring)
-Kortere dokument på samme struktur, men uten tolkning av kvalifiseringsskjema. Fokus på det viktigste: hvem er de, passer de profilen, hvem skal kontaktes, og hva er én konkret åpner for outreach basert på noe selskapet har gjort nylig.
-
----
-
-## Bruk av tidligere research
-
-Agenten sjekker alltid Supabase før den starter. Har Nerra hatt lignende kunder i samme land tidligere, gjenbrukes relevant landspesifikk kunnskap om regulering og lokale leverandører fremfor å starte fra scratch. Dette bygger seg opp over tid.
+### 3. Oppdateringsrapport (månedlig)
+Kun Del 1-2 med fokus på hva som har endret seg siden sist. Referer til tidligere rapport.
 
 ---
 
 ## Avgrensninger
 
-- Agenten skriver ikke outreach-meldinger. Det håndteres av en separat skill.
-- Agenten oppdaterer ikke CRM-status. Det håndteres av prosjektstyringsagenten.
-- All output leveres til Magnus eller Martin for gjennomgang. Ingenting sendes til kunden.
+- Agenten skriver ikke outreach-meldinger (det er en egen skill)
+- Agenten oppdaterer ikke CRM-status (det gjør prosjektagenten)
+- All output leveres til Magnus eller Martin for gjennomgang
