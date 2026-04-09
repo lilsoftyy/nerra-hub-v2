@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { notifyResearchComplete } from '@/lib/slack/notifications';
+import { loadSkill } from '@/lib/agents/skill-loader';
 import { v7 as uuidv7 } from 'uuid';
 
 export interface ResearchResult {
@@ -34,11 +35,16 @@ export async function runResearchAgent(companyId: string): Promise<ResearchResul
   const contacts = company.contacts as Array<{ full_name: string; role?: string; email?: string }> ?? [];
   const contactInfo = contacts.map((c) => `${c.full_name}${c.role ? ` (${c.role})` : ''}`).join(', ');
 
-  const prompt = `Du er en research-agent for Nerra AS, et B2B-konsulentselskap som hjelper fasadevaskfirmaer med å ta i bruk droner (Drone Wash Academy).
+  const skill = loadSkill('research');
 
-Bruk nettsøk til å finne informasjon om følgende firma. Søk på firmanavnet, nettsiden deres, og relevante bransjedetaljer.
+  const prompt = `${skill}
 
-Firma vi skal undersøke:
+---
+
+## Oppdrag
+
+Utfør research på dette firmaet:
+
 - Firmanavn: ${company.name}
 - Land: ${company.country}
 ${company.operational_area ? `- Operasjonsområde: ${company.operational_area}` : ''}
@@ -48,23 +54,7 @@ ${company.facade_team_size ? `- Fasadeteam: ${company.facade_team_size} personer
 ${contactInfo ? `- Kontakter: ${contactInfo}` : ''}
 ${company.notes ? `- Notater: ${company.notes}` : ''}
 
-Søk aktivt på internett etter informasjon om dette firmaet. Finn ut:
-- Hva firmaet gjør og hvilke tjenester de tilbyr
-- Størrelse, omsetning og markedsposisjon hvis tilgjengelig
-- Om de driver med fasadevask, bygningsvedlikehold, eller relaterte tjenester
-- Relevante nyheter eller prosjekter
-
-Skriv deretter en research-rapport (på norsk bokmål, markdown-formatering) med disse seksjonene:
-
-1. **Oppsummering** — hvem firmaet er og hva de gjør, basert på det du fant på nett
-2. **Tjenester og kompetanse** — hva de tilbyr, hvilke markeder de opererer i
-3. **Relevans for Nerra** — vurdering av om og hvordan dette firmaet er relevant for Nerra (som kunde, partner, eller annet)
-4. **Drone-potensial** — hvis relevant: vurdering av hvor egnet de er for dronebasert fasadevask
-5. **Anbefalinger** — konkrete neste steg for Nerra
-
-Skill tydelig mellom det du har funnet på nett og dine egne vurderinger. Hvis du ikke finner noe om firmaet, si det eksplisitt.
-
-VIKTIG: Skriv KUN selve rapporten. Ingen innledning om hva du skal søke etter, ingen forklaring av prosessen, ingen "la meg søke"-tekst. Start direkte med overskriften "# Research: ${company.name}" og gå rett på innholdet.`;
+Start direkte med "# Research: ${company.name}" og følg instruksjonene i skillen over.`;
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
