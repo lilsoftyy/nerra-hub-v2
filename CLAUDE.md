@@ -80,6 +80,7 @@ Disse prinsippene må aldri brytes uten at du eksplisitt har fått tillatelse fr
 - **API-ruter:** kebab-case
 - **UUID v7** genereres app-side med `uuid`-pakken (`uuidv7()`). Aldri database-default, aldri UUID v4.
 - **Norsk UI-tekst, engelsk kode.** Mapping skjer i komponenter.
+- **Norsk tekst MÅ bruke æ, ø, å korrekt.** Aldri skriv "a" for "å", "o" for "ø", "ae" for "æ". Dette gjelder overalt: UI-komponenter, Slack-meldinger, feilmeldinger, placeholder-tekst, agent-svar. Dobbeltsjekk ALL norsk tekst i kode du skriver.
 - **Ingen emojis** i kode, commits eller UI med mindre Magnus eksplisitt ber om det.
 - **Conventional commits:** `feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`.
 
