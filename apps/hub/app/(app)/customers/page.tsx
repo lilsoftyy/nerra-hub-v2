@@ -15,7 +15,7 @@ import { AIContactLookup } from '@/components/customers/ai-contact-lookup';
 import { PersonEditButton } from '@/components/customers/person-edit-button';
 import { QuickEmailButton } from '@/components/customers/quick-email-button';
 import { Plus } from 'lucide-react';
-import { formatShortDate } from '@/lib/formatters';
+import { countryName } from '@/lib/countries';
 
 const potentialCustomerPhases = ['lead', 'qualification', 'sales', 'onboarding', 'training'];
 
@@ -71,11 +71,11 @@ export default async function CustomersPage({
             <TableRow>
               <TableHead>Navn</TableHead>
               <TableHead>E-post</TableHead>
+              <TableHead>Telefon</TableHead>
               <TableHead>Selskap</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Land</TableHead>
-              <TableHead>Opprettet</TableHead>
-              <TableHead className="w-10" />
+              <TableHead className="w-16" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -104,6 +104,9 @@ export default async function CustomersPage({
                         <span className="text-xs text-muted-foreground">—</span>
                       )}
                     </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {contact.phone ?? '—'}
+                    </TableCell>
                     <TableCell>
                       {company ? (
                         <Link
@@ -128,10 +131,7 @@ export default async function CustomersPage({
                       )}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {company?.country ?? '—'}
-                    </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">
-                      {company ? formatShortDate(company.created_at) : '—'}
+                      {countryName(company?.country ?? null)}
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-2">

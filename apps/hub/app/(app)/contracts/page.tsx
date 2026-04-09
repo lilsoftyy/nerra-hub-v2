@@ -13,19 +13,31 @@ import {
   contractStatusLabels,
   contractStatusColors,
 } from '@/lib/labels';
+import { NewContractButton } from '@/components/contracts/new-contract-button';
 
 export default async function ContractsPage() {
   const supabase = await createClient();
 
-  const { data: contracts } = await supabase
-    .from('contracts')
-    .select('id, status, total, currency, valid_until, sent_at, signed_at, company_id, companies(name)')
-    .order('created_at', { ascending: false });
+  const [contractsResult, companiesResult] = await Promise.all([
+    supabase
+      .from('contracts')
+      .select('id, status, total, currency, valid_until, sent_at, signed_at, company_id, companies(name)')
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('companies')
+      .select('id, name')
+      .is('deleted_at', null)
+      .order('name'),
+  ]);
+
+  const contracts = contractsResult.data;
+  const companies = (companiesResult.data ?? []).map((c) => ({ id: c.id, name: c.name }));
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Kontrakter</h2>
+        <h1 className="text-xl font-semibold tracking-tight">Kontrakter</h1>
+        <NewContractButton companies={companies} />
       </div>
 
       <div className="rounded-md border">
