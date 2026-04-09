@@ -126,4 +126,26 @@
   html {
     @apply font-sans;
     }
+
+  /* Micro-animasjoner på interaktive elementer */
+  a, [role="button"] {
+    transition: transform 160ms cubic-bezier(0.23, 1, 0.32, 1),
+                color 150ms cubic-bezier(0.23, 1, 0.32, 1),
+                background-color 150ms cubic-bezier(0.23, 1, 0.32, 1),
+                opacity 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  /* Badge, Card, interaktive kort */
+  [data-slot="card"] {
+    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+                box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  [data-slot="card"]:active {
+    transform: scale(0.985);
+  }
+
+  /* Sidebar-lenker */
+  nav a:active {
+    transform: scale(0.97);
+  }
 }
