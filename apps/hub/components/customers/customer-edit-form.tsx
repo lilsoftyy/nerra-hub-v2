@@ -67,7 +67,7 @@ export function CustomerEditForm({ company }: { company: Company }) {
             )}
             {company.operational_area && (
               <>
-                <dt className="text-muted-foreground">Operasjonsomr\u00e5de</dt>
+                <dt className="text-muted-foreground">Operasjonsområde</dt>
                 <dd>{company.operational_area}</dd>
               </>
             )}
@@ -114,7 +114,7 @@ export function CustomerEditForm({ company }: { company: Company }) {
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="operational_area">Operasjonsomr{'\u00e5'}de</Label>
+              <Label htmlFor="operational_area">Operasjonsområde</Label>
               <Input id="operational_area" name="operational_area" defaultValue={company.operational_area ?? ''} />
             </div>
             <div className="space-y-2">

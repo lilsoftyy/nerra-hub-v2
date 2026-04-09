@@ -8,7 +8,7 @@ function formatTimeRange(start: string, end: string, isAllDay: boolean): string 
   try {
     const s = new Date(start);
     const e = new Date(end);
-    return `${s.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })} \u2013 ${e.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
+    return `${s.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })} – ${e.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
   } catch {
     return '';
   }

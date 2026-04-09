@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
-import Link from 'next/link';
-import { LogoutButton } from '@/components/shared/logout-button';
+import { Sidebar } from '@/components/shared/sidebar';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const headersList = await headers();
@@ -24,45 +23,19 @@ export default async function AppLayout({ children }: { children: React.ReactNod
   }
 
   return (
-    <div className="min-h-screen">
-      <header className="border-b px-6 py-4">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <h1 className="text-lg font-semibold">Nerra Hub</h1>
-            <nav className="flex items-center gap-4 text-sm">
-              <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
-                Dashboard
-              </Link>
-              <Link href="/inbox" className="text-muted-foreground hover:text-foreground transition-colors">
-                Innboks
-              </Link>
-              <Link href="/customers" className="text-muted-foreground hover:text-foreground transition-colors">
-                Kunder
-              </Link>
-              <Link href="/tasks" className="text-muted-foreground hover:text-foreground transition-colors">
-                Oppgaver
-              </Link>
-              <Link href="/documents" className="text-muted-foreground hover:text-foreground transition-colors">
-                Dokumenter
-              </Link>
-              <Link href="/contracts" className="text-muted-foreground hover:text-foreground transition-colors">
-                Kontrakter
-              </Link>
-              <Link href="/calendar" className="text-muted-foreground hover:text-foreground transition-colors">
-                Kalender
-              </Link>
-              <Link href="/agents" className="text-muted-foreground hover:text-foreground transition-colors">
-                Agenter
-              </Link>
-            </nav>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-sm text-muted-foreground">{userEmail}</span>
-            {!isDev && <LogoutButton />}
-          </div>
+    <div className="flex h-screen overflow-hidden bg-background">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-foreground focus:px-4 focus:py-2 focus:text-sm focus:text-background"
+      >
+        Hopp til hovedinnhold
+      </a>
+      <Sidebar userEmail={userEmail} showLogout={!isDev} />
+      <main id="main-content" className="flex-1 overflow-y-auto">
+        <div className="px-10 py-8">
+          {children}
         </div>
-      </header>
-      <main className="p-6">{children}</main>
+      </main>
     </div>
   );
 }

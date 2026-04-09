@@ -46,7 +46,7 @@ export async function ActivityLog({ companyId }: ActivityLogProps) {
                   <span className="font-medium">
                     {entry.actor_type === 'human' ? 'Bruker' : entry.actor_name ?? 'Agent'}
                   </span>
-                  {' \u2014 '}
+                  {' — '}
                   <span>{actionLabels[entry.action] ?? entry.action}</span>
                   {entry.details && typeof entry.details === 'object' && 'from' in entry.details && 'to' in entry.details && (
                     <span className="text-muted-foreground">

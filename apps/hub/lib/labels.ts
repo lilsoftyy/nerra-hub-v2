@@ -3,7 +3,7 @@ export const phaseLabels: Record<string, string> = {
   qualification: 'Kvalifisering',
   sales: 'Salg',
   onboarding: 'Onboarding',
-  training: 'Oppl\u00e6ring',
+  training: 'Opplæring',
   operational: 'Operativ',
   finished: 'Ferdig',
 };
@@ -19,9 +19,9 @@ export const phaseColors: Record<string, string> = {
 };
 
 export const taskStatusLabels: Record<string, string> = {
-  open: '\u00c5pen',
+  open: 'Åpen',
   in_progress: 'Under arbeid',
-  done: 'Fullf\u00f8rt',
+  done: 'Fullført',
   cancelled: 'Kansellert',
 };
 
@@ -35,7 +35,7 @@ export const taskStatusColors: Record<string, string> = {
 export const taskPriorityLabels: Record<string, string> = {
   low: 'Lav',
   medium: 'Medium',
-  high: 'H\u00f8y',
+  high: 'Høy',
   critical: 'Kritisk',
 };
 
@@ -48,7 +48,7 @@ export const taskPriorityColors: Record<string, string> = {
 
 export const taskCategoryLabels: Record<string, string> = {
   sales: 'Salg',
-  training: 'Oppl\u00e6ring',
+  training: 'Opplæring',
   admin: 'Administrasjon',
   development: 'Utvikling',
   research: 'Research',
@@ -74,8 +74,8 @@ export const contractStatusLabels: Record<string, string> = {
   sent: 'Sendt',
   viewed: 'Sett',
   signed: 'Signert',
-  declined: 'Avsl\u00e5tt',
-  expired: 'Utl\u00f8pt',
+  declined: 'Avslått',
+  expired: 'Utløpt',
 };
 
 export const contractStatusColors: Record<string, string> = {
