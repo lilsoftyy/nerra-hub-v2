@@ -51,6 +51,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <Link href="/calendar" className="text-muted-foreground hover:text-foreground transition-colors">
                 Kalender
               </Link>
+              <Link href="/agents" className="text-muted-foreground hover:text-foreground transition-colors">
+                Agenter
+              </Link>
             </nav>
           </div>
           <div className="flex items-center gap-3">
