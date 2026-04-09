@@ -11,6 +11,8 @@ import { CustomerEditForm } from '@/components/customers/customer-edit-form';
 import { ContactList } from '@/components/customers/contact-list';
 import { QualificationResponse } from '@/components/customers/qualification-response';
 import { CreateContractForm } from '@/components/contracts/create-contract-form';
+import Link from 'next/link';
+import { FileText } from 'lucide-react';
 
 const phaseLabels: Record<string, string> = {
   lead: 'Lead',
@@ -65,11 +67,21 @@ export default async function CustomerDetailPage({
     .eq('phase', company.phase)
     .order('sort_order');
 
-  const { data: qualificationResponse } = await supabase
-    .from('qualification_form_responses')
-    .select('*')
-    .eq('company_id', companyId)
-    .single();
+  const [qualificationResult, documentsResult] = await Promise.all([
+    supabase
+      .from('qualification_form_responses')
+      .select('*')
+      .eq('company_id', companyId)
+      .single(),
+    supabase
+      .from('documents')
+      .select('id, title, kind, created_at')
+      .eq('company_id', companyId)
+      .order('created_at', { ascending: false }),
+  ]);
+
+  const qualificationResponse = qualificationResult.data;
+  const documents = documentsResult.data ?? [];
 
   const currentPhaseIndex = phases.indexOf(company.phase);
   const nextPhase = currentPhaseIndex < phases.length - 1 ? phases[currentPhaseIndex + 1] : null;
@@ -88,6 +100,16 @@ export default async function CustomerDetailPage({
             {company.flagged && (
               <Badge variant="destructive">Flagget</Badge>
             )}
+            {documents.length > 0 && documents.map((doc) => (
+              <Link
+                key={doc.id}
+                href={`/documents/${doc.id}`}
+                className="group relative"
+                title={doc.title}
+              >
+                <FileText className="size-4 text-primary/50 transition-[color] duration-150 group-hover:text-primary" strokeWidth={1.75} />
+              </Link>
+            ))}
           </div>
         </div>
         {nextPhase && (

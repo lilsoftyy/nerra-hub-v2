@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { documentKindLabels, documentVisibilityLabels } from '@/lib/labels';
 import Link from 'next/link';
 import { DocumentEditor } from '@/components/documents/document-editor';
+import { DocumentActions } from '@/components/documents/document-actions';
 
 export default async function DocumentDetailPage({
   params,
@@ -26,8 +27,11 @@ export default async function DocumentDetailPage({
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <div>
+      <div className="flex items-start justify-between">
         <h1 className="text-xl font-semibold tracking-tight">{doc.title}</h1>
+        <DocumentActions documentId={doc.id} title={doc.title} />
+      </div>
+      <div>
         <div className="flex flex-wrap items-center gap-3 mt-1">
           <Badge variant="secondary">
             {documentKindLabels[doc.kind] ?? doc.kind}

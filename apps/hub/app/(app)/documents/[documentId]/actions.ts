@@ -3,6 +3,14 @@
 import { createClient } from '@/lib/supabase/server';
 import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { v7 as uuidv7 } from 'uuid';
+import { redirect } from 'next/navigation';
+
+export async function deleteDocument(documentId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from('documents').delete().eq('id', documentId);
+  if (error) return { error: error.message };
+  redirect('/documents');
+}
 
 export async function saveDocumentEdit(documentId: string, editedMarkdown: string) {
   const supabase = await createClient();
