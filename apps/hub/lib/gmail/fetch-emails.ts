@@ -67,7 +67,8 @@ export async function fetchRecentEmails(maxResults = 20): Promise<EmailSummary[]
     }
 
     return emails;
-  } catch {
+  } catch (err) {
+    console.error('[Gmail] Feil ved henting av e-post:', err instanceof Error ? err.message : err);
     return [];
   }
 }

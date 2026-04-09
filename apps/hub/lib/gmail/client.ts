@@ -5,7 +5,10 @@ export async function getGmailClient() {
   const supabase = await createClient();
   const { data: { session } } = await supabase.auth.getSession();
 
-  if (!session?.provider_token) {
+  const accessToken = session?.provider_token;
+  const refreshToken = session?.provider_refresh_token;
+
+  if (!accessToken && !refreshToken) {
     return null;
   }
 
@@ -15,7 +18,8 @@ export async function getGmailClient() {
   );
 
   oauth2Client.setCredentials({
-    access_token: session.provider_token,
+    access_token: accessToken ?? undefined,
+    refresh_token: refreshToken ?? undefined,
   });
 
   return google.gmail({ version: 'v1', auth: oauth2Client });

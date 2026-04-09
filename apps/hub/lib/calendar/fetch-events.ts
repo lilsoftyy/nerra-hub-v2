@@ -51,7 +51,8 @@ export async function fetchUpcomingEvents(maxResults = 20): Promise<CalendarEven
         isAllDay,
       };
     });
-  } catch {
+  } catch (err) {
+    console.error('[Calendar] Feil ved henting av hendelser:', err instanceof Error ? err.message : err);
     return [];
   }
 }
