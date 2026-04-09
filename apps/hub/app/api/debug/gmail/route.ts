@@ -10,8 +10,11 @@ export async function GET() {
     return NextResponse.json({ error: 'Ingen sesjon', step: 'session' });
   }
 
-  if (!session.provider_token) {
-    return NextResponse.json({ error: 'Ingen provider_token', step: 'token' });
+  const accessToken = session.provider_token;
+  const refreshToken = session.provider_refresh_token;
+
+  if (!accessToken && !refreshToken) {
+    return NextResponse.json({ error: 'Ingen provider_token eller refresh_token', step: 'token' });
   }
 
   const clientId = process.env.GOOGLE_OAUTH_CLIENT_ID;
@@ -28,7 +31,10 @@ export async function GET() {
 
   try {
     const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
-    oauth2Client.setCredentials({ access_token: session.provider_token });
+    oauth2Client.setCredentials({
+      access_token: accessToken ?? undefined,
+      refresh_token: refreshToken ?? undefined,
+    });
 
     const gmail = google.gmail({ version: 'v1', auth: oauth2Client });
     const response = await gmail.users.messages.list({
@@ -41,9 +47,18 @@ export async function GET() {
       success: true,
       messageCount: response.data.resultSizeEstimate ?? 0,
       firstMessageId: response.data.messages?.[0]?.id ?? null,
+      hasAccessToken: !!accessToken,
+      hasRefreshToken: !!refreshToken,
     });
-  } catch (err) {
-    const message = err instanceof Error ? err.message : 'Ukjent feil';
-    return NextResponse.json({ error: message, step: 'gmail_api' });
+  } catch (err: unknown) {
+    const error = err as { message?: string; code?: number; errors?: unknown[] };
+    return NextResponse.json({
+      error: error.message ?? 'Ukjent feil',
+      code: error.code ?? null,
+      details: error.errors ?? null,
+      step: 'gmail_api',
+      hasAccessToken: !!accessToken,
+      hasRefreshToken: !!refreshToken,
+    });
   }
 }
