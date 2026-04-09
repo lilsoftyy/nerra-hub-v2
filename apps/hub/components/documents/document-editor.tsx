@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { MarkdownContent } from '@/components/shared/markdown-content';
+import { useToast } from '@/components/shared/toast-provider';
 import { saveDocumentEdit } from '@/app/(app)/documents/[documentId]/actions';
 import { Pencil, Eye, Save, Loader2 } from 'lucide-react';
 
@@ -13,29 +14,97 @@ interface DocumentEditorProps {
   isGenerated: boolean;
 }
 
+/** Convert HTML from contentEditable back to markdown */
+function htmlToMarkdown(html: string): string {
+  const div = document.createElement('div');
+  div.innerHTML = html;
+
+  function processNode(node: Node): string {
+    if (node.nodeType === Node.TEXT_NODE) {
+      return node.textContent ?? '';
+    }
+
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+    const el = node as HTMLElement;
+    const tag = el.tagName.toLowerCase();
+    const childText = Array.from(el.childNodes).map(processNode).join('');
+
+    switch (tag) {
+      case 'h1': return `# ${childText}\n\n`;
+      case 'h2': return `## ${childText}\n\n`;
+      case 'h3': return `### ${childText}\n\n`;
+      case 'h4': return `#### ${childText}\n\n`;
+      case 'p': return `${childText}\n\n`;
+      case 'strong': case 'b': return `**${childText}**`;
+      case 'em': case 'i': return `*${childText}*`;
+      case 'ul': return `${childText}\n`;
+      case 'ol': return `${childText}\n`;
+      case 'li': {
+        const parent = el.parentElement?.tagName.toLowerCase();
+        const prefix = parent === 'ol'
+          ? `${Array.from(el.parentElement!.children).indexOf(el) + 1}. `
+          : '- ';
+        return `${prefix}${childText}\n`;
+      }
+      case 'blockquote': return `> ${childText.trim()}\n\n`;
+      case 'hr': return `---\n\n`;
+      case 'br': return '\n';
+      case 'a': {
+        const href = el.getAttribute('href');
+        return href ? `[${childText}](${href})` : childText;
+      }
+      case 'code': {
+        if (el.parentElement?.tagName.toLowerCase() === 'pre') return childText;
+        return `\`${childText}\``;
+      }
+      case 'pre': return `\`\`\`\n${childText}\n\`\`\`\n\n`;
+      case 'div': case 'article': case 'section': return childText;
+      default: return childText;
+    }
+  }
+
+  const result = processNode(div)
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+
+  return result;
+}
+
 export function DocumentEditor({ documentId, content, isGenerated }: DocumentEditorProps) {
   const router = useRouter();
+  const { addToast, updateToast } = useToast();
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(content);
   const [saving, setSaving] = useState(false);
-  const [saved, setSaved] = useState(false);
+  const editorRef = useRef<HTMLDivElement>(null);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
+    if (!editorRef.current) return;
     setSaving(true);
-    const result = await saveDocumentEdit(documentId, text);
-    if (result.error) alert(result.error);
-    else {
-      setSaved(true);
+
+    // Konverter HTML tilbake til markdown
+    const editedMarkdown = htmlToMarkdown(editorRef.current.innerHTML);
+    setText(editedMarkdown);
+
+    const toastId = addToast({ type: 'loading', title: 'Lagrer endringer...' });
+
+    const result = await saveDocumentEdit(documentId, editedMarkdown);
+    if (result.error) {
+      updateToast(toastId, { type: 'error', title: 'Feil', description: result.error });
+    } else {
+      updateToast(toastId, {
+        type: 'success',
+        title: 'Lagret',
+        description: 'Agenten lærer av endringene dine',
+      });
       setEditing(false);
       router.refresh();
-      setTimeout(() => setSaved(false), 3000);
     }
     setSaving(false);
-  };
+  }, [documentId, addToast, updateToast, router]);
 
   return (
     <div>
-      {/* Toolbar */}
       {isGenerated && (
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -55,9 +124,8 @@ export function DocumentEditor({ documentId, content, isGenerated }: DocumentEdi
             </button>
           </div>
           <div className="flex items-center gap-2">
-            {saved && <span className="text-xs text-emerald-600">Lagret — agenten lærer av endringene</span>}
             {editing && (
-              <Button size="sm" onClick={handleSave} disabled={saving || text === content}>
+              <Button size="sm" onClick={handleSave} disabled={saving}>
                 {saving ? (
                   <><Loader2 className="size-3.5 animate-spin" aria-hidden="true" />Lagrer...</>
                 ) : (
@@ -69,13 +137,16 @@ export function DocumentEditor({ documentId, content, isGenerated }: DocumentEdi
         </div>
       )}
 
-      {/* Content */}
       {editing ? (
-        <textarea
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          className="w-full min-h-[500px] rounded-xl border border-input bg-transparent px-5 py-4 text-sm font-mono leading-relaxed outline-none resize-y focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-        />
+        <div
+          ref={editorRef}
+          contentEditable
+          suppressContentEditableWarning
+          className="mx-auto rounded-xl ring-1 ring-primary/20 px-6 py-4 outline-none focus:ring-primary/40"
+          style={{ maxWidth: '700px', fontSize: '14.5px', lineHeight: 1.75 }}
+        >
+          <MarkdownContent content={text} />
+        </div>
       ) : (
         <MarkdownContent content={text} />
       )}

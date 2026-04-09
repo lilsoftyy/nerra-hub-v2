@@ -68,22 +68,22 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
       {children}
 
       {/* Toast container */}
-      <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 w-[340px]">
+      <div className="fixed top-4 right-4 z-[100] flex flex-col gap-2 w-[300px]">
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className="rounded-2xl bg-popover px-4 py-3 text-sm ring-1 ring-foreground/10 animate-in slide-in-from-right-full fade-in duration-200"
-            style={{ boxShadow: '0 8px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)' }}
+            className="rounded-xl bg-popover px-3.5 py-2.5 text-sm ring-1 ring-foreground/10 animate-in slide-in-from-right-full fade-in duration-200"
+            style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03)' }}
           >
             <div className="flex items-start gap-3">
               <div className="mt-0.5 shrink-0">{icons[toast.type]}</div>
               <div className="min-w-0 flex-1">
-                <p className="font-medium">{toast.title}</p>
-                {toast.description && <p className="mt-0.5 text-xs text-muted-foreground">{toast.description}</p>}
+                <p className="font-medium text-[13px]">{toast.title}</p>
+                {toast.description && <p className="mt-0.5 text-[11px] text-muted-foreground">{toast.description}</p>}
                 {toast.action && (
                   <button
                     onClick={toast.action.onClick}
-                    className="mt-1.5 text-xs text-primary hover:underline"
+                    className="mt-1.5 text-[11px] text-primary hover:underline"
                   >
                     {toast.action.label}
                   </button>
@@ -94,9 +94,14 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 className="shrink-0 text-muted-foreground/40 hover:text-foreground transition-[color] duration-150"
                 aria-label="Lukk"
               >
-                <X className="size-3.5" strokeWidth={1.75} />
+                <X className="size-3" strokeWidth={1.75} />
               </button>
             </div>
+            {toast.type === 'loading' && (
+              <div className="mt-2 h-0.5 w-full overflow-hidden rounded-full bg-muted">
+                <div className="h-full animate-progress rounded-full bg-primary/40" />
+              </div>
+            )}
           </div>
         ))}
       </div>
