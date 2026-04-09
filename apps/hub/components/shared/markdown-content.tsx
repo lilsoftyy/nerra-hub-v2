@@ -6,7 +6,19 @@ interface MarkdownContentProps {
   content: string;
 }
 
+function cleanContent(raw: string): string {
+  return raw
+    .replace(/[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]/gu, '')
+    .replace(/\u200B/g, '')
+    .replace(/\[\d+\]/g, '')
+    .replace(/\n\n\.\s*\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 export function MarkdownContent({ content }: MarkdownContentProps) {
+  const cleaned = cleanContent(content);
+
   return (
     <article className="max-w-none text-[14px] leading-[1.6] text-foreground">
       <ReactMarkdown
@@ -52,7 +64,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
           ),
         }}
       >
-        {content}
+        {cleaned}
       </ReactMarkdown>
     </article>
   );
