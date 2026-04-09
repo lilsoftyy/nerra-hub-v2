@@ -4,6 +4,7 @@ import { createClient } from '@/lib/supabase/server';
 import { v7 as uuidv7 } from 'uuid';
 import { createCompanySchema } from '@/lib/validators/company';
 import { redirect } from 'next/navigation';
+import { PHASES } from '@/lib/constants';
 
 export type CreateCompanyState = {
   error?: Record<string, string[]>;
@@ -59,8 +60,6 @@ export async function updateCompanyPhase(companyId: string, newPhase: string) {
   const supabase = await createClient();
 
   // Validate phase transition (forward only, one step)
-  const phases = ['lead', 'qualification', 'sales', 'onboarding', 'training', 'operational', 'finished'];
-
   const { data: company } = await supabase
     .from('companies')
     .select('phase')
@@ -69,6 +68,7 @@ export async function updateCompanyPhase(companyId: string, newPhase: string) {
 
   if (!company) return { error: 'Kunde ikke funnet' };
 
+  const phases = PHASES as readonly string[];
   const currentIndex = phases.indexOf(company.phase);
   const newIndex = phases.indexOf(newPhase);
 

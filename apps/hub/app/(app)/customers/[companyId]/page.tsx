@@ -32,7 +32,8 @@ const phaseColors: Record<string, string> = {
   finished: 'bg-slate-100 text-slate-800',
 };
 
-const phases = ['lead', 'qualification', 'sales', 'onboarding', 'training', 'operational', 'finished'];
+import { PHASES } from '@/lib/constants';
+const phases = PHASES;
 
 export default async function CustomerDetailPage({
   params,

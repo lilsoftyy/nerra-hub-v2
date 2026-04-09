@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { notifyResearchComplete } from '@/lib/slack/notifications';
 import { loadSkill } from '@/lib/agents/skill-loader';
+import { cleanAgentContent } from '@/lib/agents/utils';
 import { v7 as uuidv7 } from 'uuid';
 
 export interface ResearchResult {
@@ -69,32 +70,11 @@ Start direkte med "# Research: ${company.name}" og følg instruksjonene i skille
     messages: [{ role: 'user', content: prompt }],
   });
 
-  // Extract text from the response (may contain multiple blocks due to tool use)
-  // Filter out citation markers (small squares/dots from web search references)
-  const rawContent = message.content
-    .filter((block) => block.type === 'text')
-    .map((block) => 'text' in block ? block.text : '')
-    .join('\n\n');
-
-  // Remove citation markers like [1], [2], etc. and unicode citation characters
-  const content = rawContent
-    .replace(/\[\d+\]/g, '')
-    .replace(/[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]/gu, '')
-    .replace(/\u200B/g, '')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
+  const { content, summary } = cleanAgentContent(message);
 
   if (!content) {
     return { document_id: null, error: 'Agenten genererte ingen tekst' };
   }
-
-  // Generate summary (first meaningful paragraph)
-  const summary = content
-    .split('\n\n')
-    .find((p) => p.length > 20)
-    ?.replace(/[#*]/g, '')
-    .trim()
-    .slice(0, 200) ?? '';
 
   // Save document
   const docId = uuidv7();

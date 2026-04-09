@@ -13,6 +13,7 @@ import {
 } from '@/lib/labels';
 import { GripVertical, Plus } from 'lucide-react';
 import Link from 'next/link';
+import { formatShortDate } from '@/lib/formatters';
 
 interface Task {
   id: string;
@@ -59,17 +60,11 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
     setDraggedTaskId(taskId);
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/plain', taskId);
-    if (e.currentTarget instanceof HTMLElement) {
-      e.currentTarget.style.opacity = '0.5';
-    }
   }, []);
 
-  const handleDragEnd = useCallback((e: React.DragEvent) => {
+  const handleDragEnd = useCallback(() => {
     setDraggedTaskId(null);
     setDragOverColumn(null);
-    if (e.currentTarget instanceof HTMLElement) {
-      e.currentTarget.style.opacity = '1';
-    }
   }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent, columnId: string) => {
@@ -184,7 +179,7 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                           )}
                           {task.due_date && (
                             <span className="text-[10px] text-muted-foreground tabular-nums">
-                              {new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' }).format(new Date(task.due_date))}
+                              {formatShortDate(task.due_date)}
                             </span>
                           )}
                         </div>

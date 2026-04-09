@@ -1,6 +1,7 @@
 import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { notifyResearchComplete } from '@/lib/slack/notifications';
 import { loadSkill } from '@/lib/agents/skill-loader';
+import { cleanAgentContent } from '@/lib/agents/utils';
 import { v7 as uuidv7 } from 'uuid';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -107,29 +108,11 @@ Start direkte med "# Kunderesearch: ${company.name}" og følg instruksjonene i s
     messages: [{ role: 'user', content: prompt }],
   });
 
-  // Ekstraher tekst og rens opp
-  const rawContent = message.content
-    .filter((block) => block.type === 'text')
-    .map((block) => 'text' in block ? block.text : '')
-    .join('\n\n');
-
-  const content = rawContent
-    .replace(/\[\d+\]/g, '')
-    .replace(/[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]/gu, '')
-    .replace(/\u200B/g, '')
-    .replace(/\s{2,}/g, ' ')
-    .trim();
+  const { content, summary } = cleanAgentContent(message);
 
   if (!content) {
     return { document_id: null, error: 'Agenten genererte ingen tekst' };
   }
-
-  const summary = content
-    .split('\n\n')
-    .find((p) => p.length > 20)
-    ?.replace(/[#*]/g, '')
-    .trim()
-    .slice(0, 200) ?? '';
 
   // Lagre dokument
   const docId = uuidv7();

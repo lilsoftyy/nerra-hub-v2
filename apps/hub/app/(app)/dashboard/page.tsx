@@ -4,11 +4,16 @@ import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import Link from 'next/link';
 import { fetchUpcomingEvents } from '@/lib/calendar/fetch-events';
+import { phaseLabels, taskPriorityLabels, taskPriorityColors } from '@/lib/labels';
+import { PHASES, TEAM_MEMBERS, phaseDotColors } from '@/lib/constants';
 import {
-  phaseLabels,
-  taskPriorityLabels,
-  taskPriorityColors,
-} from '@/lib/labels';
+  getGreeting,
+  formatNorwegianDate,
+  formatRelativeDate,
+  formatShortDate,
+  formatTimeRange,
+  formatRelativeTime,
+} from '@/lib/formatters';
 import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 import { ProposalActions } from '@/components/dashboard/proposal-actions';
 import { TaskCreateDialog } from '@/components/tasks/task-create-dialog';
@@ -21,71 +26,6 @@ import {
   ArrowRight,
   Bot,
 } from 'lucide-react';
-
-const phaseDotColors: Record<string, string> = {
-  lead: 'bg-neutral-400',
-  qualification: 'bg-blue-500',
-  sales: 'bg-amber-500',
-  onboarding: 'bg-violet-500',
-  training: 'bg-orange-500',
-  operational: 'bg-emerald-500',
-  finished: 'bg-neutral-300',
-};
-
-function getGreeting(): string {
-  const hour = new Date().getHours();
-  if (hour < 10) return 'God morgen';
-  if (hour < 17) return 'God ettermiddag';
-  return 'God kveld';
-}
-
-function getFirstName(email: string): string {
-  const nameMap: Record<string, string> = {
-    'magnus@nerra.no': 'Magnus',
-    'martin@nerra.no': 'Martin',
-  };
-  return nameMap[email] ?? email.split('@')[0] ?? '';
-}
-
-function formatNorwegianDate(date: Date): string {
-  return date.toLocaleDateString('nb-NO', {
-    weekday: 'long',
-    day: 'numeric',
-    month: 'long',
-  });
-}
-
-function formatEventDate(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-
-  if (date.toDateString() === now.toDateString()) return 'I dag';
-  if (date.toDateString() === tomorrow.toDateString()) return 'I morgen';
-  return new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' }).format(date);
-}
-
-function formatEventTime(start: string, end: string, isAllDay: boolean): string {
-  if (isAllDay) return 'Hele dagen';
-  const s = new Date(start);
-  const e = new Date(end);
-  return `${s.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })} – ${e.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
-}
-
-function formatRelativeTime(dateStr: string): string {
-  const date = new Date(dateStr);
-  const now = new Date();
-  const diffMs = now.getTime() - date.getTime();
-  const diffMin = Math.floor(diffMs / 60000);
-  const diffHours = Math.floor(diffMin / 60);
-  const diffDays = Math.floor(diffHours / 24);
-
-  if (diffMin < 1) return 'Akkurat nå';
-  if (diffMin < 60) return `${diffMin} min siden`;
-  if (diffHours < 24) return `${diffHours} t siden`;
-  return `${diffDays} d siden`;
-}
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -184,7 +124,7 @@ export default async function DashboardPage() {
   const activities = activityResult.data ?? [];
 
   const pipelineCounts: Record<string, number> = {};
-  const phases = ['lead', 'qualification', 'sales', 'onboarding', 'training', 'operational', 'finished'];
+  const phases = PHASES;
   for (const phase of phases) {
     pipelineCounts[phase] = 0;
   }
@@ -193,7 +133,7 @@ export default async function DashboardPage() {
   }
   const totalCompanies = (pipelineResult.data ?? []).length || 1;
 
-  const firstName = getFirstName(userEmail);
+  const firstName = TEAM_MEMBERS[userEmail] ?? userEmail.split('@')[0] ?? '';
   const greeting = getGreeting();
   const todayEvents = calendarEvents.filter((e) => new Date(e.start).toDateString() === today.toDateString());
   const todayHasContent = todayTasks.length > 0 || overdueTasks.length > 0 || pendingProposalsCount > 0 || todayEvents.length > 0;
@@ -246,7 +186,7 @@ export default async function DashboardPage() {
                   <Calendar className="size-3.5 shrink-0 text-primary/60" strokeWidth={1.75} aria-hidden="true" />
                   <span>{event.title}</span>
                   <span className="text-xs text-muted-foreground">
-                    {formatEventTime(event.start, event.end, event.isAllDay)}
+                    {formatTimeRange(event.start, event.end, event.isAllDay)}
                   </span>
                 </div>
               ))}
@@ -315,7 +255,7 @@ export default async function DashboardPage() {
                             </Badge>
                             {task.due_date && (
                               <span className="text-xs text-muted-foreground tabular-nums">
-                                {new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' }).format(new Date(task.due_date))}
+                                {formatShortDate(task.due_date)}
                               </span>
                             )}
                           </div>
@@ -470,11 +410,11 @@ export default async function DashboardPage() {
                       <div className="min-w-0 flex-1">
                         <p className="text-sm">{event.title}</p>
                         <p className="text-xs text-muted-foreground">
-                          {formatEventTime(event.start, event.end, event.isAllDay)}
+                          {formatTimeRange(event.start, event.end, event.isAllDay)}
                         </p>
                       </div>
                       <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
-                        {formatEventDate(event.start)}
+                        {formatRelativeDate(event.start)}
                       </span>
                     </div>
                   ))}
