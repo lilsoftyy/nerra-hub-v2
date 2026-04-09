@@ -1,4 +1,5 @@
 export const phaseLabels: Record<string, string> = {
+  contact: 'Kontakt',
   lead: 'Lead',
   qualification: 'Kvalifisering',
   sales: 'Salg',

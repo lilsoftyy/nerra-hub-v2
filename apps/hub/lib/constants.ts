@@ -22,6 +22,7 @@ export const ALLOWED_DOMAIN = 'nerra.no';
 
 /** Dot colors for pipeline visualization */
 export const phaseDotColors: Record<string, string> = {
+  contact: 'bg-neutral-300',
   lead: 'bg-neutral-400',
   qualification: 'bg-blue-500',
   sales: 'bg-amber-500',

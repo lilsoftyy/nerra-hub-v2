@@ -12,33 +12,35 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { AIContactLookup } from '@/components/customers/ai-contact-lookup';
+import { PersonEditButton } from '@/components/customers/person-edit-button';
 import { Plus } from 'lucide-react';
+import { formatShortDate } from '@/lib/formatters';
 
 const potentialCustomerPhases = ['lead', 'qualification', 'sales', 'onboarding', 'training'];
 
 export default async function CustomersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ search?: string; phase?: string }>;
+  searchParams: Promise<{ search?: string }>;
 }) {
   const params = await searchParams;
   const supabase = await createClient();
 
-  let query = supabase
-    .from('companies')
-    .select('id, name, phase, country, created_at, contacts(full_name, role)')
-    .is('deleted_at', null)
+  // Hent alle kontakter med selskapsinfo
+  const { data: contacts } = await supabase
+    .from('contacts')
+    .select('id, full_name, email, phone, role, is_primary, company_id, companies(id, name, phase, country, created_at)')
     .order('created_at', { ascending: false });
 
+  // Filtrer på søk
+  let filtered = contacts ?? [];
   if (params.search) {
-    query = query.ilike('name', `%${params.search}%`);
+    const q = params.search.toLowerCase();
+    filtered = filtered.filter((c) => {
+      const company = c.companies as unknown as { name: string } | null;
+      return c.full_name.toLowerCase().includes(q) || company?.name.toLowerCase().includes(q);
+    });
   }
-
-  if (params.phase) {
-    query = query.eq('phase', params.phase);
-  }
-
-  const { data: companies } = await query;
 
   return (
     <div className="space-y-6">
@@ -56,7 +58,7 @@ export default async function CustomersPage({
       <form>
         <Input
           name="search"
-          placeholder="Søk etter navn eller selskap..."
+          placeholder="Søk..."
           defaultValue={params.search ?? ''}
           className="max-w-sm"
         />
@@ -66,44 +68,57 @@ export default async function CustomersPage({
         <Table>
           <TableHeader>
             <TableRow>
+              <TableHead>Navn</TableHead>
+              <TableHead>E-post</TableHead>
               <TableHead>Selskap</TableHead>
-              <TableHead>Kontaktperson</TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Land</TableHead>
               <TableHead>Opprettet</TableHead>
+              <TableHead className="w-10" />
             </TableRow>
           </TableHeader>
           <TableBody>
-            {companies && companies.length > 0 ? (
-              companies.map((company) => {
-                const contacts = company.contacts as unknown as Array<{ full_name: string; role?: string }> ?? [];
-                const primary = contacts[0];
-                const isPotentialCustomer = potentialCustomerPhases.includes(company.phase);
+            {filtered.length > 0 ? (
+              filtered.map((contact) => {
+                const company = contact.companies as unknown as { id: string; name: string; phase: string; country: string; created_at: string } | null;
+                const isPotentialCustomer = company ? potentialCustomerPhases.includes(company.phase) : false;
 
                 return (
-                  <TableRow key={company.id}>
+                  <TableRow key={contact.id}>
                     <TableCell>
-                      <Link
-                        href={`/customers/${company.id}`}
-                        className="text-sm font-medium hover:underline"
-                      >
-                        {company.name}
-                      </Link>
+                      <div>
+                        <p className="text-sm font-medium">{contact.full_name}</p>
+                        {contact.role && <p className="text-xs text-muted-foreground">{contact.role}</p>}
+                      </div>
                     </TableCell>
                     <TableCell>
-                      {primary ? (
-                        <div>
-                          <p className="text-sm">{primary.full_name}</p>
-                          {primary.role && <p className="text-xs text-muted-foreground">{primary.role}</p>}
-                        </div>
+                      {contact.email ? (
+                        <a
+                          href={`mailto:${contact.email}`}
+                          className="text-sm text-primary hover:underline"
+                        >
+                          {contact.email}
+                        </a>
                       ) : (
-                        <span className="text-xs text-muted-foreground">Ingen kontakt</span>
+                        <span className="text-xs text-muted-foreground">—</span>
+                      )}
+                    </TableCell>
+                    <TableCell>
+                      {company ? (
+                        <Link
+                          href={`/customers/${company.id}`}
+                          className="text-sm hover:underline"
+                        >
+                          {company.name}
+                        </Link>
+                      ) : (
+                        <span className="text-xs text-muted-foreground">—</span>
                       )}
                     </TableCell>
                     <TableCell>
                       {isPotentialCustomer ? (
                         <Badge className="bg-primary/10 text-primary text-[10px]">
-                          Potensiell kunde
+                          Kunde
                         </Badge>
                       ) : (
                         <Badge variant="outline" className="text-[10px]">
@@ -111,17 +126,28 @@ export default async function CustomersPage({
                         </Badge>
                       )}
                     </TableCell>
-                    <TableCell className="text-sm text-muted-foreground">{company.country}</TableCell>
                     <TableCell className="text-sm text-muted-foreground">
-                      {new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' }).format(new Date(company.created_at))}
+                      {company?.country ?? '—'}
+                    </TableCell>
+                    <TableCell className="text-sm text-muted-foreground">
+                      {company ? formatShortDate(company.created_at) : '—'}
+                    </TableCell>
+                    <TableCell>
+                      <PersonEditButton
+                        contactId={contact.id}
+                        fullName={contact.full_name}
+                        email={contact.email}
+                        phone={contact.phone}
+                        role={contact.role}
+                      />
                     </TableCell>
                   </TableRow>
                 );
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="text-center text-muted-foreground py-12">
-                  Ingen personer funnet. Bruk &quot;AI-søk&quot; for å legge til den første.
+                <TableCell colSpan={7} className="text-center text-muted-foreground py-12">
+                  Ingen personer funnet.
                 </TableCell>
               </TableRow>
             )}

@@ -185,7 +185,7 @@ export async function createContactFromLookup(data: {
     employee_count: data.company_employee_count || null,
     operational_area: data.company_operational_area || null,
     notes: [data.company_description, data.company_email ? `E-post: ${data.company_email}` : null, data.company_phone ? `Tlf: ${data.company_phone}` : null].filter(Boolean).join('\n') || null,
-    phase: data.is_potential_customer ? 'lead' : 'operational',
+    phase: data.is_potential_customer ? 'lead' : 'contact',
   });
 
   if (companyError) return { error: companyError.message };
