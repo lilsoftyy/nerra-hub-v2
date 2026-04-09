@@ -32,6 +32,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               <Link href="/dashboard" className="text-muted-foreground hover:text-foreground transition-colors">
                 Dashboard
               </Link>
+              <Link href="/inbox" className="text-muted-foreground hover:text-foreground transition-colors">
+                Innboks
+              </Link>
               <Link href="/customers" className="text-muted-foreground hover:text-foreground transition-colors">
                 Kunder
               </Link>
@@ -43,6 +46,9 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               </Link>
               <Link href="/contracts" className="text-muted-foreground hover:text-foreground transition-colors">
                 Kontrakter
+              </Link>
+              <Link href="/calendar" className="text-muted-foreground hover:text-foreground transition-colors">
+                Kalender
               </Link>
             </nav>
           </div>
