@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 import { headers } from 'next/headers';
 import Link from 'next/link';
+import { LogoutButton } from '@/components/shared/logout-button';
 
 export default async function AppLayout({ children }: { children: React.ReactNode }) {
   const headersList = await headers();
@@ -52,7 +53,10 @@ export default async function AppLayout({ children }: { children: React.ReactNod
               </Link>
             </nav>
           </div>
-          <span className="text-sm text-muted-foreground">{userEmail}</span>
+          <div className="flex items-center gap-3">
+            <span className="text-sm text-muted-foreground">{userEmail}</span>
+            {!isDev && <LogoutButton />}
+          </div>
         </div>
       </header>
       <main className="p-6">{children}</main>
