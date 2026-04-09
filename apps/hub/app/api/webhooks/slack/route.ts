@@ -58,7 +58,7 @@ export async function POST(request: Request) {
     if (!companies || companies.length === 0) {
       return NextResponse.json({
         response_type: 'ephemeral',
-        text: `Fant ingen kunde med navn "${text}". Opprett kunden i Hub forst.`,
+        text: `Fant ingen kunde med navn "${text}". Opprett kunden i Hub først.`,
       });
     }
 
@@ -69,7 +69,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       response_type: 'in_channel',
-      text: `Starter research for *${company.name}*. Resultatet postes i kanalen nar det er klart.`,
+      text: `Starter research for *${company.name}*. Resultatet postes i kanalen når det er klart.`,
     });
   }
 
