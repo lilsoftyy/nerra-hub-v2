@@ -10,8 +10,6 @@ export async function createTask(formData: FormData) {
   const title = formData.get('title') as string;
   if (!title) return { error: 'Tittel er påkrevd' };
 
-  const { data: { user } } = await supabase.auth.getUser();
-
   const { error } = await supabase.from('tasks').insert({
     id: uuidv7(),
     title,
@@ -20,8 +18,6 @@ export async function createTask(formData: FormData) {
     category: (formData.get('category') as string) || null,
     company_id: (formData.get('company_id') as string) || null,
     due_date: (formData.get('due_date') as string) || null,
-    assignee_id: user?.id ?? null,
-    created_by: user?.id ?? null,
   });
 
   if (error) return { error: error.message };
@@ -34,8 +30,6 @@ export async function createTaskFromDialog(formData: FormData) {
   const title = formData.get('title') as string;
   if (!title) return { error: 'Tittel er påkrevd' };
 
-  const { data: { user } } = await supabase.auth.getUser();
-
   const { error } = await supabase.from('tasks').insert({
     id: uuidv7(),
     title,
@@ -44,8 +38,6 @@ export async function createTaskFromDialog(formData: FormData) {
     category: (formData.get('category') as string) || null,
     company_id: (formData.get('company_id') as string) || null,
     due_date: (formData.get('due_date') as string) || null,
-    assignee_id: user?.id ?? null,
-    created_by: user?.id ?? null,
   });
 
   if (error) return { error: error.message };
