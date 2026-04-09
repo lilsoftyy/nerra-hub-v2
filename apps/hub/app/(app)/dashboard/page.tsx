@@ -15,7 +15,7 @@ import { TaskCreateDialog } from '@/components/tasks/task-create-dialog';
 import {
   Bell,
   Calendar,
-  Clock,
+  CheckSquare,
   AlertCircle,
   Plus,
   ArrowRight,
@@ -53,6 +53,24 @@ function formatNorwegianDate(date: Date): string {
     day: 'numeric',
     month: 'long',
   });
+}
+
+function formatEventDate(dateStr: string): string {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  if (date.toDateString() === now.toDateString()) return 'I dag';
+  if (date.toDateString() === tomorrow.toDateString()) return 'I morgen';
+  return new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' }).format(date);
+}
+
+function formatEventTime(start: string, end: string, isAllDay: boolean): string {
+  if (isAllDay) return 'Hele dagen';
+  const s = new Date(start);
+  const e = new Date(end);
+  return `${s.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })} – ${e.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
 }
 
 function formatRelativeTime(dateStr: string): string {
@@ -177,7 +195,8 @@ export default async function DashboardPage() {
 
   const firstName = getFirstName(userEmail);
   const greeting = getGreeting();
-  const todayHasContent = todayTasks.length > 0 || overdueTasks.length > 0 || pendingProposalsCount > 0;
+  const todayEvents = calendarEvents.filter((e) => new Date(e.start).toDateString() === today.toDateString());
+  const todayHasContent = todayTasks.length > 0 || overdueTasks.length > 0 || pendingProposalsCount > 0 || todayEvents.length > 0;
 
   const stats = [
     { label: 'Aktive kunder', value: activeCompaniesCount, href: '/customers' },
@@ -188,39 +207,59 @@ export default async function DashboardPage() {
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-end justify-between">
-        <header>
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {greeting}, {firstName}
-          </h1>
-          <p className="mt-0.5 text-sm text-muted-foreground capitalize">
-            {formatNorwegianDate(today)}
-          </p>
-        </header>
+      {/* Header + Dagen i dag */}
+      <header>
+        <h1 className="text-2xl font-semibold tracking-tight">
+          {greeting}, {firstName}
+        </h1>
+        <p className="mt-0.5 text-sm text-muted-foreground capitalize">
+          {formatNorwegianDate(today)}
+        </p>
+
         {todayHasContent && (
-          <div className="flex items-center gap-4 text-sm">
-            {overdueTasks.length > 0 && (
-              <div className="flex items-center gap-1.5 text-red-600">
-                <AlertCircle className="size-4" strokeWidth={1.75} aria-hidden="true" />
-                <span>{overdueTasks.length} forfalt</span>
-              </div>
-            )}
-            {todayTasks.length > 0 && (
-              <div className="flex items-center gap-1.5 text-muted-foreground">
-                <Clock className="size-4" strokeWidth={1.75} aria-hidden="true" />
-                <span>{todayTasks.length} i dag</span>
-              </div>
-            )}
-            {pendingProposalsCount > 0 && (
-              <div className="flex items-center gap-1.5 text-amber-600">
-                <Bell className="size-4" strokeWidth={1.75} aria-hidden="true" />
-                <span>{pendingProposalsCount} venter</span>
-              </div>
-            )}
+          <div className="mt-4 rounded-2xl bg-muted/30 px-5 py-4">
+            <p className="mb-3 text-xs font-medium uppercase tracking-wider text-muted-foreground">Dagen i dag</p>
+            <div className="space-y-2">
+              {overdueTasks.map((task) => {
+                const company = task.companies as unknown as { name: string } | null;
+                return (
+                  <div key={task.id} className="flex items-center gap-2 text-sm">
+                    <AlertCircle className="size-3.5 shrink-0 text-red-500" strokeWidth={1.75} aria-hidden="true" />
+                    <span className="text-red-600">{task.title}</span>
+                    {company && <span className="text-muted-foreground">· {company.name}</span>}
+                    <span className="text-xs text-red-400">forfalt</span>
+                  </div>
+                );
+              })}
+              {todayTasks.map((task) => {
+                const company = task.companies as unknown as { name: string } | null;
+                return (
+                  <div key={task.id} className="flex items-center gap-2 text-sm">
+                    <CheckSquare className="size-3.5 shrink-0 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" />
+                    <span>{task.title}</span>
+                    {company && <span className="text-muted-foreground">· {company.name}</span>}
+                  </div>
+                );
+              })}
+              {todayEvents.map((event) => (
+                <div key={event.id} className="flex items-center gap-2 text-sm">
+                  <Calendar className="size-3.5 shrink-0 text-primary/60" strokeWidth={1.75} aria-hidden="true" />
+                  <span>{event.title}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {formatEventTime(event.start, event.end, event.isAllDay)}
+                  </span>
+                </div>
+              ))}
+              {pendingProposalsCount > 0 && (
+                <div className="flex items-center gap-2 text-sm">
+                  <Bell className="size-3.5 shrink-0 text-amber-500" strokeWidth={1.75} aria-hidden="true" />
+                  <span>{pendingProposalsCount} {pendingProposalsCount === 1 ? 'godkjenning' : 'godkjenninger'} venter</span>
+                </div>
+              )}
+            </div>
           </div>
         )}
-      </div>
+      </header>
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
@@ -431,13 +470,11 @@ export default async function DashboardPage() {
                       <div className="min-w-0 flex-1">
                         <p className="text-sm">{event.title}</p>
                         <p className="text-xs text-muted-foreground">
-                          {event.isAllDay
-                            ? 'Hele dagen'
-                            : `${new Date(event.start).toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })} – ${new Date(event.end).toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`}
+                          {formatEventTime(event.start, event.end, event.isAllDay)}
                         </p>
                       </div>
                       <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
-                        {new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' }).format(new Date(event.start))}
+                        {formatEventDate(event.start)}
                       </span>
                     </div>
                   ))}
