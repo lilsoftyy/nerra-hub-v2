@@ -2,25 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+import { AnimatedPanel } from '@/components/shared/animated-panel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -57,6 +39,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
   const router = useRouter();
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   if (!task) return null;
 
@@ -86,19 +69,22 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
       router.refresh();
     }
     setDeleting(false);
+    setConfirmDelete(false);
   };
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Rediger oppgave</DialogTitle>
-          <DialogDescription>Endre detaljer for oppgaven.</DialogDescription>
-        </DialogHeader>
-
+    <div className="relative">
+      <AnimatedPanel
+        open={open}
+        onClose={() => { onOpenChange(false); setConfirmDelete(false); }}
+        width={400}
+        anchor="bottom-left"
+      >
         <form onSubmit={handleSubmit} className="space-y-4">
+          <h3 className="text-base font-semibold">Rediger oppgave</h3>
+
           <div className="space-y-2">
-            <Label htmlFor="edit-title">Tittel *</Label>
+            <Label htmlFor="edit-title">Tittel</Label>
             <Input
               id="edit-title"
               name="title"
@@ -114,12 +100,12 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
               id="edit-description"
               name="description"
               defaultValue={task.description ?? ''}
-              rows={3}
-              placeholder="Valgfri beskrivelse…"
+              rows={2}
+              placeholder="Valgfri beskrivelse..."
             />
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="edit-priority">Prioritet</Label>
               <select
@@ -133,7 +119,6 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
                 ))}
               </select>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="edit-category">Kategori</Label>
               <select
@@ -142,7 +127,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
                 defaultValue={task.category ?? ''}
                 className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               >
-                <option value="">Ingen kategori</option>
+                <option value="">Ingen</option>
                 {Object.entries(taskCategoryLabels).map(([value, label]) => (
                   <option key={value} value={value}>{label}</option>
                 ))}
@@ -150,22 +135,21 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="edit-company">Kunde</Label>
+              <Label htmlFor="edit-company">Kontakt</Label>
               <select
                 id="edit-company"
                 name="company_id"
                 defaultValue={task.company_id ?? ''}
                 className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
               >
-                <option value="">Ingen kunde</option>
+                <option value="">Ingen</option>
                 {companies.map((c) => (
                   <option key={c.id} value={c.id}>{c.name}</option>
                 ))}
               </select>
             </div>
-
             <div className="space-y-2">
               <Label htmlFor="edit-due-date">Forfallsdato</Label>
               <Input
@@ -177,41 +161,36 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
             </div>
           </div>
 
-          <div className="flex items-center justify-between pt-2">
-            <AlertDialog>
-              <AlertDialogTrigger
-                render={<Button type="button" variant="destructive" size="sm" disabled={deleting} />}
+          <div className="flex items-center justify-between pt-1">
+            {!confirmDelete ? (
+              <button
+                type="button"
+                onClick={() => setConfirmDelete(true)}
+                className="flex items-center gap-1 text-xs text-muted-foreground transition-[color] duration-150 hover:text-red-500"
               >
                 <Trash2 className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-                {deleting ? 'Sletter…' : 'Slett'}
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Slett oppgave?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Er du sikker på at du vil slette &quot;{task.title}&quot;? Dette kan ikke angres.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Avbryt</AlertDialogCancel>
-                  <AlertDialogAction onClick={handleDelete}>
-                    Slett oppgave
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-
-            <div className="flex gap-2">
-              <DialogClose render={<Button type="button" variant="outline" size="sm" />}>
-                Avbryt
-              </DialogClose>
-              <Button type="submit" size="sm" disabled={saving}>
-                {saving ? 'Lagrer…' : 'Lagre'}
-              </Button>
-            </div>
+                Slett
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <Button type="button" variant="destructive" size="sm" onClick={handleDelete} disabled={deleting}>
+                  {deleting ? 'Sletter...' : 'Bekreft slett'}
+                </Button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmDelete(false)}
+                  className="text-xs text-muted-foreground hover:text-foreground"
+                >
+                  Avbryt
+                </button>
+              </div>
+            )}
+            <Button type="submit" size="sm" disabled={saving}>
+              {saving ? 'Lagrer...' : 'Lagre'}
+            </Button>
           </div>
         </form>
-      </DialogContent>
-    </Dialog>
+      </AnimatedPanel>
+    </div>
   );
 }

@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { AnimatedPanel } from '@/components/shared/animated-panel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { createCalendarEvent } from '@/app/(app)/calendar/actions';
+import { Plus } from 'lucide-react';
 
 export function CreateEventForm() {
   const router = useRouter();
@@ -26,61 +27,56 @@ export function CreateEventForm() {
     if (res.error) {
       setResult(`Feil: ${res.error}`);
     } else {
-      setResult('Hendelse opprettet!');
       setOpen(false);
+      setResult(null);
       router.refresh();
     }
     setSaving(false);
   };
 
-  if (!open) {
-    return (
-      <Button variant="outline" onClick={() => setOpen(true)}>
+  return (
+    <div className="relative">
+      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+        <Plus className="size-4" strokeWidth={1.75} aria-hidden="true" />
         Opprett hendelse
       </Button>
-    );
-  }
 
-  return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base">Ny kalenderhendelse</CardTitle>
-      </CardHeader>
-      <CardContent>
+      <AnimatedPanel open={open} onClose={() => { setOpen(false); setResult(null); }} width={380}>
         <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <Label htmlFor="title">Tittel *</Label>
-            <Input id="title" name="title" required placeholder="f.eks. Mote med Martin" />
+          <h3 className="text-base font-semibold">Ny hendelse</h3>
+
+          <div className="space-y-2">
+            <Label htmlFor="title">Tittel</Label>
+            <Input id="title" name="title" required placeholder="F.eks. Møte med Martin" autoFocus />
           </div>
           <div className="grid grid-cols-3 gap-3">
-            <div>
-              <Label htmlFor="date">Dato *</Label>
+            <div className="space-y-2">
+              <Label htmlFor="date">Dato</Label>
               <Input id="date" name="date" type="date" required />
             </div>
-            <div>
-              <Label htmlFor="start_time">Fra *</Label>
+            <div className="space-y-2">
+              <Label htmlFor="start_time">Fra</Label>
               <Input id="start_time" name="start_time" type="time" required defaultValue="16:00" />
             </div>
-            <div>
-              <Label htmlFor="end_time">Til *</Label>
+            <div className="space-y-2">
+              <Label htmlFor="end_time">Til</Label>
               <Input id="end_time" name="end_time" type="time" required defaultValue="17:00" />
             </div>
           </div>
-          <div>
-            <Label htmlFor="attendees">Deltakere (e-post, kommaseparert)</Label>
+          <div className="space-y-2">
+            <Label htmlFor="attendees">Deltakere (e-post)</Label>
             <Input id="attendees" name="attendees" placeholder="martin@nerra.no" />
           </div>
-          <div>
+          <div className="space-y-2">
             <Label htmlFor="description">Beskrivelse</Label>
             <Textarea id="description" name="description" rows={2} />
           </div>
-          {result && <p className="text-sm text-muted-foreground">{result}</p>}
-          <div className="flex gap-2 justify-end">
-            <Button type="button" variant="outline" size="sm" onClick={() => setOpen(false)}>Avbryt</Button>
-            <Button type="submit" size="sm" disabled={saving}>{saving ? 'Oppretter...' : 'Opprett'}</Button>
-          </div>
+          {result && <p className="text-xs text-red-600">{result}</p>}
+          <Button type="submit" size="sm" className="w-full" disabled={saving}>
+            {saving ? 'Oppretter...' : 'Opprett hendelse'}
+          </Button>
         </form>
-      </CardContent>
-    </Card>
+      </AnimatedPanel>
+    </div>
   );
 }

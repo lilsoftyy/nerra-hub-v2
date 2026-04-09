@@ -2,14 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogClose,
-} from '@/components/ui/dialog';
+import { AnimatedPanel } from '@/components/shared/animated-panel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -49,7 +42,7 @@ export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
   };
 
   return (
-    <>
+    <div className="relative">
       <button
         onClick={() => setOpen(true)}
         className="flex items-center gap-1 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
@@ -58,103 +51,87 @@ export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
         Ny oppgave
       </button>
 
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Ny oppgave</DialogTitle>
-            <DialogDescription>Opprett en ny oppgave.</DialogDescription>
-          </DialogHeader>
+      <AnimatedPanel open={open} onClose={() => setOpen(false)} width={380}>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <h3 className="text-base font-semibold">Ny oppgave</h3>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="new-title">Tittel</Label>
+            <Input
+              id="new-title"
+              name="title"
+              required
+              placeholder="Skriv tittel..."
+              autoFocus
+            />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="new-description">Beskrivelse</Label>
+            <Textarea
+              id="new-description"
+              name="description"
+              rows={2}
+              placeholder="Valgfri beskrivelse..."
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
-              <Label htmlFor="new-title">Tittel *</Label>
-              <Input
-                id="new-title"
-                name="title"
-                required
-                placeholder="Skriv tittel..."
-                autoFocus
-              />
+              <Label htmlFor="new-priority">Prioritet</Label>
+              <select
+                id="new-priority"
+                name="priority"
+                defaultValue="medium"
+                className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                {Object.entries(taskPriorityLabels).map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
             </div>
-
             <div className="space-y-2">
-              <Label htmlFor="new-description">Beskrivelse</Label>
-              <Textarea
-                id="new-description"
-                name="description"
-                rows={3}
-                placeholder="Valgfri beskrivelse..."
-              />
+              <Label htmlFor="new-category">Kategori</Label>
+              <select
+                id="new-category"
+                name="category"
+                defaultValue=""
+                className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                <option value="">Velg...</option>
+                {Object.entries(taskCategoryLabels).map(([value, label]) => (
+                  <option key={value} value={value}>{label}</option>
+                ))}
+              </select>
             </div>
+          </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="new-priority">Prioritet</Label>
-                <select
-                  id="new-priority"
-                  name="priority"
-                  defaultValue="medium"
-                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  {Object.entries(taskPriorityLabels).map(([value, label]) => (
-                    <option key={value} value={value}>{label}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="new-category">Kategori</Label>
-                <select
-                  id="new-category"
-                  name="category"
-                  defaultValue=""
-                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  <option value="">Velg kategori...</option>
-                  {Object.entries(taskCategoryLabels).map(([value, label]) => (
-                    <option key={value} value={value}>{label}</option>
-                  ))}
-                </select>
-              </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label htmlFor="new-company">Kontakt</Label>
+              <select
+                id="new-company"
+                name="company_id"
+                defaultValue=""
+                className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+              >
+                <option value="">Ingen</option>
+                {companies.map((c) => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
             </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="new-company">Kunde</Label>
-                <select
-                  id="new-company"
-                  name="company_id"
-                  defaultValue=""
-                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  <option value="">Ingen kunde</option>
-                  {companies.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="new-due-date">Forfallsdato</Label>
-                <Input
-                  id="new-due-date"
-                  name="due_date"
-                  type="date"
-                />
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="new-due-date">Forfallsdato</Label>
+              <Input id="new-due-date" name="due_date" type="date" />
             </div>
+          </div>
 
-            <div className="flex justify-end gap-2 pt-2">
-              <DialogClose render={<Button type="button" variant="outline" size="sm" />}>
-                Avbryt
-              </DialogClose>
-              <Button type="submit" size="sm" disabled={saving}>
-                {saving ? 'Oppretter...' : 'Opprett oppgave'}
-              </Button>
-            </div>
-          </form>
-        </DialogContent>
-      </Dialog>
-    </>
+          <Button type="submit" size="sm" className="w-full" disabled={saving}>
+            {saving ? 'Oppretter...' : 'Opprett oppgave'}
+          </Button>
+        </form>
+      </AnimatedPanel>
+    </div>
   );
 }
