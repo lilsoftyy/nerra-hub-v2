@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/table';
 import { AIContactLookup } from '@/components/customers/ai-contact-lookup';
 import { PersonEditButton } from '@/components/customers/person-edit-button';
+import { QuickEmailButton } from '@/components/customers/quick-email-button';
 import { Plus } from 'lucide-react';
 import { formatShortDate } from '@/lib/formatters';
 
@@ -133,13 +134,18 @@ export default async function CustomersPage({
                       {company ? formatShortDate(company.created_at) : '—'}
                     </TableCell>
                     <TableCell>
-                      <PersonEditButton
-                        contactId={contact.id}
-                        fullName={contact.full_name}
-                        email={contact.email}
-                        phone={contact.phone}
-                        role={contact.role}
-                      />
+                      <div className="flex items-center gap-2">
+                        {contact.email && (
+                          <QuickEmailButton email={contact.email} name={contact.full_name} />
+                        )}
+                        <PersonEditButton
+                          contactId={contact.id}
+                          fullName={contact.full_name}
+                          email={contact.email}
+                          phone={contact.phone}
+                          role={contact.role}
+                        />
+                      </div>
                     </TableCell>
                   </TableRow>
                 );
