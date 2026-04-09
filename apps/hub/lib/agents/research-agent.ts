@@ -79,10 +79,19 @@ VIKTIG: Skriv KUN selve rapporten. Ingen innledning om hva du skal søke etter, 
   });
 
   // Extract text from the response (may contain multiple blocks due to tool use)
-  const content = message.content
+  // Filter out citation markers (small squares/dots from web search references)
+  const rawContent = message.content
     .filter((block) => block.type === 'text')
     .map((block) => 'text' in block ? block.text : '')
     .join('\n\n');
+
+  // Remove citation markers like [1], [2], etc. and unicode citation characters
+  const content = rawContent
+    .replace(/\[\d+\]/g, '')
+    .replace(/[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]/gu, '')
+    .replace(/\u200B/g, '')
+    .replace(/\s{2,}/g, ' ')
+    .trim();
 
   if (!content) {
     return { document_id: null, error: 'Agenten genererte ingen tekst' };
