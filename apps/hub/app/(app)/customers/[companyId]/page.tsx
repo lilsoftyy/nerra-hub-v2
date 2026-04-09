@@ -131,6 +131,7 @@ export default async function CustomerDetailPage({
                   agent="agent_6_lead_research"
                   label="Enkel research"
                   companyId={company.id}
+                  companyName={company.name}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Rask research-rapport basert på nettsøk.
@@ -141,6 +142,7 @@ export default async function CustomerDetailPage({
                   agent="customer_research_agent"
                   label="Dyp kunderesearch"
                   companyId={company.id}
+                  companyName={company.name}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Grundig rapport med regulatorisk kontekst, konkurrenter og markedsanalyse.

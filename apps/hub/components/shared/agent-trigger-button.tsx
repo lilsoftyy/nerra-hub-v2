@@ -3,23 +3,32 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/shared/toast-provider';
 
 interface AgentTriggerButtonProps {
   agent: string;
   label: string;
   companyId?: string;
+  companyName?: string;
   variant?: 'default' | 'outline' | 'secondary';
   size?: 'default' | 'sm' | 'lg';
 }
 
-export function AgentTriggerButton({ agent, label, companyId, variant = 'outline', size = 'sm' }: AgentTriggerButtonProps) {
+export function AgentTriggerButton({ agent, label, companyId, companyName, variant = 'outline', size = 'sm' }: AgentTriggerButtonProps) {
   const router = useRouter();
+  const { addToast, updateToast } = useToast();
   const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<string | null>(null);
 
   const handleClick = async () => {
+    if (loading) return;
     setLoading(true);
-    setResult(null);
+
+    const toastId = addToast({
+      type: 'loading',
+      title: `${label}${companyName ? ` — ${companyName}` : ''}`,
+      description: 'Agenten jobber...',
+    });
+
     try {
       const res = await fetch('/api/agents/run', {
         method: 'POST',
@@ -27,31 +36,49 @@ export function AgentTriggerButton({ agent, label, companyId, variant = 'outline
         body: JSON.stringify({ agent, company_id: companyId }),
       });
       const data = await res.json();
+
       if (data.error) {
-        setResult(`Feil: ${data.error}`);
-      } else if (data.proposals_created !== undefined) {
-        setResult(`Ferdig. ${data.proposals_created} forslag opprettet.`);
-        router.refresh();
+        updateToast(toastId, {
+          type: 'error',
+          title: 'Feil',
+          description: data.error,
+        });
       } else if (data.document_id) {
-        setResult('Research-dokument opprettet.');
-        router.refresh();
+        updateToast(toastId, {
+          type: 'success',
+          title: `${label} ferdig`,
+          description: companyName ?? 'Rapport opprettet',
+          action: {
+            label: 'Se rapport',
+            onClick: () => router.push(`/documents/${data.document_id}`),
+          },
+        });
+      } else if (data.proposals_created !== undefined) {
+        updateToast(toastId, {
+          type: 'success',
+          title: `${label} ferdig`,
+          description: `${data.proposals_created} forslag opprettet`,
+        });
       } else {
-        setResult('Ferdig.');
-        router.refresh();
+        updateToast(toastId, {
+          type: 'success',
+          title: `${label} ferdig`,
+        });
       }
+      router.refresh();
     } catch {
-      setResult('Noe gikk galt.');
+      updateToast(toastId, {
+        type: 'error',
+        title: 'Noe gikk galt',
+      });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div>
-      <Button onClick={handleClick} disabled={loading} variant={variant} size={size}>
-        {loading ? 'Kjører...' : label}
-      </Button>
-      {result && <p className="text-sm text-muted-foreground mt-1">{result}</p>}
-    </div>
+    <Button onClick={handleClick} disabled={loading} variant={variant} size={size}>
+      {loading ? 'Kjører...' : label}
+    </Button>
   );
 }
