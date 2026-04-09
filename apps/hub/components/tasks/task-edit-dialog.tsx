@@ -179,11 +179,11 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
 
           <div className="flex items-center justify-between pt-2">
             <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button type="button" variant="destructive" size="sm" disabled={deleting}>
-                  <Trash2 className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-                  {deleting ? 'Sletter…' : 'Slett'}
-                </Button>
+              <AlertDialogTrigger
+                render={<Button type="button" variant="destructive" size="sm" disabled={deleting} />}
+              >
+                <Trash2 className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                {deleting ? 'Sletter…' : 'Slett'}
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
@@ -202,8 +202,8 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
             </AlertDialog>
 
             <div className="flex gap-2">
-              <DialogClose asChild>
-                <Button type="button" variant="outline" size="sm">Avbryt</Button>
+              <DialogClose render={<Button type="button" variant="outline" size="sm" />}>
+                Avbryt
               </DialogClose>
               <Button type="submit" size="sm" disabled={saving}>
                 {saving ? 'Lagrer…' : 'Lagre'}
