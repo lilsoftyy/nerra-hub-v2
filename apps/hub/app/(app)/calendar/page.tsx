@@ -2,6 +2,7 @@ import { fetchUpcomingEvents } from '@/lib/calendar/fetch-events';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { CreateEventForm } from '@/components/calendar/create-event-form';
+import { DeleteEventButton } from '@/components/calendar/delete-event-button';
 
 function formatTimeRange(start: string, end: string, isAllDay: boolean): string {
   if (isAllDay) return 'Hele dagen';
@@ -93,16 +94,19 @@ export default async function CalendarPage() {
                             </p>
                           )}
                         </div>
-                        {event.meetLink && (
-                          <a
-                            href={event.meetLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-xs text-blue-600 hover:underline whitespace-nowrap"
-                          >
-                            Bli med i møte
-                          </a>
-                        )}
+                        <div className="flex items-center gap-2 shrink-0">
+                          {event.meetLink && (
+                            <a
+                              href={event.meetLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-blue-600 hover:underline whitespace-nowrap"
+                            >
+                              Bli med i møte
+                            </a>
+                          )}
+                          <DeleteEventButton eventId={event.id} />
+                        </div>
                       </div>
                     </CardContent>
                   </Card>

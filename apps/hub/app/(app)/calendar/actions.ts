@@ -49,3 +49,22 @@ export async function createCalendarEvent(formData: FormData) {
     return { error: `Kunne ikke opprette hendelse: ${message}` };
   }
 }
+
+export async function deleteCalendarEvent(eventId: string) {
+  const calendar = await getCalendarClient();
+  if (!calendar) {
+    return { error: 'Ingen tilgang til Google Calendar.' };
+  }
+
+  try {
+    await calendar.events.delete({
+      calendarId: 'primary',
+      eventId,
+    });
+    revalidatePath('/calendar');
+    return { success: true };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : 'Ukjent feil';
+    return { error: `Kunne ikke slette hendelse: ${message}` };
+  }
+}
