@@ -25,6 +25,8 @@ import {
   Plus,
   ArrowRight,
   Bot,
+  UserPlus,
+  Building2,
 } from 'lucide-react';
 
 export default async function DashboardPage() {
@@ -139,7 +141,7 @@ export default async function DashboardPage() {
   const todayHasContent = todayTasks.length > 0 || overdueTasks.length > 0 || pendingProposalsCount > 0 || todayEvents.length > 0;
 
   const stats = [
-    { label: 'Aktive kontakter', value: activeCompaniesCount, href: '/customers' },
+    { label: 'Personer', value: activeCompaniesCount, href: '/customers' },
     { label: 'Åpne oppgaver', value: openTasksCount, href: '/tasks' },
     { label: 'Godkjenninger', value: pendingProposalsCount, href: undefined },
     { label: 'I opplæring', value: trainingCompaniesCount, href: '/customers' },
@@ -220,6 +222,31 @@ export default async function DashboardPage() {
             <div key={stat.label}>{content}</div>
           );
         })}
+      </div>
+
+      {/* Quick actions */}
+      <div className="flex items-center gap-2">
+        <Link
+          href="/customers/new"
+          className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.97]"
+        >
+          <UserPlus className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+          Ny person
+        </Link>
+        <Link
+          href="/customers/new"
+          className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.97]"
+        >
+          <Building2 className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+          Nytt selskap
+        </Link>
+        <Link
+          href="/tasks"
+          className="flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.97]"
+        >
+          <Plus className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+          Ny oppgave
+        </Link>
       </div>
 
       {/* Main grid */}
@@ -348,7 +375,7 @@ export default async function DashboardPage() {
                 href="/customers"
                 className="flex items-center gap-1 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
               >
-                Alle kontakter
+                Alle personer
                 <ArrowRight className="size-3" strokeWidth={2} aria-hidden="true" />
               </Link>
             </CardHeader>

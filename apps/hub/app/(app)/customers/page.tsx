@@ -43,7 +43,7 @@ export default async function CustomersPage({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold tracking-tight">Kontakter</h1>
+        <h1 className="text-xl font-semibold tracking-tight">Personer</h1>
         <div className="flex items-center gap-2">
           <AIContactLookup />
           <Button size="sm" variant="outline" render={<Link href="/customers/new" />}>
@@ -121,7 +121,7 @@ export default async function CustomersPage({
             ) : (
               <TableRow>
                 <TableCell colSpan={5} className="text-center text-muted-foreground py-12">
-                  Ingen kontakter funnet. Bruk &quot;AI-søk&quot; for å legge til den første.
+                  Ingen personer funnet. Bruk &quot;AI-søk&quot; for å legge til den første.
                 </TableCell>
               </TableRow>
             )}

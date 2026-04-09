@@ -26,7 +26,7 @@ const navGroups = [
   {
     label: 'CRM',
     items: [
-      { href: '/customers', label: 'Kontakter', icon: Users },
+      { href: '/customers', label: 'Personer', icon: Users },
       { href: '/tasks', label: 'Oppgaver', icon: CheckSquare },
     ],
   },
