@@ -98,45 +98,42 @@ export function AIContactLookup() {
 
       <AnimatedPanel open={open} onClose={() => { setOpen(false); resetState(); }}>
         {step === 'search' && (
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-base font-semibold">Finn kontakt</h3>
-              <p className="mt-0.5 text-xs text-muted-foreground">Skriv inn navn og selskap — AI finner resten.</p>
-            </div>
+          <div className="space-y-3">
+            <h3 className="text-base font-semibold">Finn kontakt</h3>
             <div className="space-y-2">
               <Label htmlFor="lookup-name">Navn</Label>
               <Input
                 id="lookup-name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="F.eks. Johan Eriksson"
                 autoFocus
                 onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="lookup-company">Selskap</Label>
-              <Input
-                id="lookup-company"
-                value={company}
-                onChange={(e) => setCompany(e.target.value)}
-                placeholder="F.eks. Kärcher Sverige"
-                onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
-              />
+            <div className="flex items-end gap-2">
+              <div className="flex-1 space-y-2">
+                <Label htmlFor="lookup-company">Selskap</Label>
+                <Input
+                  id="lookup-company"
+                  value={company}
+                  onChange={(e) => setCompany(e.target.value)}
+                  onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
+                />
+              </div>
+              <button
+                onClick={handleSearch}
+                disabled={searching || !name.trim() || !company.trim()}
+                className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground transition-[opacity] duration-150 hover:opacity-80 disabled:opacity-40"
+                aria-label="Søk"
+              >
+                {searching ? (
+                  <Loader2 className="size-4 animate-spin" />
+                ) : (
+                  <Search className="size-4" strokeWidth={1.75} />
+                )}
+              </button>
             </div>
             {error && <p className="text-xs text-red-600">{error}</p>}
-            <Button
-              className="w-full"
-              size="sm"
-              onClick={handleSearch}
-              disabled={searching || !name.trim() || !company.trim()}
-            >
-              {searching ? (
-                <><Loader2 className="size-4 animate-spin" aria-hidden="true" />Søker...</>
-              ) : (
-                <><Search className="size-4" strokeWidth={1.75} aria-hidden="true" />Søk</>
-              )}
-            </Button>
           </div>
         )}
 

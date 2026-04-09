@@ -47,7 +47,7 @@ export function CreateEventForm() {
 
           <div className="space-y-2">
             <Label htmlFor="title">Tittel</Label>
-            <Input id="title" name="title" required placeholder="F.eks. Møte med Martin" autoFocus />
+            <Input id="title" name="title" required autoFocus />
           </div>
           <div className="grid grid-cols-3 gap-3">
             <div className="space-y-2">
@@ -64,8 +64,8 @@ export function CreateEventForm() {
             </div>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="attendees">Deltakere (e-post)</Label>
-            <Input id="attendees" name="attendees" placeholder="martin@nerra.no" />
+            <Label htmlFor="attendees">Deltakere</Label>
+            <Input id="attendees" name="attendees" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="description">Beskrivelse</Label>
@@ -73,7 +73,7 @@ export function CreateEventForm() {
           </div>
           {result && <p className="text-xs text-red-600">{result}</p>}
           <Button type="submit" size="sm" className="w-full" disabled={saving}>
-            {saving ? 'Oppretter...' : 'Opprett hendelse'}
+            {saving ? 'Oppretter...' : 'Opprett'}
           </Button>
         </form>
       </AnimatedPanel>

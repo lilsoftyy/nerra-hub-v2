@@ -96,13 +96,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
 
           <div className="space-y-2">
             <Label htmlFor="edit-description">Beskrivelse</Label>
-            <Textarea
-              id="edit-description"
-              name="description"
-              defaultValue={task.description ?? ''}
-              rows={2}
-              placeholder="Valgfri beskrivelse..."
-            />
+            <Textarea id="edit-description" name="description" defaultValue={task.description ?? ''} rows={2} />
           </div>
 
           <div className="grid grid-cols-2 gap-3">
