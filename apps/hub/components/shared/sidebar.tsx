@@ -81,10 +81,10 @@ export function Sidebar({ userEmail, showLogout }: SidebarProps) {
                     key={item.href}
                     href={item.href}
                     className={cn(
-                      'flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-[color,background-color] duration-150',
+                      'flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-[13px] font-medium transition-[color,background-color] duration-200',
                       isActive
-                        ? 'bg-foreground/[0.06] text-foreground'
-                        : 'text-muted-foreground hover:bg-foreground/[0.04] hover:text-foreground'
+                        ? 'bg-primary/[0.08] text-foreground'
+                        : 'text-muted-foreground hover:bg-foreground/[0.03] hover:text-foreground'
                     )}
                   >
                     <Icon className="size-4 shrink-0" strokeWidth={1.75} aria-hidden="true" />
