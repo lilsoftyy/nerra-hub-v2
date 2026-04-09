@@ -6,13 +6,10 @@ import { readdirSync, readFileSync } from 'fs';
 import { join } from 'path';
 import {
   Search,
-  FileText,
   Users,
   Mail,
-  ArrowRightLeft,
   FileSignature,
   Send,
-  Bot,
   FolderCheck,
 } from 'lucide-react';
 
