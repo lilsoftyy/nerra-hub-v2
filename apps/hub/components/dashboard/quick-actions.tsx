@@ -15,6 +15,7 @@ import {
   Loader2,
 } from 'lucide-react';
 import { createContactFromLookup } from '@/app/(app)/customers/actions';
+import { createCalendarEvent } from '@/app/(app)/calendar/actions';
 
 interface LookupResult {
   person_name: string;
@@ -128,9 +129,60 @@ function AILookupPanel({ onClose, defaultMode }: { onClose: () => void; defaultM
   );
 }
 
+function NewEventPanel({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (saving) return;
+    setSaving(true);
+    setError(null);
+    const formData = new FormData(e.currentTarget);
+    const res = await createCalendarEvent(formData);
+    if (res.error) setError(res.error);
+    else { onClose(); router.refresh(); }
+    setSaving(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <h3 className="text-base font-semibold">Ny hendelse</h3>
+      <div className="space-y-2">
+        <Label htmlFor="qa-event-title">Tittel</Label>
+        <Input id="qa-event-title" name="title" required autoFocus />
+      </div>
+      <div className="grid grid-cols-3 gap-2">
+        <div className="space-y-2">
+          <Label htmlFor="qa-event-date">Dato</Label>
+          <Input id="qa-event-date" name="date" type="date" required />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="qa-event-start">Fra</Label>
+          <Input id="qa-event-start" name="start_time" type="time" required defaultValue="10:00" />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="qa-event-end">Til</Label>
+          <Input id="qa-event-end" name="end_time" type="time" required defaultValue="11:00" />
+        </div>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="qa-event-attendees">Deltakere</Label>
+        <Input id="qa-event-attendees" name="attendees" />
+      </div>
+      {error && <p className="text-xs text-red-600">{error}</p>}
+      <Button type="submit" size="sm" className="w-full" disabled={saving}>
+        {saving ? 'Oppretter...' : 'Opprett'}
+      </Button>
+    </form>
+  );
+}
+
 export function QuickActions() {
   const [personOpen, setPersonOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
+  const [calendarOpen, setCalendarOpen] = useState(false);
 
   const iconClass = "flex size-8 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]";
 
@@ -166,9 +218,20 @@ export function QuickActions() {
         <AILookupPanel onClose={() => setCompanyOpen(false)} defaultMode="company" />
       </AnimatedPanel>
 
-      <a href="/calendar" className={iconClass} title="Kalender">
-        <Calendar className="size-4" strokeWidth={1.75} />
-      </a>
+      <AnimatedPanel
+        open={calendarOpen}
+        onClose={() => setCalendarOpen(false)}
+        width={340}
+        anchor="bottom-left"
+        showClose={true}
+        trigger={
+          <button onClick={() => setCalendarOpen(true)} className={iconClass} title="Ny hendelse">
+            <Calendar className="size-4" strokeWidth={1.75} />
+          </button>
+        }
+      >
+        <NewEventPanel onClose={() => setCalendarOpen(false)} />
+      </AnimatedPanel>
     </div>
   );
 }
