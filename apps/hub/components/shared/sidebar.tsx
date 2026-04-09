@@ -55,12 +55,12 @@ export function Sidebar({ userEmail, showLogout }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <aside className="flex h-screen w-44 flex-col border-r bg-background">
+    <aside className="flex h-screen w-44 flex-col bg-background">
       {/* Logo */}
-      <div className="flex h-14 items-center px-5">
-        <span className="text-[15px] font-semibold tracking-tight">
-          Nerra Hub
-        </span>
+      <div className="flex items-center px-4 pt-6 pb-3">
+        <Link href="/dashboard">
+          <img src="/logo.svg" alt="Nerra — gå til dashboard" className="h-14" />
+        </Link>
       </div>
 
       {/* Navigation */}

@@ -180,7 +180,7 @@ export default async function DashboardPage() {
       {/* Header */}
       <div className="flex items-end justify-between">
         <header>
-          <h1 className="text-xl font-semibold tracking-tight">
+          <h1 className="text-2xl font-semibold tracking-tight">
             {greeting}, {firstName}
           </h1>
           <p className="mt-0.5 text-sm text-muted-foreground capitalize">
