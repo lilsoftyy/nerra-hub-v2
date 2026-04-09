@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createContract } from '@/app/(app)/contracts/actions';
 import { Plus, Trash2 } from 'lucide-react';
+import { selectClassName } from '@/lib/ui-utils';
 
 interface Company {
   id: string;
@@ -72,7 +73,7 @@ export function NewContractButton({ companies }: { companies: Company[] }) {
           <select
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
-            className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+            className={selectClassName}
             required
           >
             <option value="">Velg firma...</option>

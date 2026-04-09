@@ -6,6 +6,7 @@ import { AnimatedPanel } from '@/components/shared/animated-panel';
 import { useToast } from '@/components/shared/toast-provider';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
+import { selectClassName } from '@/lib/ui-utils';
 import {
   Search,
   Users,
@@ -14,10 +15,7 @@ import {
   Sparkles,
 } from 'lucide-react';
 
-interface Company {
-  id: string;
-  name: string;
-}
+interface Company { id: string; name: string }
 
 interface Suggestion {
   label: string;
@@ -27,26 +25,41 @@ interface Suggestion {
   companyName: string;
 }
 
-interface AgentCommandsProps {
-  companies: Company[];
-  suggestions: Suggestion[];
+function ResearchPanel({
+  title, agentName, label, companies, onRun,
+}: {
+  title: string; agentName: string; label: string; companies: Company[]; onRun: (agent: string, companyId: string, label: string) => void;
+}) {
+  const [selected, setSelected] = useState('');
+  return (
+    <div className="space-y-3">
+      <h3 className="text-base font-semibold">{title}</h3>
+      <div className="space-y-2">
+        <Label>Velg firma</Label>
+        <select value={selected} onChange={(e) => setSelected(e.target.value)} className={selectClassName}>
+          <option value="">Velg...</option>
+          {companies.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
+        </select>
+      </div>
+      <Button size="sm" className="w-full" disabled={!selected} onClick={() => { onRun(agentName, selected, label); }}>
+        Kjør
+      </Button>
+    </div>
+  );
 }
 
-export function AgentCommands({ companies, suggestions }: AgentCommandsProps) {
+export function AgentCommands({ companies, suggestions }: { companies: Company[]; suggestions: Suggestion[] }) {
   const router = useRouter();
   const { addToast, updateToast } = useToast();
   const [researchOpen, setResearchOpen] = useState(false);
   const [deepResearchOpen, setDeepResearchOpen] = useState(false);
-  const [selectedCompany, setSelectedCompany] = useState('');
 
   const runAgent = async (agent: string, companyId: string, label: string) => {
     const companyName = companies.find((c) => c.id === companyId)?.name ?? '';
+    setResearchOpen(false);
+    setDeepResearchOpen(false);
 
-    const toastId = addToast({
-      type: 'loading',
-      title: `${label}${companyName ? ` — ${companyName}` : ''}`,
-      description: 'Agenten jobber...',
-    });
+    const toastId = addToast({ type: 'loading', title: `${label} — ${companyName}`, description: 'Agenten jobber...' });
 
     try {
       const res = await fetch('/api/agents/run', {
@@ -55,16 +68,10 @@ export function AgentCommands({ companies, suggestions }: AgentCommandsProps) {
         body: JSON.stringify({ agent, company_id: companyId }),
       });
       const data = await res.json();
-
       if (data.error) {
         updateToast(toastId, { type: 'error', title: 'Feil', description: data.error });
       } else if (data.document_id) {
-        updateToast(toastId, {
-          type: 'success',
-          title: `${label} ferdig`,
-          description: companyName,
-          action: { label: 'Se rapport', onClick: () => router.push(`/documents/${data.document_id}`) },
-        });
+        updateToast(toastId, { type: 'success', title: `${label} ferdig`, description: companyName, action: { label: 'Se rapport', onClick: () => router.push(`/documents/${data.document_id}`) } });
       } else {
         updateToast(toastId, { type: 'success', title: `${label} ferdig` });
       }
@@ -75,33 +82,14 @@ export function AgentCommands({ companies, suggestions }: AgentCommandsProps) {
   };
 
   const runProjectAgent = async () => {
-    const toastId = addToast({
-      type: 'loading',
-      title: 'Sjekker faseoverganger',
-      description: 'Agenten sjekker alle kunder...',
-    });
-
+    const toastId = addToast({ type: 'loading', title: 'Sjekker faseoverganger', description: 'Agenten sjekker alle kunder...' });
     try {
-      const res = await fetch('/api/agents/run', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ agent: 'agent_3_project' }),
-      });
+      const res = await fetch('/api/agents/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ agent: 'agent_3_project' }) });
       const data = await res.json();
-
-      if (data.error) {
-        updateToast(toastId, { type: 'error', title: 'Feil', description: data.error });
-      } else {
-        updateToast(toastId, {
-          type: 'success',
-          title: 'Fasesjekk ferdig',
-          description: `${data.proposals_created ?? 0} forslag opprettet`,
-        });
-      }
+      if (data.error) updateToast(toastId, { type: 'error', title: 'Feil', description: data.error });
+      else updateToast(toastId, { type: 'success', title: 'Fasesjekk ferdig', description: `${data.proposals_created ?? 0} forslag opprettet` });
       router.refresh();
-    } catch {
-      updateToast(toastId, { type: 'error', title: 'Noe gikk galt' });
-    }
+    } catch { updateToast(toastId, { type: 'error', title: 'Noe gikk galt' }); }
   };
 
   const cmdClass = "flex items-center gap-3 rounded-xl px-4 py-3 text-sm transition-[background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 active:scale-[0.98] cursor-pointer";
@@ -116,11 +104,7 @@ export function AgentCommands({ companies, suggestions }: AgentCommandsProps) {
           </div>
           <div className="space-y-1">
             {suggestions.map((s, i) => (
-              <button
-                key={i}
-                onClick={() => runAgent(s.agent, s.companyId, s.label)}
-                className={cmdClass}
-              >
+              <button key={i} onClick={() => runAgent(s.agent, s.companyId, s.label)} className={cmdClass}>
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
                   <Play className="size-3.5 text-primary" strokeWidth={1.75} aria-hidden="true" />
                 </div>
@@ -137,90 +121,14 @@ export function AgentCommands({ companies, suggestions }: AgentCommandsProps) {
       <section>
         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">Kommandoer</h2>
         <div className="space-y-1">
-          <AnimatedPanel
-            open={researchOpen}
-            onClose={() => { setResearchOpen(false); setSelectedCompany(''); }}
-            width={320}
-            anchor="bottom-left"
-            trigger={
-              <div onClick={() => setResearchOpen(true)} className={cmdClass}>
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted">
-                  <Search className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" />
-                </div>
-                <div className="text-left">
-                  <p className="font-medium">Enkel research</p>
-                  <p className="text-xs text-muted-foreground">Rask rapport basert på nettsøk</p>
-                </div>
-              </div>
-            }
-          >
-            <div className="space-y-3">
-              <h3 className="text-base font-semibold">Enkel research</h3>
-              <div className="space-y-2">
-                <Label>Velg firma</Label>
-                <select
-                  value={selectedCompany}
-                  onChange={(e) => setSelectedCompany(e.target.value)}
-                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  <option value="">Velg...</option>
-                  {companies.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
-              </div>
-              <Button
-                size="sm"
-                className="w-full"
-                disabled={!selectedCompany}
-                onClick={() => { runAgent('agent_6_lead_research', selectedCompany, 'Enkel research'); setResearchOpen(false); }}
-              >
-                Kjør
-              </Button>
-            </div>
+          <AnimatedPanel open={researchOpen} onClose={() => setResearchOpen(false)} width={320} anchor="bottom-left"
+            trigger={<div onClick={() => setResearchOpen(true)} className={cmdClass}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted"><Search className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" /></div><div className="text-left"><p className="font-medium">Enkel research</p><p className="text-xs text-muted-foreground">Rask rapport basert på nettsøk</p></div></div>}>
+            <ResearchPanel title="Enkel research" agentName="agent_6_lead_research" label="Enkel research" companies={companies} onRun={runAgent} />
           </AnimatedPanel>
 
-          <AnimatedPanel
-            open={deepResearchOpen}
-            onClose={() => { setDeepResearchOpen(false); setSelectedCompany(''); }}
-            width={320}
-            anchor="bottom-left"
-            trigger={
-              <div onClick={() => setDeepResearchOpen(true)} className={cmdClass}>
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted">
-                  <Users className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" />
-                </div>
-                <div className="text-left">
-                  <p className="font-medium">Dyp kunderesearch</p>
-                  <p className="text-xs text-muted-foreground">Grundig rapport med konkurrenter og marked</p>
-                </div>
-              </div>
-            }
-          >
-            <div className="space-y-3">
-              <h3 className="text-base font-semibold">Dyp kunderesearch</h3>
-              <div className="space-y-2">
-                <Label>Velg firma</Label>
-                <select
-                  value={selectedCompany}
-                  onChange={(e) => setSelectedCompany(e.target.value)}
-                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
-                >
-                  <option value="">Velg...</option>
-                  {companies.map((c) => (
-                    <option key={c.id} value={c.id}>{c.name}</option>
-                  ))}
-                </select>
-              </div>
-              <Button
-                size="sm"
-                className="w-full"
-                disabled={!selectedCompany}
-                onClick={() => { runAgent('customer_research_agent', selectedCompany, 'Dyp kunderesearch'); setDeepResearchOpen(false); }}
-              >
-                Kjør
-              </Button>
-            </div>
+          <AnimatedPanel open={deepResearchOpen} onClose={() => setDeepResearchOpen(false)} width={320} anchor="bottom-left"
+            trigger={<div onClick={() => setDeepResearchOpen(true)} className={cmdClass}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted"><Users className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" /></div><div className="text-left"><p className="font-medium">Dyp kunderesearch</p><p className="text-xs text-muted-foreground">Grundig rapport med konkurrenter og marked</p></div></div>}>
+            <ResearchPanel title="Dyp kunderesearch" agentName="customer_research_agent" label="Dyp kunderesearch" companies={companies} onRun={runAgent} />
           </AnimatedPanel>
 
           <div onClick={runProjectAgent} className={cmdClass}>

@@ -23,25 +23,28 @@ export async function runCustomerResearchAgent(
   options?: { isAutoTriggered?: boolean }
 ): Promise<CustomerResearchResult> {
 
-  // Hent selskapsdata med kontakter, DWA-detaljer og kvalifiseringssvar
-  const { data: company } = await supabase
-    .from('companies')
-    .select('*, contacts(*), customer_dwa_details(*)')
-    .eq('id', companyId)
-    .single();
+  // Hent selskapsdata og kvalifiseringssvar parallelt
+  const [companyResult, qualificationResult] = await Promise.all([
+    supabase
+      .from('companies')
+      .select('*, contacts(*), customer_dwa_details(*)')
+      .eq('id', companyId)
+      .single(),
+    supabase
+      .from('qualification_form_responses')
+      .select('responses')
+      .eq('company_id', companyId)
+      .order('submitted_at', { ascending: false })
+      .limit(1)
+      .single(),
+  ]);
+
+  const company = companyResult.data;
+  const qualificationData = qualificationResult.data;
 
   if (!company) {
     return { document_id: null, error: 'Kunde ikke funnet' };
   }
-
-  // Hent kvalifiseringssvar hvis det finnes
-  const { data: qualificationData } = await supabase
-    .from('qualification_form_responses')
-    .select('responses')
-    .eq('company_id', companyId)
-    .order('submitted_at', { ascending: false })
-    .limit(1)
-    .single();
 
   // Slett eksisterende customer_report slik at vi genererer en ny
   await supabase

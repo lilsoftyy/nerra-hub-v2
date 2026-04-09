@@ -18,7 +18,13 @@ export function DocumentActions({ documentId, title }: DocumentActionsProps) {
 
   const handleDelete = async () => {
     setDeleting(true);
-    await deleteDocument(documentId);
+    try {
+      await deleteDocument(documentId);
+    } catch {
+      alert('Kunne ikke slette dokumentet.');
+      setDeleting(false);
+      setConfirmDelete(false);
+    }
   };
 
   return (

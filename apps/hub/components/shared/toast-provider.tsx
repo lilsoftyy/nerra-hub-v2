@@ -19,6 +19,12 @@ interface ToastContextType {
 
 const ToastContext = createContext<ToastContextType | null>(null);
 
+const toastIcons = {
+  loading: <Loader2 className="size-4 animate-spin text-primary" />,
+  success: <CheckCircle className="size-4 text-emerald-500" />,
+  error: <AlertCircle className="size-4 text-red-500" />,
+};
+
 export function useToast() {
   const ctx = useContext(ToastContext);
   if (!ctx) throw new Error('useToast must be used within ToastProvider');
@@ -57,12 +63,6 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }, []);
 
-  const icons = {
-    loading: <Loader2 className="size-4 animate-spin text-primary" />,
-    success: <CheckCircle className="size-4 text-emerald-500" />,
-    error: <AlertCircle className="size-4 text-red-500" />,
-  };
-
   return (
     <ToastContext.Provider value={{ addToast, updateToast, removeToast }}>
       {children}
@@ -76,7 +76,7 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
             style={{ boxShadow: '0 4px 20px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03)' }}
           >
             <div className="flex items-start gap-3">
-              <div className="mt-0.5 shrink-0">{icons[toast.type]}</div>
+              <div className="mt-0.5 shrink-0">{toastIcons[toast.type]}</div>
               <div className="min-w-0 flex-1">
                 <p className="font-medium text-[13px]">{toast.title}</p>
                 {toast.description && <p className="mt-0.5 text-[11px] text-muted-foreground">{toast.description}</p>}

@@ -14,7 +14,8 @@ import {
 } from '@/components/ui/table';
 import { documentKindLabels } from '@/lib/labels';
 import { formatShortDate } from '@/lib/formatters';
-import { ChevronUp, ChevronDown } from 'lucide-react';
+import { sortableHeadClassName } from '@/lib/ui-utils';
+import { SortIcon } from '@/components/shared/sort-icon';
 
 interface Document {
   id: string;
@@ -75,14 +76,7 @@ export function DocumentsList({ documents }: { documents: Document[] }) {
     return list;
   }, [documents, search, sortKey, sortDir]);
 
-  const SortIcon = ({ col }: { col: SortKey }) => {
-    if (sortKey !== col) return null;
-    return sortDir === 'asc'
-      ? <ChevronUp className="inline size-3 ml-0.5" strokeWidth={2} />
-      : <ChevronDown className="inline size-3 ml-0.5" strokeWidth={2} />;
-  };
-
-  const headClass = "cursor-pointer select-none hover:text-foreground transition-[color] duration-150";
+  const headClass = sortableHeadClassName;
 
   return (
     <div className="space-y-4">
@@ -98,16 +92,16 @@ export function DocumentsList({ documents }: { documents: Document[] }) {
           <TableHeader>
             <TableRow>
               <TableHead className={headClass} onClick={() => handleSort('title')}>
-                Tittel<SortIcon col="title" />
+                Tittel<SortIcon active={sortKey === "title"} direction={sortDir} />
               </TableHead>
               <TableHead className={headClass} onClick={() => handleSort('kind')}>
-                Type<SortIcon col="kind" />
+                Type<SortIcon active={sortKey === "kind"} direction={sortDir} />
               </TableHead>
               <TableHead className={headClass} onClick={() => handleSort('company_name')}>
-                Firma<SortIcon col="company_name" />
+                Firma<SortIcon active={sortKey === "company_name"} direction={sortDir} />
               </TableHead>
               <TableHead className={headClass} onClick={() => handleSort('created_at')}>
-                Opprettet<SortIcon col="created_at" />
+                Opprettet<SortIcon active={sortKey === "created_at"} direction={sortDir} />
               </TableHead>
             </TableRow>
           </TableHeader>

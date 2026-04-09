@@ -20,7 +20,9 @@ import {
 import { PersonEditButton } from '@/components/customers/person-edit-button';
 import { QuickEmailButton } from '@/components/customers/quick-email-button';
 import { countryName } from '@/lib/countries';
-import { ChevronUp, ChevronDown, Mail } from 'lucide-react';
+import { sortableHeadClassName, buildMailtoUrl } from '@/lib/ui-utils';
+import { SortIcon } from '@/components/shared/sort-icon';
+import { Mail } from 'lucide-react';
 
 interface Person {
   id: string;
@@ -34,7 +36,7 @@ interface Person {
   company_country: string | null;
 }
 
-const potentialCustomerPhases = ['lead', 'qualification', 'sales', 'onboarding', 'training'];
+const potentialCustomerPhases: string[] = ['lead', 'qualification', 'sales', 'onboarding', 'training'];
 
 type SortKey = 'full_name' | 'company_name';
 type SortDir = 'asc' | 'desc';
@@ -87,22 +89,14 @@ export function PersonsList({ persons }: { persons: Person[] }) {
     .map((p) => p.email!);
 
   const handleSendEmail = () => {
-    const mailto = `mailto:${selectedEmails.join(',')}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.open(mailto, '_blank');
+    window.open(buildMailtoUrl(selectedEmails, subject, body), '_blank');
     setEmailOpen(false);
     setSubject('');
     setBody('');
     setSelected(new Set());
   };
 
-  const SortIcon = ({ col }: { col: SortKey }) => {
-    if (sortKey !== col) return null;
-    return sortDir === 'asc'
-      ? <ChevronUp className="inline size-3 ml-0.5" strokeWidth={2} />
-      : <ChevronDown className="inline size-3 ml-0.5" strokeWidth={2} />;
-  };
-
-  const headClass = "cursor-pointer select-none hover:text-foreground transition-[color] duration-150";
+  const headClass = sortableHeadClassName;
 
   return (
     <div className="space-y-4">
@@ -150,12 +144,12 @@ export function PersonsList({ persons }: { persons: Person[] }) {
           <TableHeader>
             <TableRow>
               <TableHead className={headClass} onClick={() => handleSort('full_name')}>
-                Navn<SortIcon col="full_name" />
+                Navn<SortIcon active={sortKey === 'full_name'} direction={sortDir} />
               </TableHead>
               <TableHead>E-post</TableHead>
               <TableHead>Telefon</TableHead>
               <TableHead className={headClass} onClick={() => handleSort('company_name')}>
-                Selskap<SortIcon col="company_name" />
+                Selskap<SortIcon active={sortKey === 'company_name'} direction={sortDir} />
               </TableHead>
               <TableHead>Type</TableHead>
               <TableHead>Land</TableHead>

@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Mail } from 'lucide-react';
+import { buildMailtoUrl } from '@/lib/ui-utils';
 
 interface QuickEmailButtonProps {
   email: string;
@@ -19,8 +20,7 @@ export function QuickEmailButton({ email, name }: QuickEmailButtonProps) {
   const [body, setBody] = useState('');
 
   const handleSend = () => {
-    const mailto = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.open(mailto, '_blank');
+    window.open(buildMailtoUrl(email, subject, body), '_blank');
     setOpen(false);
     setSubject('');
     setBody('');

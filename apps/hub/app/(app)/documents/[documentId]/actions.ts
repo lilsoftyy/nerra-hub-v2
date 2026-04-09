@@ -110,16 +110,16 @@ Returner KUN JSON-array. Ingen forklaring.`,
   try {
     const learnings = JSON.parse(jsonMatch[0]) as Array<{ category: string; learning: string }>;
 
-    for (const l of learnings) {
-      await supabase.from('agent_memory').insert({
+    await supabase.from('agent_memory').insert(
+      learnings.map((l) => ({
         id: uuidv7(),
         agent_name: agentName,
         category: l.category,
         learning: l.learning,
         source_document_id: documentId,
         company_id: companyId,
-      });
-    }
+      }))
+    );
   } catch {
     // Parse feil — ignorer
   }
