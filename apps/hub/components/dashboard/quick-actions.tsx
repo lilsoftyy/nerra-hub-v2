@@ -184,7 +184,7 @@ export function QuickActions() {
   const [companyOpen, setCompanyOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
 
-  const iconClass = "flex size-8 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]";
+  const iconClass = "flex size-12 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]";
 
   return (
     <div className="flex items-center gap-2">
@@ -196,7 +196,7 @@ export function QuickActions() {
         showClose={true}
         trigger={
           <button onClick={() => setPersonOpen(true)} className={iconClass} title="Ny person">
-            <UserPlus className="size-4" strokeWidth={1.75} />
+            <UserPlus className="size-5" strokeWidth={1.75} />
           </button>
         }
       >
@@ -211,7 +211,7 @@ export function QuickActions() {
         showClose={true}
         trigger={
           <button onClick={() => setCompanyOpen(true)} className={iconClass} title="Nytt selskap">
-            <Building2 className="size-4" strokeWidth={1.75} />
+            <Building2 className="size-5" strokeWidth={1.75} />
           </button>
         }
       >
@@ -226,7 +226,7 @@ export function QuickActions() {
         showClose={true}
         trigger={
           <button onClick={() => setCalendarOpen(true)} className={iconClass} title="Ny hendelse">
-            <Calendar className="size-4" strokeWidth={1.75} />
+            <Calendar className="size-5" strokeWidth={1.75} />
           </button>
         }
       >
