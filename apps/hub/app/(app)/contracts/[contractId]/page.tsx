@@ -46,8 +46,8 @@ export default async function ContractDetailPage({ params }: ContractDetailPageP
 
   const company = contract.companies as unknown as { name: string } | null;
   const packages = contract.packages as unknown as Array<{ name: string; price: number }> | null;
-  const publicUrl = contract.public_slug
-    ? `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hub.nerra.no'}/c/${contract.public_slug}`
+  const publicUrl = contract.public_url_slug
+    ? `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://hub.nerra.no'}/c/${contract.public_url_slug}`
     : null;
 
   return (
@@ -57,6 +57,14 @@ export default async function ContractDetailPage({ params }: ContractDetailPageP
         <Badge className={contractStatusColors[contract.status] ?? ''}>
           {contractStatusLabels[contract.status] ?? contract.status}
         </Badge>
+        <a
+          href={`/api/contracts/${contract.id}/pdf`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-800"
+        >
+          Last ned PDF
+        </a>
       </div>
 
       <Card>
@@ -94,16 +102,16 @@ export default async function ContractDetailPage({ params }: ContractDetailPageP
                 {contract.subtotal.toLocaleString('nb-NO')}
               </div>
             )}
-            {contract.adjustment != null && contract.adjustment !== 0 && (
+            {contract.adjustment_percent != null && contract.adjustment_percent !== 0 && (
               <div>
                 <span className="text-muted-foreground">Justering:</span>{' '}
-                {contract.adjustment.toLocaleString('nb-NO')}
+                {contract.adjustment_percent}%
               </div>
             )}
-            {contract.total_amount != null && (
+            {contract.total != null && (
               <div className="font-semibold">
                 <span className="text-muted-foreground">Total:</span>{' '}
-                {contract.total_amount.toLocaleString('nb-NO')} {contract.currency ?? 'NOK'}
+                {contract.total.toLocaleString('nb-NO')} {contract.currency ?? 'NOK'}
               </div>
             )}
           </div>

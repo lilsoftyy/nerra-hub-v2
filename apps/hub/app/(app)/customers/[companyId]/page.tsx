@@ -10,6 +10,7 @@ import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 import { CustomerEditForm } from '@/components/customers/customer-edit-form';
 import { ContactList } from '@/components/customers/contact-list';
 import { QualificationResponse } from '@/components/customers/qualification-response';
+import { CreateContractForm } from '@/components/contracts/create-contract-form';
 
 const phaseLabels: Record<string, string> = {
   lead: 'Lead',
@@ -134,6 +135,7 @@ export default async function CustomerDetailPage({
               </p>
             </CardContent>
           </Card>
+          <CreateContractForm companyId={company.id} companyName={company.name} />
         </div>
       </div>
     </div>

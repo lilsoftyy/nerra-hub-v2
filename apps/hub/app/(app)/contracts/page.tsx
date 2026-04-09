@@ -19,7 +19,7 @@ export default async function ContractsPage() {
 
   const { data: contracts } = await supabase
     .from('contracts')
-    .select('id, status, total_amount, currency, valid_until, sent_at, signed_at, company_id, companies(name)')
+    .select('id, status, total, currency, valid_until, sent_at, signed_at, company_id, companies(name)')
     .order('created_at', { ascending: false });
 
   return (
@@ -60,8 +60,8 @@ export default async function ContractsPage() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-muted-foreground">
-                      {contract.total_amount != null
-                        ? `${contract.total_amount.toLocaleString('nb-NO')} ${contract.currency ?? 'NOK'}`
+                      {contract.total != null
+                        ? `${contract.total.toLocaleString('nb-NO')} ${contract.currency ?? 'NOK'}`
                         : '-'}
                     </TableCell>
                     <TableCell className="text-muted-foreground">

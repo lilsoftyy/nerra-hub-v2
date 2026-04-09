@@ -1,6 +1,7 @@
 import { fetchUpcomingEvents } from '@/lib/calendar/fetch-events';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { CreateEventForm } from '@/components/calendar/create-event-form';
 
 function formatTimeRange(start: string, end: string, isAllDay: boolean): string {
   if (isAllDay) return 'Hele dagen';
@@ -50,11 +51,14 @@ export default async function CalendarPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold">Kalender</h2>
-        {events.length > 0 && (
-          <span className="text-sm text-muted-foreground">
-            Neste {events.length} hendelser
-          </span>
-        )}
+        <div className="flex items-center gap-4">
+          {events.length > 0 && (
+            <span className="text-sm text-muted-foreground">
+              Neste {events.length} hendelser
+            </span>
+          )}
+          <CreateEventForm />
+        </div>
       </div>
 
       {events.length > 0 ? (
