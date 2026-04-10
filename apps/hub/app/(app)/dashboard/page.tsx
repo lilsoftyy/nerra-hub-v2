@@ -166,12 +166,19 @@ export default async function DashboardPage() {
     <div className="space-y-6">
       {/* Header + Dagen i dag */}
       <header>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          {greeting}, {firstName}
-        </h1>
-        <p className="mt-0.5 text-sm text-muted-foreground capitalize">
-          {formatNorwegianDate(today)}
-        </p>
+        <div className="flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">
+              {greeting}, {firstName}
+            </h1>
+            <p className="mt-0.5 text-sm text-muted-foreground capitalize">
+              {formatNorwegianDate(today)}
+            </p>
+          </div>
+          <div className="shrink-0 w-72">
+            <PorscheTracker savedAmount={11_400} />
+          </div>
+        </div>
 
         {todayHasContent && (
           <div className="mt-4 rounded-2xl bg-muted/30 px-5 py-4">
@@ -217,9 +224,6 @@ export default async function DashboardPage() {
           </div>
         )}
       </header>
-
-      {/* Porsche-mål */}
-      <PorscheTracker savedAmount={11_400} />
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
