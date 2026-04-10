@@ -61,8 +61,8 @@ export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
       <img
         src="/porsche.png"
         alt="Porsche 911 GT2 RS — Nerra"
-        className="h-12 w-auto opacity-60"
-        style={{ filter: 'grayscale(0.2)', transform: 'scaleX(-1)' }}
+        className="h-16 w-auto opacity-60"
+        style={{ filter: 'grayscale(0.2)' }}
       />
     </div>
   );
