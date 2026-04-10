@@ -86,17 +86,13 @@ export function DocumentEditor({ documentId, content, isGenerated }: DocumentEdi
     const editedMarkdown = htmlToMarkdown(editorRef.current.innerHTML);
     setText(editedMarkdown);
 
-    const toastId = addToast({ type: 'loading', title: 'Lagrer endringer...' });
+    const toastId = addToast({ type: 'loading', title: 'Lagrer...' });
 
     const result = await saveDocumentEdit(documentId, editedMarkdown);
     if (result.error) {
       updateToast(toastId, { type: 'error', title: 'Feil', description: result.error });
     } else {
-      updateToast(toastId, {
-        type: 'success',
-        title: 'Lagret',
-        description: 'Agenten lærer av endringene dine',
-      });
+      updateToast(toastId, { type: 'success', title: 'Lagret' });
       setEditing(false);
       router.refresh();
     }

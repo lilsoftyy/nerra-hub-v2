@@ -127,27 +127,27 @@ export default async function CustomerDetailPage({
               <CardTitle className="text-base">AI-agenter</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
-              <div>
+              <div className="flex items-center gap-2">
                 <AgentTriggerButton
                   agent="agent_6_lead_research"
                   label="Firmasøk"
                   companyId={company.id}
                   companyName={company.name}
                 />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Henter grunnleggende info om selskapet fra nettet.
-                </p>
+                {documents.some((d) => d.kind === 'research') && (
+                  <span className="text-xs text-emerald-600">Utført</span>
+                )}
               </div>
-              <div>
+              <div className="flex items-center gap-2">
                 <AgentTriggerButton
                   agent="customer_research_agent"
                   label="Kunderesearch"
                   companyId={company.id}
                   companyName={company.name}
                 />
-                <p className="text-xs text-muted-foreground mt-1">
-                  Full analyse — relevans, konkurrenter, marked og neste steg.
-                </p>
+                {documents.some((d) => d.kind === 'customer_report') && (
+                  <span className="text-xs text-emerald-600">Utført</span>
+                )}
               </div>
             </CardContent>
           </Card>

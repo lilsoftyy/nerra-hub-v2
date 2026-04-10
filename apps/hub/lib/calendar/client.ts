@@ -8,7 +8,7 @@ export async function getCalendarClient() {
   const accessToken = session?.provider_token;
   const refreshToken = session?.provider_refresh_token;
 
-  if (!accessToken && !refreshToken) {
+  if (!refreshToken) {
     return null;
   }
 
@@ -19,8 +19,18 @@ export async function getCalendarClient() {
 
   oauth2Client.setCredentials({
     access_token: accessToken ?? undefined,
-    refresh_token: refreshToken ?? undefined,
+    refresh_token: refreshToken,
   });
+
+  // Refresh token proaktivt hvis access token mangler eller kan være utløpt
+  if (!accessToken) {
+    try {
+      const { credentials } = await oauth2Client.refreshAccessToken();
+      oauth2Client.setCredentials(credentials);
+    } catch {
+      return null;
+    }
+  }
 
   return google.calendar({ version: 'v3', auth: oauth2Client });
 }

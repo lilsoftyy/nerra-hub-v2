@@ -59,7 +59,7 @@ export function AgentCommands({ companies, suggestions }: { companies: Company[]
     setResearchOpen(false);
     setDeepResearchOpen(false);
 
-    const toastId = addToast({ type: 'loading', title: `${label} — ${companyName}`, description: 'Agenten jobber...' });
+    const toastId = addToast({ type: 'loading', title: `${label} — ${companyName}` });
 
     try {
       const res = await fetch('/api/agents/run', {
@@ -71,7 +71,7 @@ export function AgentCommands({ companies, suggestions }: { companies: Company[]
       if (data.error) {
         updateToast(toastId, { type: 'error', title: 'Feil', description: data.error });
       } else if (data.document_id) {
-        updateToast(toastId, { type: 'success', title: `${label} ferdig`, description: companyName, action: { label: 'Se rapport', onClick: () => router.push(`/documents/${data.document_id}`) } });
+        updateToast(toastId, { type: 'success', title: `${label} ferdig`, action: { label: 'Se rapport', onClick: () => router.push(`/documents/${data.document_id}`) } });
       } else {
         updateToast(toastId, { type: 'success', title: `${label} ferdig` });
       }
@@ -82,12 +82,12 @@ export function AgentCommands({ companies, suggestions }: { companies: Company[]
   };
 
   const runProjectAgent = async () => {
-    const toastId = addToast({ type: 'loading', title: 'Sjekker faseoverganger', description: 'Agenten sjekker alle kunder...' });
+    const toastId = addToast({ type: 'loading', title: 'Sjekker faseoverganger' });
     try {
       const res = await fetch('/api/agents/run', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ agent: 'agent_3_project' }) });
       const data = await res.json();
       if (data.error) updateToast(toastId, { type: 'error', title: 'Feil', description: data.error });
-      else updateToast(toastId, { type: 'success', title: 'Fasesjekk ferdig', description: `${data.proposals_created ?? 0} forslag opprettet` });
+      else updateToast(toastId, { type: 'success', title: `${data.proposals_created ?? 0} forslag opprettet` });
       router.refresh();
     } catch { updateToast(toastId, { type: 'error', title: 'Noe gikk galt' }); }
   };

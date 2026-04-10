@@ -28,6 +28,21 @@ import {
   Bot,
 } from 'lucide-react';
 
+const dashboardActionLabels: Record<string, string> = {
+  'company.phase_changed': 'Faseendring',
+  'company.created': 'Ny kunde',
+  'company.updated': 'Kunde oppdatert',
+  'company.created_from_lead_research': 'Lead lagt til',
+  'contact.created': 'Kontakt lagt til',
+  'contact.created_via_ai_lookup': 'Kontakt funnet via AI',
+  'task.created': 'Oppgave opprettet',
+  'task.status_changed': 'Oppgave oppdatert',
+  'document.created': 'Research ferdig',
+  'proposal.created': 'Forslag opprettet',
+  'proposal.approved': 'Forslag godkjent',
+  'proposal.rejected': 'Forslag avvist',
+};
+
 export default async function DashboardPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
@@ -438,14 +453,21 @@ export default async function DashboardPage() {
               {activities.length > 0 ? (
                 <div className="space-y-2">
                   {activities.map((activity) => {
+                    const company = activity.companies as unknown as { name: string } | null;
+                    const isAgent = activity.actor_type === 'agent';
+                    const label = dashboardActionLabels[activity.action] ?? activity.action;
                     return (
                       <div key={activity.id} className="flex items-baseline justify-between gap-3">
                         <p className="min-w-0 flex-1 truncate text-sm">
+                          {isAgent && (
+                            <span className="mr-1 inline-block size-1.5 rounded-full bg-primary/60 align-middle" />
+                          )}
                           <span className="font-medium">
-                            {activity.actor_name ?? activity.actor_type}
+                            {label}
                           </span>
-                          {' — '}
-                          {activity.action}
+                          {company && (
+                            <span className="text-muted-foreground"> — {company.name}</span>
+                          )}
                         </p>
                         <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
                           {formatRelativeTime(activity.created_at)}

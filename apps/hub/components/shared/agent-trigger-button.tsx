@@ -26,7 +26,6 @@ export function AgentTriggerButton({ agent, label, companyId, companyName, varia
     const toastId = addToast({
       type: 'loading',
       title: `${label}${companyName ? ` — ${companyName}` : ''}`,
-      description: 'Agenten jobber...',
     });
 
     try {
@@ -47,7 +46,6 @@ export function AgentTriggerButton({ agent, label, companyId, companyName, varia
         updateToast(toastId, {
           type: 'success',
           title: `${label} ferdig`,
-          description: companyName ?? 'Rapport opprettet',
           action: {
             label: 'Se rapport',
             onClick: () => router.push(`/documents/${data.document_id}`),
@@ -56,8 +54,7 @@ export function AgentTriggerButton({ agent, label, companyId, companyName, varia
       } else if (data.proposals_created !== undefined) {
         updateToast(toastId, {
           type: 'success',
-          title: `${label} ferdig`,
-          description: `${data.proposals_created} forslag opprettet`,
+          title: `${data.proposals_created} forslag opprettet`,
         });
       } else {
         updateToast(toastId, {
