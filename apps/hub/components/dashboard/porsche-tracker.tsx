@@ -3,10 +3,12 @@
 /**
  * Porsche 911 Turbo S progress tracker.
  *
- * Mål: 3 800 000 NOK
- * Viser en SVG-silhuett av en 911 i sideprofil med en progress bar under.
+ * Strategi: Spare 1 000 000 kr i egenkapital, låne resten (2 800 000 kr).
+ * Sparing: ca. 50 000 - 100 000 kr/år (to personer).
+ * Progress bar viser sparing mot egenkapital-målet.
  */
 
+const EQUITY_TARGET = 1_000_000;
 const PORSCHE_PRICE = 3_800_000;
 
 interface PorscheTrackerProps {
@@ -54,51 +56,65 @@ function Porsche911Svg({ progress }: { progress: number }) {
         fill="none"
       />
 
-      {/* Hjul */}
-      <circle cx="195" cy="210" r="42" stroke="currentColor" className="text-foreground/[0.12]" strokeWidth="2" fill="none" />
-      <circle cx="195" cy="210" r="28" stroke="currentColor" className="text-foreground/[0.08]" strokeWidth="1.5" fill="none" />
-      <circle cx="195" cy="210" r="8" fill="currentColor" className="text-foreground/[0.08]" />
+      {/* Forhjul */}
+      <circle cx="195" cy="215" r="38" stroke="currentColor" className="text-foreground/[0.12]" strokeWidth="2" fill="none" />
+      <circle cx="195" cy="215" r="25" stroke="currentColor" className="text-foreground/[0.08]" strokeWidth="1.5" fill="none" />
+      <circle cx="195" cy="215" r="7" fill="currentColor" className="text-foreground/[0.08]" />
 
-      <circle cx="615" cy="210" r="42" stroke="currentColor" className="text-foreground/[0.12]" strokeWidth="2" fill="none" />
-      <circle cx="615" cy="210" r="28" stroke="currentColor" className="text-foreground/[0.08]" strokeWidth="1.5" fill="none" />
-      <circle cx="615" cy="210" r="8" fill="currentColor" className="text-foreground/[0.08]" />
+      {/* Bakhjul (litt større, typisk 911) */}
+      <circle cx="648" cy="215" r="40" stroke="currentColor" className="text-foreground/[0.12]" strokeWidth="2" fill="none" />
+      <circle cx="648" cy="215" r="26" stroke="currentColor" className="text-foreground/[0.08]" strokeWidth="1.5" fill="none" />
+      <circle cx="648" cy="215" r="7" fill="currentColor" className="text-foreground/[0.08]" />
     </svg>
   );
 }
 
-// Porsche 911 side profile path — forenklet silhuett
+// Porsche 992 911 Turbo S side profile — moderne silhuett
+// Lav nese, bred bakende, markant spoiler-linje, agressiv profil
 const carPath = [
-  'M 100,210',
-  'C 100,200 110,185 130,180',
-  'L 155,175',
-  'C 160,170 170,168 195,168',
-  'C 220,168 230,170 235,175',
-  'L 280,178',
-  'L 310,175',
-  'L 350,160',
-  'L 390,135',
-  'L 430,108',
-  'L 470,88',
-  'L 520,78',
-  'L 560,76',
-  'L 600,78',
-  'L 640,85',
-  'L 680,95',
-  'L 710,108',
-  'L 730,120',
-  'L 740,135',
-  'L 745,150',
-  'L 748,165',
-  'L 748,178',
-  'L 740,185',
-  'L 660,188',
-  'C 655,175 640,168 615,168',
-  'C 590,168 575,175 570,188',
-  'L 240,188',
-  'C 235,175 220,168 195,168',
-  'C 170,168 155,175 150,188',
-  'L 115,190',
-  'C 105,195 100,200 100,210',
+  // Forhjul bunn → nese
+  'M 148,195',
+  'C 140,192 120,188 108,182',
+  'C 96,176 82,170 74,164',
+  'L 60,156',
+  'C 54,152 50,148 50,144',
+  // Nese → panser
+  'L 52,140',
+  'C 54,136 62,132 76,128',
+  'L 120,118',
+  // Panser → vindskjerm (lang, lav linje)
+  'L 200,104',
+  'L 260,92',
+  'C 290,86 310,82 330,80',
+  // Vindskjerm → tak (bratt vinkel, typisk 911)
+  'C 350,78 365,76 380,76',
+  'L 420,76',
+  // Tak → bakrute (kort, avrundet)
+  'C 450,76 470,78 490,84',
+  'L 520,94',
+  // Bakrute → bakende (bred, kraftig)
+  'C 540,102 560,112 575,120',
+  'L 600,130',
+  // Bakende → spoiler
+  'C 620,138 640,146 660,150',
+  'L 700,156',
+  'C 720,158 735,160 742,162',
+  // Spoiler-kant
+  'L 748,160',
+  'L 750,164',
+  // Bakende nedover
+  'L 748,170',
+  'C 746,176 740,182 732,186',
+  'L 710,192',
+  // Bakhjul overkant
+  'C 698,195 676,196 662,196',
+  'C 648,196 636,194 626,190',
+  // Mellom hjulene (underside)
+  'L 240,190',
+  // Forhjul overkant
+  'C 230,194 218,196 204,196',
+  'C 190,196 178,195 166,192',
+  'L 148,195',
   'Z',
 ].join(' ');
 
@@ -113,12 +129,11 @@ function formatNok(amount: number): string {
 }
 
 export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
-  const progress = (savedAmount / PORSCHE_PRICE) * 100;
-  const remaining = PORSCHE_PRICE - savedAmount;
+  const progress = (savedAmount / EQUITY_TARGET) * 100;
+  const remaining = EQUITY_TARGET - savedAmount;
 
-  // Estimat: med 600k lønn, ~25% skatt, ~300k levekostnader = ~150k sparing/år per person
-  // To personer = 300k/år i starten, voksende med lønnsøkning
-  const yearlySavingsEstimate = 300_000;
+  // Sparing: 50-100k/år totalt (to personer). Bruker 75k som snitt.
+  const yearlySavingsEstimate = 75_000;
   const yearsLeft = remaining > 0 ? Math.ceil(remaining / yearlySavingsEstimate) : 0;
 
   return (
@@ -129,7 +144,7 @@ export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
             Porsche 911 Turbo S
           </p>
           <p className="text-[11px] text-muted-foreground/40 mt-0.5">
-            {formatNok(savedAmount)} av {formatNok(PORSCHE_PRICE)} kr
+            {formatNok(savedAmount)} av {formatNok(EQUITY_TARGET)} egenkapital ({formatNok(PORSCHE_PRICE)} totalt)
           </p>
         </div>
         <div className="text-right">
@@ -138,7 +153,7 @@ export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
           </p>
           {yearsLeft > 0 && (
             <p className="text-[11px] text-muted-foreground/40">
-              ~{yearsLeft} {yearsLeft === 1 ? 'år' : 'år'} igjen
+              ~{yearsLeft} år igjen
             </p>
           )}
         </div>
