@@ -36,6 +36,14 @@ export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
 
   return (
     <div className="flex items-center gap-3 rounded-xl bg-muted/20 px-4 py-2.5">
+      {/* Porsche-bilde — spoiler venstre, nese høyre */}
+      <img
+        src="/porsche.png"
+        alt="Porsche 911 GT2 RS — Nerra"
+        className="h-24 w-auto opacity-60"
+        style={{ filter: 'grayscale(0.2)', transform: 'scaleX(-1)' }}
+      />
+
       {/* Info + progress */}
       <div className="min-w-0 flex-1">
         <p className="text-xs font-semibold tabular-nums">
@@ -56,14 +64,6 @@ export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
           {' '}({formatNok(PORSCHE_PRICE)} totalt)
         </p>
       </div>
-
-      {/* Porsche-bilde — vendt 180° så nesa peker bort fra progress */}
-      <img
-        src="/porsche.png"
-        alt="Porsche 911 GT2 RS — Nerra"
-        className="h-16 w-auto opacity-60"
-        style={{ filter: 'grayscale(0.2)' }}
-      />
     </div>
   );
 }
