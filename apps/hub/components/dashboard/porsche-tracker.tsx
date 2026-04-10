@@ -48,7 +48,7 @@ export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-1.5">
           <p className="text-[10px] font-medium text-muted-foreground/50">Porscho-meter</p>
-          <p className="text-xs font-semibold tabular-nums">
+          <p className="text-[10px] font-semibold tabular-nums">
             {progress < 0.01 ? progress.toFixed(3) : progress < 1 ? progress.toFixed(2) : progress.toFixed(1)}%
           </p>
         </div>
