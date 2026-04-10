@@ -2,17 +2,7 @@ import { fetchUpcomingEvents } from '@/lib/calendar/fetch-events';
 import { Badge } from '@/components/ui/badge';
 import { CreateEventForm } from '@/components/calendar/create-event-form';
 import { DeleteEventButton } from '@/components/calendar/delete-event-button';
-
-function formatTimeRange(start: string, end: string, isAllDay: boolean): string {
-  if (isAllDay) return 'Hele dagen';
-  try {
-    const s = new Date(start);
-    const e = new Date(end);
-    return `${s.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })} – ${e.toLocaleTimeString('nb-NO', { hour: '2-digit', minute: '2-digit' })}`;
-  } catch {
-    return '';
-  }
-}
+import { formatTimeRange } from '@/lib/formatters';
 
 function isToday(dateStr: string): boolean {
   try {

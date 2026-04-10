@@ -31,7 +31,7 @@ export async function notifyProposalCreated(title: string, agentName: string, co
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `*Nytt forslag fra agent*\n*Tittel:* ${title}\n*Agent:* ${agentName}${companyText}\n<https://nerra-hub.vercel.app/dashboard|Ga til godkjenningskoen>`,
+          text: `*Nytt forslag fra agent*\n*Tittel:* ${title}\n*Agent:* ${agentName}${companyText}\n<https://nerra-hub.vercel.app/dashboard|Gå til godkjenningskøen>`,
         },
       },
     ],

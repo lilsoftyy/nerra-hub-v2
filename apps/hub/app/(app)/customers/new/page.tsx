@@ -16,7 +16,7 @@ export default function NewCustomerPage() {
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <h2 className="text-2xl font-bold">Opprett kunde</h2>
+      <h1 className="text-xl font-semibold tracking-tight">Opprett kunde</h1>
 
       {state?.error?._form && (
         <div className="rounded-md bg-red-50 p-4 text-sm text-red-700">

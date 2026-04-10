@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
+import { selectClassName } from '@/lib/ui-utils';
 import { updateTask, deleteTask } from '@/app/(app)/tasks/actions';
 import { Trash2, X } from 'lucide-react';
 
@@ -120,7 +121,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="edit-priority">Prioritet</Label>
-              <select id="edit-priority" name="priority" defaultValue={task.priority} className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+              <select id="edit-priority" name="priority" defaultValue={task.priority} className={selectClassName}>
                 {Object.entries(taskPriorityLabels).map(([value, label]) => (
                   <option key={value} value={value}>{label}</option>
                 ))}
@@ -134,7 +135,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-2">
               <Label htmlFor="edit-category">Kategori</Label>
-              <select id="edit-category" name="category" defaultValue={task.category ?? ''} className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+              <select id="edit-category" name="category" defaultValue={task.category ?? ''} className={selectClassName}>
                 <option value="">Ingen</option>
                 {Object.entries(taskCategoryLabels).map(([value, label]) => (
                   <option key={value} value={value}>{label}</option>
@@ -143,7 +144,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
             </div>
             <div className="space-y-2">
               <Label htmlFor="edit-company">Kontakt</Label>
-              <select id="edit-company" name="company_id" defaultValue={task.company_id ?? ''} className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+              <select id="edit-company" name="company_id" defaultValue={task.company_id ?? ''} className={selectClassName}>
                 <option value="">Ingen</option>
                 {companies.map((c) => (
                   <option key={c.id} value={c.id}>{c.name}</option>

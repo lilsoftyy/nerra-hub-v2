@@ -132,7 +132,7 @@ export function CreateContractForm({ companyId, companyName }: { companyId: stri
               <Input id="valid_until" name="valid_until" type="date" />
             </div>
             <div>
-              <Label htmlFor="language">Sprak</Label>
+              <Label htmlFor="language">Språk</Label>
               <Input id="language" name="language" defaultValue="no" placeholder="no / en" />
             </div>
           </div>

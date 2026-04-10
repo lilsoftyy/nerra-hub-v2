@@ -24,7 +24,7 @@ export default async function InboxPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">Innboks</h2>
+        <h1 className="text-xl font-semibold tracking-tight">Innboks</h1>
         {emails.length > 0 && (
           <span className="text-sm text-muted-foreground">{emails.length} e-poster</span>
         )}

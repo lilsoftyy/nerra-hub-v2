@@ -13,29 +13,8 @@ import { QualificationResponse } from '@/components/customers/qualification-resp
 import { CreateContractForm } from '@/components/contracts/create-contract-form';
 import Link from 'next/link';
 import { FileText } from 'lucide-react';
-
-const phaseLabels: Record<string, string> = {
-  lead: 'Lead',
-  qualification: 'Kvalifisering',
-  sales: 'Salg',
-  onboarding: 'Onboarding',
-  training: 'Opplæring',
-  operational: 'Operativ',
-  finished: 'Ferdig',
-};
-
-const phaseColors: Record<string, string> = {
-  lead: 'bg-gray-100 text-gray-800',
-  qualification: 'bg-blue-100 text-blue-800',
-  sales: 'bg-yellow-100 text-yellow-800',
-  onboarding: 'bg-purple-100 text-purple-800',
-  training: 'bg-orange-100 text-orange-800',
-  operational: 'bg-green-100 text-green-800',
-  finished: 'bg-slate-100 text-slate-800',
-};
-
 import { PHASES } from '@/lib/constants';
-const phases = PHASES;
+import { phaseLabels, phaseColors } from '@/lib/labels';
 
 export default async function CustomerDetailPage({
   params,
@@ -83,15 +62,15 @@ export default async function CustomerDetailPage({
   const qualificationResponse = qualificationResult.data;
   const documents = documentsResult.data ?? [];
 
-  const currentPhaseIndex = phases.indexOf(company.phase);
-  const nextPhase = currentPhaseIndex < phases.length - 1 ? phases[currentPhaseIndex + 1] : null;
+  const currentPhaseIndex = (PHASES as readonly string[]).indexOf(company.phase);
+  const nextPhase = currentPhaseIndex < PHASES.length - 1 ? PHASES[currentPhaseIndex + 1] : null;
 
   return (
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold">{company.name}</h2>
+          <h1 className="text-xl font-semibold tracking-tight">{company.name}</h1>
           <div className="flex items-center gap-3 mt-1">
             <Badge variant="secondary" className={phaseColors[company.phase] ?? ''}>
               {phaseLabels[company.phase] ?? company.phase}

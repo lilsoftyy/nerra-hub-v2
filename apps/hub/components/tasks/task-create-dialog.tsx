@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
+import { selectClassName } from '@/lib/ui-utils';
 import { createTaskFromDialog } from '@/app/(app)/tasks/actions';
 import { Plus } from 'lucide-react';
 
@@ -62,7 +63,7 @@ export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
             <Label htmlFor="new-priority">Prioritet</Label>
-            <select id="new-priority" name="priority" defaultValue="medium" className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+            <select id="new-priority" name="priority" defaultValue="medium" className={selectClassName}>
               {Object.entries(taskPriorityLabels).map(([value, label]) => (
                 <option key={value} value={value}>{label}</option>
               ))}
@@ -76,7 +77,7 @@ export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-2">
             <Label htmlFor="new-category">Kategori</Label>
-            <select id="new-category" name="category" defaultValue="" className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+            <select id="new-category" name="category" defaultValue="" className={selectClassName}>
               <option value="">Ingen</option>
               {Object.entries(taskCategoryLabels).map(([value, label]) => (
                 <option key={value} value={value}>{label}</option>
@@ -85,7 +86,7 @@ export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
           </div>
           <div className="space-y-2">
             <Label htmlFor="new-company">Kontakt</Label>
-            <select id="new-company" name="company_id" defaultValue="" className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50">
+            <select id="new-company" name="company_id" defaultValue="" className={selectClassName}>
               <option value="">Ingen</option>
               {companies.map((c) => (
                 <option key={c.id} value={c.id}>{c.name}</option>

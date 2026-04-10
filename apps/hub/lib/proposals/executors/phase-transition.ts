@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import type { ExecutionContext, ExecutionResult } from '../types';
 import { ExecutionError } from '../types';
-
-const PHASES = ['lead', 'qualification', 'sales', 'onboarding', 'training', 'operational', 'finished'];
+import { PHASES } from '@/lib/constants';
 
 export async function executePhaseTransition(
   payload: { company_id: string; from_phase: string; to_phase: string },
@@ -11,8 +10,8 @@ export async function executePhaseTransition(
   const supabase = await createClient();
 
   // Validate transition
-  const fromIdx = PHASES.indexOf(payload.from_phase);
-  const toIdx = PHASES.indexOf(payload.to_phase);
+  const fromIdx = (PHASES as readonly string[]).indexOf(payload.from_phase);
+  const toIdx = (PHASES as readonly string[]).indexOf(payload.to_phase);
 
   if (fromIdx < 0 || toIdx < 0) {
     throw new ExecutionError('invalid_phase', `Unknown phase: ${payload.from_phase} or ${payload.to_phase}`);

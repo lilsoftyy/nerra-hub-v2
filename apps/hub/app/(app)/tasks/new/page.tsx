@@ -5,6 +5,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
+import { selectClassName } from '@/lib/ui-utils';
 import { createTask } from '../actions';
 
 async function createTaskAction(formData: FormData): Promise<void> {
@@ -23,7 +24,7 @@ export default async function NewTaskPage() {
 
   return (
     <div className="mx-auto max-w-2xl space-y-6">
-      <h2 className="text-2xl font-bold">Opprett oppgave</h2>
+      <h1 className="text-xl font-semibold tracking-tight">Opprett oppgave</h1>
 
       <Card>
         <CardHeader>
@@ -53,7 +54,7 @@ export default async function NewTaskPage() {
                   id="priority"
                   name="priority"
                   defaultValue="medium"
-                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                  className={selectClassName}
                 >
                   {Object.entries(taskPriorityLabels).map(([value, label]) => (
                     <option key={value} value={value}>
@@ -69,7 +70,7 @@ export default async function NewTaskPage() {
                   id="category"
                   name="category"
                   defaultValue=""
-                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                  className={selectClassName}
                 >
                   <option value="">Velg kategori...</option>
                   {Object.entries(taskCategoryLabels).map(([value, label]) => (
@@ -88,7 +89,7 @@ export default async function NewTaskPage() {
                   id="company_id"
                   name="company_id"
                   defaultValue=""
-                  className="flex h-9 w-full rounded-lg border border-input bg-transparent px-3 py-2 text-sm outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50"
+                  className={selectClassName}
                 >
                   <option value="">Ingen kunde</option>
                   {companies?.map((company) => (

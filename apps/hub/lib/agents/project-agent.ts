@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { v7 as uuidv7 } from 'uuid';
-
-const PHASES = ['lead', 'qualification', 'sales', 'onboarding', 'training', 'operational', 'finished'];
+import { PHASES } from '@/lib/constants';
 
 export interface AgentResult {
   proposals_created: number;
@@ -41,7 +40,7 @@ export async function runProjectAgent(): Promise<AgentResult> {
 
     // If all checklist items are completed, propose phase transition
     if (allCompleted) {
-      const currentIndex = PHASES.indexOf(company.phase);
+      const currentIndex = (PHASES as readonly string[]).indexOf(company.phase);
       const nextPhase = currentIndex < PHASES.length - 1 ? PHASES[currentIndex + 1] : null;
 
       if (!nextPhase) continue;
