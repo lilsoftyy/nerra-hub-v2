@@ -11,6 +11,17 @@ function cleanContent(raw: string): string {
     .replace(/[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]/gu, '')
     .replace(/\u200B/g, '')
     .replace(/\[\d+\]/g, '')
+    // Fix broken sentences: newlines before punctuation (". \n\n" or ",\n\n")
+    .replace(/\n+\.\s*/g, '. ')
+    .replace(/\n+,\s*/g, ', ')
+    // Fix broken sentences: newlines in the middle of a sentence (lowercase/comma before \n\n + lowercase after)
+    .replace(/([a-zæøå,])\s*\n\n\s*([a-zæøå])/gi, (_, before, after) => {
+      // If before is comma or lowercase, and after is lowercase — join them
+      if (after === after.toLowerCase()) {
+        return `${before} ${after}`;
+      }
+      return `${before}\n\n${after}`;
+    })
     .replace(/\n\n\.\s*\n/g, '\n')
     .replace(/\n{3,}/g, '\n\n')
     .trim();
@@ -23,7 +34,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
     <div className="mx-auto" style={{ maxWidth: '700px' }}>
       <article
         className="text-foreground"
-        style={{ fontSize: '16px', lineHeight: 1.75 }}
+        style={{ fontSize: '14.5px', lineHeight: 1.8 }}
       >
         <ReactMarkdown
           components={{
@@ -86,7 +97,7 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
               </h4>
             ),
             p: ({ children }) => (
-              <p style={{ marginTop: 0, marginBottom: '1rem' }}>{children}</p>
+              <p style={{ marginTop: 0, marginBottom: '1.25rem' }}>{children}</p>
             ),
             ul: ({ children }) => (
               <ul style={{
