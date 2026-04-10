@@ -36,24 +36,11 @@ export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
 
   return (
     <div className="flex items-center gap-3 rounded-xl bg-muted/20 px-4 py-2.5">
-      {/* Porsche-bilde */}
-      <img
-        src="/porsche.png"
-        alt="Porsche 911 GT2 RS — Nerra"
-        className="h-10 w-auto opacity-60"
-        style={{ filter: 'grayscale(0.2)' }}
-      />
-
-      {/* Info */}
+      {/* Info + progress */}
       <div className="min-w-0 flex-1">
-        <div className="flex items-baseline gap-2">
-          <p className="text-xs font-medium text-muted-foreground/60">
-            Porsche 911 Turbo S
-          </p>
-          <p className="text-xs font-semibold tabular-nums">
-            {progress < 0.01 ? progress.toFixed(3) : progress < 1 ? progress.toFixed(2) : progress.toFixed(1)}%
-          </p>
-        </div>
+        <p className="text-xs font-semibold tabular-nums">
+          {progress < 0.01 ? progress.toFixed(3) : progress < 1 ? progress.toFixed(2) : progress.toFixed(1)}%
+        </p>
 
         {/* Progress bar */}
         <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-foreground/[0.04]">
@@ -69,6 +56,14 @@ export function PorscheTracker({ savedAmount }: PorscheTrackerProps) {
           {' '}({formatNok(PORSCHE_PRICE)} totalt)
         </p>
       </div>
+
+      {/* Porsche-bilde — vendt 180° så nesa peker bort fra progress */}
+      <img
+        src="/porsche.png"
+        alt="Porsche 911 GT2 RS — Nerra"
+        className="h-12 w-auto opacity-60"
+        style={{ filter: 'grayscale(0.2)', transform: 'scaleX(-1)' }}
+      />
     </div>
   );
 }
