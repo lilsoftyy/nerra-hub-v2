@@ -18,6 +18,7 @@ import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 import { ProposalActions } from '@/components/dashboard/proposal-actions';
 import { TaskCreateDialog } from '@/components/tasks/task-create-dialog';
 import { QuickActions } from '@/components/dashboard/quick-actions';
+import { PorscheTracker } from '@/components/dashboard/porsche-tracker';
 import {
   Bell,
   Calendar,
@@ -216,6 +217,9 @@ export default async function DashboardPage() {
           </div>
         )}
       </header>
+
+      {/* Porsche-mål */}
+      <PorscheTracker savedAmount={11_400} />
 
       {/* Stats */}
       <div className="grid grid-cols-4 gap-4">
