@@ -175,7 +175,7 @@ export default async function DashboardPage() {
               {formatNorwegianDate(today)}
             </p>
           </div>
-          <div className="shrink-0 w-72">
+          <div className="shrink-0 w-[420px]">
             <PorscheTracker savedAmount={11_400} />
           </div>
         </div>
