@@ -44,15 +44,20 @@ export async function saveDocumentEdit(documentId: string, editedMarkdown: strin
 
   if (error) return { error: error.message };
 
-  // Generer lærdom fra endringene (non-blocking)
+  // Generer lærdom fra endringene
   if (doc.generated_by_agent && originalContent !== editedMarkdown) {
-    generateLearning(
-      doc.generated_by_agent,
-      originalContent ?? '',
-      editedMarkdown,
-      documentId,
-      doc.company_id,
-    ).catch(() => {});
+    try {
+      await generateLearning(
+        doc.generated_by_agent,
+        originalContent ?? '',
+        editedMarkdown,
+        documentId,
+        doc.company_id,
+        supabase,
+      );
+    } catch {
+      // Lærdom-generering er ikke kritisk — ignorer feil
+    }
   }
 
   return { success: true };
@@ -128,9 +133,9 @@ async function generateLearning(
   edited: string,
   documentId: string,
   companyId: string | null,
+  supabase: Awaited<ReturnType<typeof createClient>>,
 ) {
   const anthropic = getAnthropicClient();
-  const supabase = await createClient();
 
   // Begrens lengde for å spare tokens
   const origShort = original.slice(0, 3000);
