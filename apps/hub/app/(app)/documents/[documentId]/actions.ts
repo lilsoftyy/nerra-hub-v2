@@ -58,6 +58,70 @@ export async function saveDocumentEdit(documentId: string, editedMarkdown: strin
   return { success: true };
 }
 
+export async function addLeadFromReport(data: {
+  name: string;
+  country: string;
+  city?: string;
+  website?: string;
+  employeeCount?: number;
+  services?: string;
+  relevance?: string;
+  contacts: Array<{
+    name: string;
+    role?: string;
+    email?: string;
+    linkedin?: string;
+  }>;
+}) {
+  const supabase = await createClient();
+  const companyId = uuidv7();
+
+  const notes = [
+    data.services ? `Tjenester: ${data.services}` : null,
+    data.relevance ? `Relevans: ${data.relevance}` : null,
+    data.city ? `By: ${data.city}` : null,
+  ].filter(Boolean).join('\n');
+
+  const { error: companyError } = await supabase.from('companies').insert({
+    id: companyId,
+    name: data.name,
+    country: data.country,
+    website: data.website || null,
+    employee_count: data.employeeCount || null,
+    notes: notes || null,
+    phase: 'lead',
+  });
+
+  if (companyError) return { error: companyError.message };
+
+  if (data.contacts.length > 0) {
+    const contactInserts = data.contacts.map((c, i) => ({
+      id: uuidv7(),
+      company_id: companyId,
+      full_name: c.name,
+      email: c.email || null,
+      role: c.role || null,
+      is_primary: i === 0,
+    }));
+    await supabase.from('contacts').insert(contactInserts);
+  }
+
+  await supabase.from('activity_log').insert({
+    id: uuidv7(),
+    actor_type: 'human',
+    action: 'company.created_from_lead_research',
+    entity_type: 'company',
+    entity_id: companyId,
+    company_id: companyId,
+    details: {
+      company: data.name,
+      contacts: data.contacts.length,
+    },
+  });
+
+  return { success: true, companyId };
+}
+
 async function generateLearning(
   agentName: string,
   original: string,

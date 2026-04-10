@@ -61,18 +61,32 @@ Styres av Magnus ved manuell kjøring. Agenten søker i det landet eller markede
 
 ---
 
+## Språk — KRITISK
+
+Skriv ALLTID på norsk bokmål med korrekte æ, ø, å. Uansett hvilket land du søker i eller hvilket språk kildene er på — du OVERSETTER alt til norsk bokmål.
+
+---
+
 ## Hva agenten samler per prospekt
 
 For hvert selskap som passerer innledende filtrering:
 
 - Firmanavn, land, by
+- Nettside
 - Eierstruktur (familieid, PE-støttet, børsnotert)
 - Estimert omsetning og antall ansatte
 - Hvilke tjenester de tilbyr — med fokus på utvendig arbeid
 - Operasjonsland og geografisk rekkevidde
-- Kontaktperson og tittel (primært daglig leder eller operasjonsdirektør)
-- LinkedIn-URL for selskap og kontaktperson
 - Kort begrunnelse for hvorfor selskapet kvalifiserer
+
+### Kontaktpersoner per selskap — VIKTIG
+For hvert selskap, søk aktivt etter:
+- **Daglig leder / CEO** — LinkedIn-profil, e-post, telefon
+- **Operasjonsdirektør / COO** — LinkedIn-profil, e-post
+- **Salgssjef** — LinkedIn-profil, e-post
+- Andre relevante ledere
+
+Bruk tid på å finne reelle kontaktpersoner med faktisk e-post. Dette er noe av det mest verdifulle i rapporten.
 
 ---
 
@@ -95,15 +109,39 @@ Prospekter med høy score på de to øverste signalene prioriteres alltid øvers
 
 ## Output
 
-Agenten leverer en **lead-shortlist** til Nerra Hub — én liste per kjøring, formatert som Markdown og lagret i Supabase.
+Agenten leverer en **lead-shortlist** til Nerra Hub — én liste per kjøring.
 
-Shortlisten inneholder:
-- Rangert liste over kvalifiserte prospekter (typisk 5–15 per kjøring)
-- Nøkkeldata per selskap som beskrevet over
-- Agentens begrunnelse for inkludering og rangering
+### Rapportstruktur
+
+Start med en kort oppsummering (2-3 setninger) om søket — hvilket land/marked, hvor mange selskaper funnet, generell vurdering av markedet.
+
+Deretter, for hvert selskap, bruk denne EKSAKTE strukturen:
+
+```
+## {Firmanavn}
+
+{2-3 setninger om selskapet — hva de gjør og hvorfor de er relevante}
+
+- **Land:** {land}
+- **By:** {by}
+- **Nettside:** {url}
+- **Ansatte:** {antall}
+- **Tjenester:** {kort oppsummering}
+- **Relevans:** {kort begrunnelse for inkludering}
+
+### Kontaktpersoner
+
+- **{Navn}** — {rolle} | {e-post} | [LinkedIn]({linkedin-url})
+- **{Navn}** — {rolle} | {e-post} | [LinkedIn]({linkedin-url})
+```
+
+Denne strukturen er viktig fordi Hub-appen parser den for å vise handlingsknapper.
+
+### Krav
+- Typisk 5-15 selskaper per kjøring
+- Sortert etter relevans (høyest først)
 - Eventuelle røde flagg notert eksplisitt
-
-Magnus eller Martin gjennomgår listen og godkjenner hvilke selskaper som opprettes som leads i CRM. Ingenting opprettes automatisk.
+- Magnus eller Martin gjennomgår listen og godkjenner hvilke selskaper som legges til. Ingenting opprettes automatisk.
 
 ---
 

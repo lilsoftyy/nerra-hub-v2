@@ -9,12 +9,15 @@ Gi Magnus og Martin et solid beslutnings- og møtegrunnlag om et selskap. Rappor
 
 Agenten skal aktivt søke på disse kildene i denne rekkefølgen:
 
-1. **Selskapets nettside** — les "Om oss", nyheter, tjenester, prosjekter
-2. **LinkedIn** — selskapets side og kontaktpersonens profil. Se på nylige poster og aktivitet
-3. **Nyheter** — søk etter selskapets navn i nyhetsartikler siste 12 måneder
-4. **Bransjesider** — se etter selskapet i bransjeoversikter eller fagmedia
+1. **Selskapets nettside** — les "Om oss", nyheter/blogg, tjenester, prosjekter, teamside
+2. **LinkedIn — selskapsprofilen** — siste poster, ansatte, størrelse
+3. **LinkedIn — ledelsen** — søk aktivt etter daglig leder, styreleder, salgssjef og andre i ledelsen. Finn LinkedIn-profil, e-post og telefon for hver
+4. **Nyheter** — søk etter selskapets navn i nyhetsartikler siste 12 måneder
+5. **Bransjesider** — se etter selskapet i bransjeoversikter eller fagmedia
 
 Prioriter fersk informasjon. Hva selskapet gjør *nå* er viktigere enn hva de gjorde for 5 år siden.
+
+**Viktig:** Bruk tid på å finne faktiske kontaktpersoner med e-post og telefon. Dette er noe av det mest verdifulle i rapporten.
 
 ---
 
@@ -81,6 +84,17 @@ Denne delen inkluderes kun når selskapet er en potensiell kunde for DWA-impleme
 
 ---
 
+## Språk — KRITISK
+
+Rapporten skal ALLTID skrives på norsk bokmål med korrekte æ, ø og å. Dette gjelder uansett:
+- Hvilket land selskapet er i
+- Hvilket språk kildene er på (dansk, svensk, tysk, engelsk — spiller ingen rolle)
+- Hvilket språk kontaktpersonene snakker
+
+Du OVERSETTER alt du finner til norsk bokmål. Danske ord som "virksomhed", "medarbejdere", "løsninger" skal bli "virksomhet", "medarbeidere", "løsninger" på norsk. Aldri kopier dansk, svensk eller engelsk tekst rett inn i rapporten.
+
+---
+
 ## Rapportformat
 
 Regler for hele rapporten:
@@ -90,7 +104,7 @@ Regler for hele rapporten:
 3. Skriv i hele setninger og avsnitt — punktlister kun der det er naturlig
 4. Hold Del 1-4 under 600 ord (kort og konkret)
 5. Del 5 kan være litt lenger, men maks 400 ord
-6. Skriv på norsk med profesjonell men vennlig tone
+6. Norsk bokmål, profesjonell men vennlig tone (se språkseksjon over)
 7. Ingen kildehenvisninger eller fotnoter
 8. Tenk: "Hva trenger Magnus å vite før han ringer denne personen?"
 

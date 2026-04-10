@@ -57,8 +57,9 @@ export const taskCategoryLabels: Record<string, string> = {
 };
 
 export const documentKindLabels: Record<string, string> = {
-  research: 'Research',
-  customer_report: 'Kunderapport',
+  research: 'Firmasøk',
+  customer_report: 'Kunderesearch',
+  lead_research: 'Lead Research',
   welcome_package: 'Velkomstpakke',
   contract: 'Kontrakt',
   briefing: 'Briefing',

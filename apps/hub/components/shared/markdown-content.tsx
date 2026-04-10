@@ -22,15 +22,22 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
   return (
     <div className="mx-auto" style={{ maxWidth: '700px' }}>
       <article
-        className="text-foreground/90"
-        style={{ fontSize: '14.5px', lineHeight: 1.75 }}
+        className="text-foreground"
+        style={{ fontSize: '16px', lineHeight: 1.75 }}
       >
         <ReactMarkdown
           components={{
             h1: ({ children }) => (
               <h1
                 className="first:mt-0"
-                style={{ fontSize: '20px', fontWeight: 500, marginTop: '2em', marginBottom: '0.6em' }}
+                style={{
+                  fontSize: '1.625rem',
+                  fontWeight: 600,
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.01em',
+                  marginTop: '1.5rem',
+                  marginBottom: '0.5rem',
+                }}
               >
                 {children}
               </h1>
@@ -38,53 +45,100 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
             h2: ({ children }) => (
               <h2
                 className="first:mt-0"
-                style={{ fontSize: '16px', fontWeight: 500, marginTop: '1.8em', marginBottom: '0.5em' }}
+                style={{
+                  fontSize: '1.375rem',
+                  fontWeight: 600,
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.01em',
+                  marginTop: '1.25rem',
+                  marginBottom: '0.5rem',
+                }}
               >
                 {children}
               </h2>
             ),
             h3: ({ children }) => (
               <h3
-                style={{ fontSize: '14.5px', fontWeight: 500, marginTop: '1.5em', marginBottom: '0.4em' }}
+                style={{
+                  fontSize: '1.125rem',
+                  fontWeight: 600,
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.01em',
+                  marginTop: '1rem',
+                  marginBottom: '0.5rem',
+                }}
               >
                 {children}
               </h3>
             ),
             h4: ({ children }) => (
               <h4
-                style={{ fontSize: '14.5px', fontWeight: 500, marginTop: '1.2em', marginBottom: '0.3em' }}
+                style={{
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  lineHeight: 1.3,
+                  letterSpacing: '-0.01em',
+                  marginTop: '0.75rem',
+                  marginBottom: '0.5rem',
+                }}
               >
                 {children}
               </h4>
             ),
             p: ({ children }) => (
-              <p style={{ marginBottom: '0.9em' }}>{children}</p>
+              <p style={{ marginTop: 0, marginBottom: '1rem' }}>{children}</p>
             ),
             ul: ({ children }) => (
-              <ul style={{ marginBottom: '0.9em', paddingLeft: '1.4em', listStyleType: 'disc' }}>
+              <ul style={{
+                marginTop: '0.5rem',
+                marginBottom: '0.5rem',
+                paddingLeft: '1.5rem',
+                listStyleType: 'disc',
+              }}>
                 {children}
               </ul>
             ),
             ol: ({ children }) => (
-              <ol style={{ marginBottom: '0.9em', paddingLeft: '1.4em', listStyleType: 'decimal' }}>
+              <ol style={{
+                marginTop: '0.5rem',
+                marginBottom: '0.5rem',
+                paddingLeft: '1.5rem',
+                listStyleType: 'decimal',
+              }}>
                 {children}
               </ol>
             ),
             li: ({ children }) => (
-              <li style={{ marginBottom: '0.25em' }}>{children}</li>
+              <li style={{ marginBottom: '0.3125rem', lineHeight: 1.75 }}>{children}</li>
             ),
             strong: ({ children }) => (
-              <strong style={{ fontWeight: 500 }}>{children}</strong>
+              <strong style={{ fontWeight: 600 }}>{children}</strong>
+            ),
+            em: ({ children }) => (
+              <em style={{ fontStyle: 'italic' }}>{children}</em>
+            ),
+            a: ({ href, children }) => (
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  color: '#1a56db',
+                  textDecoration: 'underline',
+                  textUnderlineOffset: '2px',
+                }}
+              >
+                {children}
+              </a>
             ),
             blockquote: ({ children }) => (
               <blockquote
-                className="text-foreground/60 italic"
                 style={{
-                  borderLeft: '2px solid currentColor',
-                  opacity: 0.4,
-                  paddingLeft: '1em',
-                  marginTop: '1em',
-                  marginBottom: '1em',
+                  borderLeft: '3px solid #d1d5db',
+                  paddingLeft: '1rem',
+                  margin: '1rem 0',
+                  color: '#6b7280',
+                  fontStyle: 'normal',
                 }}
               >
                 {children}
@@ -92,28 +146,40 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
             ),
             hr: () => (
               <hr
-                className="border-foreground/10"
-                style={{ marginTop: '2em', marginBottom: '2em', borderTopWidth: '0.5px' }}
+                style={{
+                  border: 'none',
+                  borderTop: '1px solid rgba(0, 0, 0, 0.15)',
+                  margin: '1.5rem 0',
+                }}
               />
             ),
             code: ({ children }) => (
               <code
-                className="bg-foreground/5"
-                style={{ fontSize: '13px', padding: '1px 5px', borderRadius: '3px', fontFamily: 'monospace' }}
+                style={{
+                  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                  fontSize: '0.875em',
+                  backgroundColor: 'rgba(0, 0, 0, 0.06)',
+                  borderRadius: '4px',
+                  padding: '2px 5px',
+                  color: 'inherit',
+                }}
               >
                 {children}
               </code>
             ),
             pre: ({ children }) => (
               <pre
-                className="bg-foreground/5"
                 style={{
-                  fontSize: '13px',
-                  padding: '12px 16px',
+                  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+                  fontSize: '0.875rem',
+                  lineHeight: 1.6,
+                  backgroundColor: 'rgba(0, 0, 0, 0.05)',
                   borderRadius: '6px',
-                  marginTop: '1em',
-                  marginBottom: '1em',
+                  padding: '1rem 1.25rem',
+                  marginTop: '0.75rem',
+                  marginBottom: '1rem',
                   overflowX: 'auto',
+                  whiteSpace: 'pre',
                 }}
               >
                 {children}
@@ -123,28 +189,25 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
               <table
                 style={{
                   width: '100%',
-                  marginTop: '1em',
-                  marginBottom: '1em',
-                  fontSize: '13.5px',
                   borderCollapse: 'collapse',
+                  margin: '1rem 0',
+                  fontSize: '0.9375rem',
                 }}
               >
                 {children}
               </table>
             ),
             thead: ({ children }) => (
-              <thead className="text-foreground/50" style={{ fontSize: '12.5px' }}>
+              <thead style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.15)' }}>
                 {children}
               </thead>
             ),
             th: ({ children }) => (
               <th
                 style={{
-                  textAlign: 'left',
-                  fontWeight: 500,
-                  padding: '6px 12px',
-                  borderBottom: '0.5px solid currentColor',
-                  opacity: 0.2,
+                  fontWeight: 600,
+                  textAlign: 'left' as const,
+                  padding: '0.5rem 0.75rem',
                 }}
               >
                 {children}
@@ -153,13 +216,24 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
             td: ({ children }) => (
               <td
                 style={{
-                  padding: '6px 12px',
-                  borderBottom: '0.5px solid currentColor',
-                  opacity: 0.9,
+                  padding: '0.5rem 0.75rem',
+                  borderBottom: '1px solid rgba(0, 0, 0, 0.07)',
                 }}
               >
                 {children}
               </td>
+            ),
+            img: ({ src, alt }) => (
+              <img
+                src={src}
+                alt={alt ?? ''}
+                style={{
+                  maxWidth: '100%',
+                  height: 'auto',
+                  borderRadius: '6px',
+                  margin: '0.5rem 0',
+                }}
+              />
             ),
           }}
         >

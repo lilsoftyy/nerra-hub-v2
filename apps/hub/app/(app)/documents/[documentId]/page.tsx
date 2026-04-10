@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { documentKindLabels, documentVisibilityLabels } from '@/lib/labels';
 import Link from 'next/link';
 import { DocumentEditor } from '@/components/documents/document-editor';
+import { LeadResearchViewer } from '@/components/documents/lead-research-viewer';
 import { DocumentActions } from '@/components/documents/document-actions';
 
 export default async function DocumentDetailPage({
@@ -55,11 +56,15 @@ export default async function DocumentDetailPage({
         </div>
       </div>
 
-      <DocumentEditor
-        documentId={doc.id}
-        content={doc.content_markdown ?? ''}
-        isGenerated={isGenerated}
-      />
+      {doc.kind === 'lead_research' ? (
+        <LeadResearchViewer content={doc.content_markdown ?? ''} />
+      ) : (
+        <DocumentEditor
+          documentId={doc.id}
+          content={doc.content_markdown ?? ''}
+          isGenerated={isGenerated}
+        />
+      )}
 
       {isGenerated && (
         <p className="text-xs text-muted-foreground">

@@ -17,15 +17,15 @@ import {
 
 const agents = [
   {
-    name: 'Research-agent',
-    description: 'Rask research-rapport om et selskap basert på nettsøk.',
+    name: 'Firmasøk',
+    description: 'Søker opp grunnleggende info om et selskap fra nettet.',
     status: 'aktiv' as const,
     agentId: 'agent_6_lead_research',
     icon: Search,
   },
   {
-    name: 'Kunderesearch-agent',
-    description: 'Dyp research med regulatorisk kontekst, konkurrenter og markedsanalyse.',
+    name: 'Kunderesearch',
+    description: 'Full analyse — relevans, konkurrenter, marked og neste steg.',
     status: 'aktiv' as const,
     agentId: 'customer_research_agent',
     icon: Users,
@@ -66,7 +66,7 @@ const statusColors: Record<string, string> = {
 };
 
 const skillLabels: Record<string, string> = {
-  research: 'Research-rapport',
+  research: 'Firmasøk',
   'email-draft': 'E-postutkast',
   'phase-transition': 'Faseovergang',
   contract: 'Kontraktgenerering',
@@ -76,8 +76,8 @@ const skillLabels: Record<string, string> = {
 };
 
 const skillDescriptions: Record<string, string> = {
-  research: 'Enkel research-rapport om et firma basert på nettsøk',
-  'customer-research': 'Dyp research på ett selskap — møtegrunnlag og beslutningsstøtte',
+  research: 'Søker opp grunnleggende info om et selskap fra nettet',
+  'customer-research': 'Full analyse — relevans, konkurrenter, marked og neste steg',
   'lead-research': 'Proaktiv prospektering — finner og kvalifiserer potensielle kunder',
   outreach: 'Personalisert kald outreach-e-post til prospekter',
   'email-draft': 'Leser innkommende e-post og foreslår et svar som utkast',

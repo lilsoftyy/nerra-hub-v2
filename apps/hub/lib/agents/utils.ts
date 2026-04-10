@@ -27,7 +27,9 @@ export function cleanAgentContent(message: Anthropic.Message): { content: string
     .replace(/\[\d+\]/g, '')
     .replace(/[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]/gu, '')
     .replace(/\u200B/g, '')
-    .replace(/\s{2,}/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .replace(/[^\S\n]{2,}/g, ' ')
+    .replace(/\\"/g, '"')
     .trim();
 
   const summary = content

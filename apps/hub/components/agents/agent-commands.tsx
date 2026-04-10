@@ -122,13 +122,13 @@ export function AgentCommands({ companies, suggestions }: { companies: Company[]
         <h2 className="mb-3 text-sm font-semibold text-muted-foreground">Kommandoer</h2>
         <div className="space-y-1">
           <AnimatedPanel open={researchOpen} onClose={() => setResearchOpen(false)} width={320} anchor="bottom-left"
-            trigger={<div onClick={() => setResearchOpen(true)} className={cmdClass}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted"><Search className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" /></div><div className="text-left"><p className="font-medium">Enkel research</p><p className="text-xs text-muted-foreground">Rask rapport basert på nettsøk</p></div></div>}>
-            <ResearchPanel title="Enkel research" agentName="agent_6_lead_research" label="Enkel research" companies={companies} onRun={runAgent} />
+            trigger={<div onClick={() => setResearchOpen(true)} className={cmdClass}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted"><Search className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" /></div><div className="text-left"><p className="font-medium">Firmasøk</p><p className="text-xs text-muted-foreground">Grunnleggende info om selskapet fra nettet</p></div></div>}>
+            <ResearchPanel title="Firmasøk" agentName="agent_6_lead_research" label="Firmasøk" companies={companies} onRun={runAgent} />
           </AnimatedPanel>
 
           <AnimatedPanel open={deepResearchOpen} onClose={() => setDeepResearchOpen(false)} width={320} anchor="bottom-left"
-            trigger={<div onClick={() => setDeepResearchOpen(true)} className={cmdClass}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted"><Users className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" /></div><div className="text-left"><p className="font-medium">Dyp kunderesearch</p><p className="text-xs text-muted-foreground">Grundig rapport med konkurrenter og marked</p></div></div>}>
-            <ResearchPanel title="Dyp kunderesearch" agentName="customer_research_agent" label="Dyp kunderesearch" companies={companies} onRun={runAgent} />
+            trigger={<div onClick={() => setDeepResearchOpen(true)} className={cmdClass}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted"><Users className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" /></div><div className="text-left"><p className="font-medium">Kunderesearch</p><p className="text-xs text-muted-foreground">Full analyse — relevans, konkurrenter og neste steg</p></div></div>}>
+            <ResearchPanel title="Kunderesearch" agentName="customer_research_agent" label="Kunderesearch" companies={companies} onRun={runAgent} />
           </AnimatedPanel>
 
           <div onClick={runProjectAgent} className={cmdClass}>

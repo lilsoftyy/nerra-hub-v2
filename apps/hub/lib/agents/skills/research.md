@@ -1,36 +1,48 @@
-# Skill: Research-rapport
+# Skill: Firmasøk
 
 ## Formål
-Generer en research-rapport om et firma basert på nettsøk og tilgjengelig data i Hub.
+Finn grunnleggende informasjon om et selskap — hvem de er, hva de gjør, hvor de holder til, og hvem som leder selskapet. Dette er IKKE en dyp analyse, men en rask oversikt.
 
-## Input
-- Firmanavn, land, operasjonsområde, nettside, antall ansatte, fasadeteam-størrelse
-- Kontaktpersoner (navn, rolle)
-- Notater fra Hub
+---
 
-## Steg
+## Språk — KRITISK
 
-1. **Søk på internett** etter firmaet. Bruk firmanavn + land som søkeord. Hvis nettside finnes, søk også på den.
-2. **Finn ut hva firmaet gjør** — tjenester, produkter, markeder de opererer i.
-3. **Finn størrelse og posisjon** — omsetning, ansatte, kunder, prosjekter.
-4. **Vurder relevans for Nerra** — er dette en potensiell kunde, partner, konkurrent, eller noe annet?
-5. **Vurder drone-potensial** — kun hvis firmaet driver med bygningsvedlikehold, fasadevask, eller relaterte tjenester.
-6. **Skriv anbefalinger** — konkrete neste steg for Nerra.
+Skriv ALLTID på norsk bokmål med korrekte æ, ø, å. Uansett hvilket språk kildene er på (dansk, svensk, tysk, engelsk) — du OVERSETTER alt til norsk bokmål. Aldri kopier dansk eller andre språk inn i rapporten.
+
+---
+
+## Søkestrategi
+
+Søk i denne rekkefølgen:
+
+1. **Selskapets nettside** — "Om oss", tjenester, nyheter
+2. **LinkedIn** — selskapets side + profiler for daglig leder, styreleder, og andre i ledelsen
+3. **Nyhetsartikler** — siste 12 måneder, søk på selskapets navn
+
+For hver person i ledelsen du finner, noter:
+- Navn og rolle
+- LinkedIn-profil (lenke)
+- E-post hvis tilgjengelig
+- Telefon hvis tilgjengelig
+
+---
 
 ## Rapportformat
 
-Skriv på norsk bokmål med korrekte æ, ø, å. Bruk markdown.
+Kort og konkret. Maks 500 ord.
 
-### Seksjoner (i denne rekkefølgen):
-1. **Oppsummering** — 2-3 setninger om hvem firmaet er
-2. **Tjenester og kompetanse** — hva de tilbyr
-3. **Relevans for Nerra** — hvorfor dette firmaet er interessant
-4. **Drone-potensial** — hvis relevant
-5. **Anbefalinger** — konkrete neste steg
+### Seksjoner:
+1. **Om selskapet** — 2-3 setninger. Hva gjør de, hvor holder de til, hvor store er de
+2. **Ledelse og nøkkelpersoner** — navn, rolle, LinkedIn-lenke, e-post/telefon
+3. **Siste nytt** — har det skjedd noe relevant det siste året? Hvis ikke, skriv det
+4. **Kort vurdering** — 1-2 setninger om hvordan selskapet kan være relevant for Nerra
+
+---
 
 ## Regler
-- Skill tydelig mellom fakta fra nettsøk og dine egne vurderinger.
-- Hvis du ikke finner informasjon, si det eksplisitt. Ikke finn opp fakta.
-- Start direkte med rapporten. Ingen innledning om hva du skal søke etter.
-- Ikke bruk referansemarkører eller fotnoter.
-- Hold rapporten mellom 500-1500 ord.
+- Start med `# {firmanavn}` som tittel
+- Skriv i hele setninger, ikke bare punktlister (unntatt kontaktinfo)
+- Skill tydelig mellom fakta og dine egne vurderinger
+- Hvis du ikke finner informasjon, si det. Ikke finn opp fakta
+- Ingen kildehenvisninger eller fotnoter
+- Norsk bokmål, profesjonell men vennlig tone

@@ -66,7 +66,7 @@ Regler:
 2. Første avsnitt: 2-3 setninger som oppsummerer hvem selskapet er
 3. Maksimalt 3-4 korte seksjoner, under 500 ord totalt
 4. Skriv i hele setninger, IKKE bare punktlister
-5. Norsk, profesjonell men vennlig tone
+5. ALLTID norsk bokmål med korrekte æ, ø, å — uansett hvilket språk kildene er på. Oversett dansk/svensk/engelsk til norsk
 6. IKKE inkluder regulatorisk info, kilder eller tekniske detaljer
 7. Fokus: hvem er de, hva gjør de, og er de relevante for Nerra?`;
 
@@ -96,7 +96,7 @@ Regler:
     company_id: companyId,
     kind: 'research',
     visibility: 'internal',
-    title: `Research: ${company.name}`,
+    title: `Firmasøk: ${company.name}`,
     summary,
     content_markdown: content,
     language: 'no',

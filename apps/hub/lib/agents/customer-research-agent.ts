@@ -11,7 +11,7 @@ export interface CustomerResearchResult {
 }
 
 /**
- * Kunderesearch-agent — dyp research på ett selskap.
+ * Kunderesearch — dyp research på ett selskap.
  *
  * Trigges automatisk etter kvalifiseringsskjema, eller manuelt fra kundeprofil.
  * Bruker web search for å finne informasjon om selskapet, regulatorisk kontekst,
@@ -104,6 +104,8 @@ ${qualification.additional_info ? `- Tilleggsinformasjon: ${qualification.additi
 
 Du SKAL skrive rapporten som et lesbart dokument for en forretningsperson. IKKE et datadump.
 
+SPRÅK: Skriv ALLTID på norsk bokmål med korrekte æ, ø, å. Uansett hvilket språk kildene er på (dansk, svensk, tysk, engelsk) — du OVERSETTER alt til norsk bokmål. Aldri kopier dansk eller andre språk inn i rapporten. "virksomhed" → "virksomhet", "medarbejdere" → "medarbeidere", osv.
+
 REGLER:
 1. Start med "# ${company.name}" — ingenting før dette
 2. Første avsnitt: 2-3 setninger som oppsummerer selskapet
@@ -111,7 +113,7 @@ REGLER:
 4. Skriv i HELE SETNINGER og AVSNITT — IKKE bare punktlister overalt
 5. Punktlister KUN for kontaktinfo og konkrete handlingspunkter
 6. Maks 5 hovedseksjoner, maks 1000 ord totalt
-7. Norsk, profesjonell men vennlig tone
+7. Norsk bokmål, profesjonell men vennlig tone — ALDRI dansk, svensk eller engelsk
 8. INGEN kildehenvisninger, fotnoter eller referanser
 9. INGEN tekniske detaljer som org.nr., stammkapital, eierstruktur-detaljer
 10. Tenk: "Hva trenger Magnus å vite før han ringer denne personen?"

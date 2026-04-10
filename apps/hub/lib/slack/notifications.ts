@@ -66,7 +66,7 @@ export async function notifyResearchComplete(companyName: string, companyId: str
         type: 'section',
         text: {
           type: 'mrkdwn',
-          text: `*Research-rapport ferdig*\n*Kunde:* ${companyName}\n<https://nerra-hub.vercel.app/customers/${companyId}|Se kundeprofil>`,
+          text: `*Research ferdig*\n*Kunde:* ${companyName}\n<https://nerra-hub.vercel.app/customers/${companyId}|Se kundeprofil>`,
         },
       },
     ],

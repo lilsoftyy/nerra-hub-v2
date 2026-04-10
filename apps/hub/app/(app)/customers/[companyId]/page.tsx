@@ -130,23 +130,23 @@ export default async function CustomerDetailPage({
               <div>
                 <AgentTriggerButton
                   agent="agent_6_lead_research"
-                  label="Enkel research"
+                  label="Firmasøk"
                   companyId={company.id}
                   companyName={company.name}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
-                  Rask research-rapport basert på nettsøk.
+                  Henter grunnleggende info om selskapet fra nettet.
                 </p>
               </div>
               <div>
                 <AgentTriggerButton
                   agent="customer_research_agent"
-                  label="Dyp kunderesearch"
+                  label="Kunderesearch"
                   companyId={company.id}
                   companyName={company.name}
                 />
                 <p className="text-xs text-muted-foreground mt-1">
-                  Grundig rapport med regulatorisk kontekst, konkurrenter og markedsanalyse.
+                  Full analyse — relevans, konkurrenter, marked og neste steg.
                 </p>
               </div>
             </CardContent>
