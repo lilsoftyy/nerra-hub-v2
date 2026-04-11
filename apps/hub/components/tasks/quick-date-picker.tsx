@@ -18,8 +18,6 @@ const quickDates = [
   { label: '3 uker', days: 21 },
 ];
 
-export { quickDates, addDays };
-
 export function QuickDatePicker({ value, onChange }: { value?: string; onChange?: (date: string) => void }) {
   const [dueDate, setDueDate] = useState(value ?? '');
   const [activeDays, setActiveDays] = useState<number | null>(null);

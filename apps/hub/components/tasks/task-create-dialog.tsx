@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
+import { useToast } from '@/components/shared/toast-provider';
 import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
 import { selectClassName } from '@/lib/ui-utils';
 import { QuickDatePicker } from '@/components/tasks/quick-date-picker';
@@ -19,6 +20,7 @@ interface TaskCreateDialogProps {
 
 export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
   const router = useRouter();
+  const { addToast } = useToast();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -28,7 +30,7 @@ export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
     const formData = new FormData(e.currentTarget);
     const result = await createTaskFromDialog(formData);
     if (result?.error) {
-      alert(result.error);
+      addToast({ type: 'error', title: 'Feil', description: result.error });
     } else {
       setOpen(false);
       router.refresh();

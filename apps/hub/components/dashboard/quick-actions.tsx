@@ -165,6 +165,7 @@ function NewEventPanel({ onClose }: { onClose: () => void }) {
 
 function NewTaskPanel({ onClose }: { onClose: () => void }) {
   const router = useRouter();
+  const { addToast } = useToast();
   const [saving, setSaving] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -173,7 +174,7 @@ function NewTaskPanel({ onClose }: { onClose: () => void }) {
     setSaving(true);
     const formData = new FormData(e.currentTarget);
     const res = await createTaskFromDialog(formData);
-    if (res?.error) alert(res.error);
+    if (res?.error) addToast({ type: 'error', title: 'Feil', description: res.error });
     else { onClose(); router.refresh(); }
     setSaving(false);
   };

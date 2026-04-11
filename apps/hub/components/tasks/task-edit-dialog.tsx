@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
 import { selectClassName } from '@/lib/ui-utils';
 import { QuickDatePicker } from '@/components/tasks/quick-date-picker';
+import { useToast } from '@/components/shared/toast-provider';
 import { updateTask, deleteTask } from '@/app/(app)/tasks/actions';
 import { Trash2, X } from 'lucide-react';
 
@@ -41,6 +42,7 @@ function toDateString(timestamp: string | null): string {
 
 export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEditDialogProps) {
   const router = useRouter();
+  const { addToast } = useToast();
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
@@ -83,7 +85,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
     setSaving(true);
     const formData = new FormData(e.currentTarget);
     const result = await updateTask(task.id, formData);
-    if (result?.error) alert(result.error);
+    if (result?.error) addToast({ type: 'error', title: 'Feil', description: result.error });
     else { handleClose(); router.refresh(); }
     setSaving(false);
   };
@@ -91,7 +93,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
   const handleDelete = async () => {
     setDeleting(true);
     const result = await deleteTask(task.id);
-    if (result?.error) alert(result.error);
+    if (result?.error) addToast({ type: 'error', title: 'Feil', description: result.error });
     else { handleClose(); router.refresh(); }
     setDeleting(false);
   };

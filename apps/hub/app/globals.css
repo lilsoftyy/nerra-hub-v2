@@ -153,11 +153,11 @@
     transform: scale(0.985);
   }
 
-  /* Knapper — dybdeeffekt */
-  button:hover, [role="button"]:hover {
+  /* Knapper — dybdeeffekt (kun shadcn Button og eksplisitte targets) */
+  [data-slot="button"]:hover {
     transform: scale(1.05);
   }
-  button:active, [role="button"]:active {
+  [data-slot="button"]:active {
     transform: scale(0.97);
   }
 
