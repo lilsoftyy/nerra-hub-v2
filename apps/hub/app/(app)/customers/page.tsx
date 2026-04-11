@@ -32,12 +32,15 @@ export default async function CustomersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold tracking-tight">Personer</h1>
-        <div className="flex items-center gap-2">
-          <AIContactLookup />
-          <Button size="sm" variant="outline" render={<Link href="/customers/new" />}>
-            <Plus className="size-4" strokeWidth={1.75} aria-hidden="true" />
-            Manuelt
-          </Button>
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-muted-foreground/50">Legg til ny:</span>
+          <div className="flex items-center gap-2">
+            <AIContactLookup />
+            <Button size="sm" variant="outline" render={<Link href="/customers/new" />}>
+              <Plus className="size-4" strokeWidth={1.75} aria-hidden="true" />
+              Manuelt
+            </Button>
+          </div>
         </div>
       </div>
 
