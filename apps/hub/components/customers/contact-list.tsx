@@ -7,7 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/components/shared/toast-provider';
 import { addContact, updateContact, deleteContact } from '@/app/(app)/customers/actions';
+import { Search, Loader2 } from 'lucide-react';
 
 interface Contact {
   id: string;
@@ -18,11 +20,63 @@ interface Contact {
   is_primary: boolean;
 }
 
-export function ContactList({ contacts, companyId }: { contacts: Contact[]; companyId: string }) {
+export function ContactList({ contacts, companyId, companyName }: { contacts: Contact[]; companyId: string; companyName?: string }) {
   const router = useRouter();
+  const { addToast, updateToast } = useToast();
   const [adding, setAdding] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [enrichingId, setEnrichingId] = useState<string | null>(null);
+
+  const enrichContact = async (contact: Contact) => {
+    setEnrichingId(contact.id);
+    const toastId = addToast({ type: 'loading', title: `Søker etter ${contact.full_name}...` });
+
+    try {
+      const res = await fetch('/api/agents/lookup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: contact.full_name,
+          company: companyName ?? '',
+        }),
+      });
+      const data = await res.json();
+
+      if (data.error) {
+        updateToast(toastId, { type: 'error', title: 'Søk feilet', description: data.error });
+        setEnrichingId(null);
+        return;
+      }
+
+      // Oppdater kontakten med ny info
+      const formData = new FormData();
+      formData.set('full_name', contact.full_name);
+      formData.set('email', data.person_email ?? contact.email ?? '');
+      formData.set('phone', data.person_phone ?? contact.phone ?? '');
+      formData.set('role', data.person_role ?? contact.role ?? '');
+
+      const result = await updateContact(contact.id, formData);
+      if (result?.error) {
+        updateToast(toastId, { type: 'error', title: 'Kunne ikke oppdatere', description: result.error });
+      } else {
+        const found = [
+          data.person_email && 'e-post',
+          data.person_phone && 'telefon',
+          data.person_role && 'stilling',
+        ].filter(Boolean);
+        updateToast(toastId, {
+          type: 'success',
+          title: `Oppdatert ${contact.full_name}`,
+          description: found.length > 0 ? `Fant: ${found.join(', ')}` : 'Ingen nye data funnet',
+        });
+        router.refresh();
+      }
+    } catch {
+      updateToast(toastId, { type: 'error', title: 'Noe gikk galt' });
+    }
+    setEnrichingId(null);
+  };
 
   const handleAdd = async (formData: FormData) => {
     setSaving(true);
@@ -140,6 +194,17 @@ export function ContactList({ contacts, companyId }: { contacts: Contact[]; comp
                     {contact.phone && <p className="text-sm">{contact.phone}</p>}
                   </div>
                   <div className="flex gap-1">
+                    <button
+                      onClick={() => enrichContact(contact)}
+                      disabled={enrichingId === contact.id}
+                      className="flex size-8 items-center justify-center rounded-full text-muted-foreground/50 transition-[color,background-color] duration-150 hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                      title="AI-søk — fyll ut manglende info"
+                    >
+                      {enrichingId === contact.id
+                        ? <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+                        : <Search className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                      }
+                    </button>
                     <Button
                       variant="outline"
                       size="sm"

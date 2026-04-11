@@ -107,7 +107,7 @@ export default async function CustomerDetailPage({
           <CustomerEditForm company={company} />
 
           {/* Contacts */}
-          <ContactList contacts={contacts ?? []} companyId={company.id} />
+          <ContactList contacts={contacts ?? []} companyId={company.id} companyName={company.name} />
 
           {/* Qualification response */}
           {qualificationResponse && (
