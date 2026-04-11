@@ -19,6 +19,7 @@ async function createCompanyFromDialog(data: {
   website?: string;
   contact_name?: string;
   contact_email?: string;
+  contact_phone?: string;
   contact_role?: string;
 }) {
   const { createClient } = await import('@/lib/supabase/client');
@@ -42,6 +43,7 @@ async function createCompanyFromDialog(data: {
       company_id: companyId,
       full_name: data.contact_name,
       email: data.contact_email || null,
+      phone: data.contact_phone || null,
       role: data.contact_role || null,
       is_primary: true,
     });
@@ -77,6 +79,7 @@ export function ManualAddDialog({ trigger }: ManualAddDialogProps) {
       website: form.get('website') as string,
       contact_name: form.get('contact_name') as string,
       contact_email: form.get('contact_email') as string,
+      contact_phone: form.get('contact_phone') as string,
       contact_role: form.get('contact_role') as string,
     });
 
@@ -111,35 +114,40 @@ export function ManualAddDialog({ trigger }: ManualAddDialogProps) {
 
         <div className="grid grid-cols-2 gap-2">
           <div className="space-y-1.5">
-            <Label htmlFor="manual-name">Firmanavn</Label>
-            <Input id="manual-name" name="name" required autoFocus />
+            <Label htmlFor="manual-contact-name">Navn</Label>
+            <Input id="manual-contact-name" name="contact_name" autoFocus />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="manual-country">Land</Label>
-            <Input id="manual-country" name="country" placeholder="Norge" required />
+            <Label htmlFor="manual-contact-role">Stilling</Label>
+            <Input id="manual-contact-role" name="contact_role" />
           </div>
         </div>
-
-        <div className="space-y-1.5">
-          <Label htmlFor="manual-website">Nettside</Label>
-          <Input id="manual-website" name="website" placeholder="https://" />
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-1.5">
+            <Label htmlFor="manual-contact-email">E-post</Label>
+            <Input id="manual-contact-email" name="contact_email" type="email" />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="manual-contact-phone">Telefon</Label>
+            <Input id="manual-contact-phone" name="contact_phone" />
+          </div>
         </div>
 
         <div className="pt-1 border-t border-foreground/[0.06]">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50 mb-2">Kontaktperson (valgfritt)</p>
+          <p className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/50 mb-2">Firma</p>
           <div className="grid grid-cols-2 gap-2">
             <div className="space-y-1.5">
-              <Label htmlFor="manual-contact-name">Navn</Label>
-              <Input id="manual-contact-name" name="contact_name" />
+              <Label htmlFor="manual-name">Firmanavn</Label>
+              <Input id="manual-name" name="name" required />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="manual-contact-role">Stilling</Label>
-              <Input id="manual-contact-role" name="contact_role" />
+              <Label htmlFor="manual-country">Land</Label>
+              <Input id="manual-country" name="country" placeholder="Norge" required />
             </div>
           </div>
           <div className="space-y-1.5 mt-2">
-            <Label htmlFor="manual-contact-email">E-post</Label>
-            <Input id="manual-contact-email" name="contact_email" type="email" />
+            <Label htmlFor="manual-website">Nettside</Label>
+            <Input id="manual-website" name="website" placeholder="https://" />
           </div>
         </div>
 
