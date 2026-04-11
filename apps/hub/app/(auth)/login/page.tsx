@@ -11,7 +11,7 @@ export default function LoginPage() {
         <img
           src="/logo.svg"
           alt="Nerra"
-          className="h-12 opacity-80 brightness-200"
+          className="h-24 opacity-80 brightness-200"
         />
 
         <p className="text-sm text-white/30">
