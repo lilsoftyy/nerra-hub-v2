@@ -1,78 +1,50 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { createPortal } from 'react-dom';
+import { AnimatedPanel } from '@/components/shared/animated-panel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/shared/toast-provider';
 import { updateContact } from '@/app/(app)/customers/actions';
-import { X, Search, Loader2 } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 
-interface PersonDetailPanelProps {
-  contactId: string;
-  fullName: string;
+interface Person {
+  id: string;
+  full_name: string;
   email: string | null;
   phone: string | null;
   role: string | null;
-  companyName: string | null;
-  companyId: string | null;
-  open: boolean;
-  onOpenChange: (open: boolean) => void;
+  company_name: string | null;
 }
 
-export function PersonDetailPanel({
-  contactId, fullName, email, phone, role,
-  companyName, companyId, open, onOpenChange,
-}: PersonDetailPanelProps) {
+export function PersonDetailTrigger({ person }: { person: Person }) {
   const router = useRouter();
   const { addToast, updateToast } = useToast();
+  const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
   const [enriching, setEnriching] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [closing, setClosing] = useState(false);
-
-  useEffect(() => {
-    if (open) requestAnimationFrame(() => setMounted(true));
-    else { setMounted(false); setClosing(false); }
-  }, [open]);
-
-  const handleClose = () => {
-    setClosing(true);
-    setTimeout(() => { setMounted(false); setClosing(false); onOpenChange(false); }, 200);
-  };
-
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose(); };
-    document.addEventListener('keydown', handler);
-    return () => document.removeEventListener('keydown', handler);
-  });
-
-  if (!open) return null;
-
-  const isVisible = mounted && !closing;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSaving(true);
     const formData = new FormData(e.currentTarget);
-    const result = await updateContact(contactId, formData);
+    const result = await updateContact(person.id, formData);
     if (result?.error) addToast({ type: 'error', title: 'Feil', description: result.error });
-    else { handleClose(); router.refresh(); }
+    else { setOpen(false); router.refresh(); }
     setSaving(false);
   };
 
   const handleEnrich = async () => {
     setEnriching(true);
-    const toastId = addToast({ type: 'loading', title: `Søker etter ${fullName}...` });
+    const toastId = addToast({ type: 'loading', title: `Søker etter ${person.full_name}...` });
 
     try {
       const res = await fetch('/api/agents/lookup', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: fullName, company: companyName ?? '' }),
+        body: JSON.stringify({ name: person.full_name, company: person.company_name ?? '' }),
       });
       const data = await res.json();
 
@@ -83,12 +55,12 @@ export function PersonDetailPanel({
       }
 
       const formData = new FormData();
-      formData.set('full_name', fullName);
-      formData.set('email', data.person_email ?? email ?? '');
-      formData.set('phone', data.person_phone ?? phone ?? '');
-      formData.set('role', data.person_role ?? role ?? '');
+      formData.set('full_name', person.full_name);
+      formData.set('email', data.person_email ?? person.email ?? '');
+      formData.set('phone', data.person_phone ?? person.phone ?? '');
+      formData.set('role', data.person_role ?? person.role ?? '');
 
-      const result = await updateContact(contactId, formData);
+      const result = await updateContact(person.id, formData);
       if (result?.error) {
         updateToast(toastId, { type: 'error', title: 'Kunne ikke oppdatere', description: result.error });
       } else {
@@ -99,10 +71,10 @@ export function PersonDetailPanel({
         ].filter(Boolean);
         updateToast(toastId, {
           type: 'success',
-          title: `Oppdatert ${fullName}`,
+          title: `Oppdatert ${person.full_name}`,
           description: found.length > 0 ? `Fant: ${found.join(', ')}` : 'Ingen nye data funnet',
         });
-        handleClose();
+        setOpen(false);
         router.refresh();
       }
     } catch {
@@ -111,75 +83,70 @@ export function PersonDetailPanel({
     setEnriching(false);
   };
 
-  return createPortal(
-    <>
-      <div className="fixed inset-0 z-40" onClick={handleClose} style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 200ms cubic-bezier(0.23, 1, 0.32, 1)' }} />
-      <div
-        className="fixed z-50 rounded-2xl bg-popover p-5 text-sm ring-1 ring-foreground/10"
-        style={{
-          width: 380,
-          top: '50%',
-          left: '50%',
-          transformOrigin: 'center',
-          transform: `translate(-50%, -50%) ${isVisible ? 'scale(1)' : 'scale(0.95)'}`,
-          opacity: isVisible ? 1 : 0,
-          transition: 'transform 200ms cubic-bezier(0.23, 1, 0.32, 1), opacity 150ms cubic-bezier(0.23, 1, 0.32, 1)',
-          boxShadow: '0 8px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)',
-        }}
-      >
-        <button onClick={handleClose} className="absolute top-3 right-3 text-muted-foreground/50 transition-[color] duration-150 hover:text-foreground" aria-label="Lukk">
-          <X className="size-4" strokeWidth={1.75} />
+  return (
+    <AnimatedPanel
+      open={open}
+      onClose={() => setOpen(false)}
+      width={360}
+      anchor="bottom-left"
+      trigger={
+        <button
+          type="button"
+          onClick={() => setOpen(true)}
+          className="text-left"
+        >
+          <p className="text-sm font-medium hover:text-primary transition-[color] duration-150">{person.full_name}</p>
+          {person.role && <p className="text-xs text-muted-foreground">{person.role}</p>}
         </button>
+      }
+    >
+      <form onSubmit={handleSubmit} className="space-y-3">
+        <div>
+          <h3 className="text-base font-semibold">{person.full_name}</h3>
+          {person.company_name && (
+            <p className="text-xs text-muted-foreground">{person.company_name}</p>
+          )}
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          <div>
-            <h3 className="text-base font-semibold">{fullName}</h3>
-            {companyName && (
-              <p className="text-xs text-muted-foreground">{companyName}</p>
-            )}
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label htmlFor={`pd-name-${person.id}`}>Navn</Label>
+            <Input id={`pd-name-${person.id}`} name="full_name" defaultValue={person.full_name} required />
           </div>
+          <div className="space-y-1.5">
+            <Label htmlFor={`pd-role-${person.id}`}>Stilling</Label>
+            <Input id={`pd-role-${person.id}`} name="role" defaultValue={person.role ?? ''} />
+          </div>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="space-y-1.5">
+            <Label htmlFor={`pd-email-${person.id}`}>E-post</Label>
+            <Input id={`pd-email-${person.id}`} name="email" type="email" defaultValue={person.email ?? ''} />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor={`pd-phone-${person.id}`}>Telefon</Label>
+            <Input id={`pd-phone-${person.id}`} name="phone" defaultValue={person.phone ?? ''} />
+          </div>
+        </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="pd-name">Navn</Label>
-              <Input id="pd-name" name="full_name" defaultValue={fullName} required />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="pd-role">Stilling</Label>
-              <Input id="pd-role" name="role" defaultValue={role ?? ''} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-1.5">
-              <Label htmlFor="pd-email">E-post</Label>
-              <Input id="pd-email" name="email" type="email" defaultValue={email ?? ''} />
-            </div>
-            <div className="space-y-1.5">
-              <Label htmlFor="pd-phone">Telefon</Label>
-              <Input id="pd-phone" name="phone" defaultValue={phone ?? ''} />
-            </div>
-          </div>
-
-          <div className="flex items-center justify-between pt-1">
-            <button
-              type="button"
-              onClick={handleEnrich}
-              disabled={enriching}
-              className="flex items-center gap-1.5 text-xs text-muted-foreground transition-[color] duration-150 hover:text-primary disabled:opacity-50"
-            >
-              {enriching
-                ? <Loader2 className="size-3 animate-spin" aria-hidden="true" />
-                : <Search className="size-3" strokeWidth={1.75} aria-hidden="true" />
-              }
-              Fyll ut med AI
-            </button>
-            <Button type="submit" size="sm" disabled={saving}>
-              {saving ? 'Lagrer...' : 'Lagre'}
-            </Button>
-          </div>
-        </form>
-      </div>
-    </>,
-    document.body
+        <div className="flex items-center justify-between pt-1">
+          <button
+            type="button"
+            onClick={handleEnrich}
+            disabled={enriching}
+            className="flex items-center gap-1.5 text-xs text-muted-foreground transition-[color] duration-150 hover:text-primary disabled:opacity-50"
+          >
+            {enriching
+              ? <Loader2 className="size-3 animate-spin" aria-hidden="true" />
+              : <Search className="size-3" strokeWidth={1.75} aria-hidden="true" />
+            }
+            Fyll ut med AI
+          </button>
+          <Button type="submit" size="sm" disabled={saving}>
+            {saving ? 'Lagrer...' : 'Lagre'}
+          </Button>
+        </div>
+      </form>
+    </AnimatedPanel>
   );
 }
