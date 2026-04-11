@@ -94,7 +94,7 @@ export function TaskTimeline({ tasks }: TaskTimelineProps) {
   return (
     <div className="rounded-xl bg-muted/20 overflow-hidden">
       <div className="overflow-x-auto">
-        <div style={{ minWidth: `${totalWidth}px` }}>
+        <div className="relative" style={{ minWidth: `${totalWidth}px` }}>
           {/* Header med dager */}
           <div className="flex border-b border-foreground/[0.06] sticky top-0 bg-muted/20">
             {days.map((day, i) => {
