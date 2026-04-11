@@ -29,7 +29,7 @@ async function createCompanyFromDialog(data: {
   const { error: companyError } = await supabase.from('companies').insert({
     id: companyId,
     name: data.name,
-    country: data.country.toUpperCase(),
+    country: data.country,
     website: data.website || null,
     phase: 'lead',
   });
@@ -115,8 +115,8 @@ export function ManualAddDialog({ trigger }: ManualAddDialogProps) {
             <Input id="manual-name" name="name" required autoFocus />
           </div>
           <div className="space-y-1.5">
-            <Label htmlFor="manual-country">Land (ISO)</Label>
-            <Input id="manual-country" name="country" placeholder="NO" maxLength={2} required />
+            <Label htmlFor="manual-country">Land</Label>
+            <Input id="manual-country" name="country" placeholder="Norge" required />
           </div>
         </div>
 

@@ -171,13 +171,27 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                       />
                     </div>
                   </div>
-                  <div className="flex gap-2 justify-end">
-                    <Button type="button" variant="outline" size="sm" onClick={() => setEditingId(null)}>
-                      Avbryt
-                    </Button>
-                    <Button type="submit" size="sm" disabled={saving}>
-                      {saving ? 'Lagrer...' : 'Lagre'}
-                    </Button>
+                  <div className="flex items-center justify-between">
+                    <button
+                      type="button"
+                      onClick={() => enrichContact(contact)}
+                      disabled={enrichingId === contact.id}
+                      className="flex items-center gap-1.5 text-xs text-muted-foreground transition-[color] duration-150 hover:text-primary disabled:opacity-50"
+                    >
+                      {enrichingId === contact.id
+                        ? <Loader2 className="size-3 animate-spin" aria-hidden="true" />
+                        : <Search className="size-3" strokeWidth={1.75} aria-hidden="true" />
+                      }
+                      Fyll ut med AI
+                    </button>
+                    <div className="flex gap-2">
+                      <Button type="button" variant="outline" size="sm" onClick={() => setEditingId(null)}>
+                        Avbryt
+                      </Button>
+                      <Button type="submit" size="sm" disabled={saving}>
+                        {saving ? 'Lagrer...' : 'Lagre'}
+                      </Button>
+                    </div>
                   </div>
                 </form>
               ) : (
@@ -194,17 +208,6 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                     {contact.phone && <p className="text-sm">{contact.phone}</p>}
                   </div>
                   <div className="flex gap-1">
-                    <button
-                      onClick={() => enrichContact(contact)}
-                      disabled={enrichingId === contact.id}
-                      className="flex size-8 items-center justify-center rounded-full text-muted-foreground/50 transition-[color,background-color] duration-150 hover:bg-primary/10 hover:text-primary disabled:opacity-50"
-                      title="AI-søk — fyll ut manglende info"
-                    >
-                      {enrichingId === contact.id
-                        ? <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
-                        : <Search className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-                      }
-                    </button>
                     <Button
                       variant="outline"
                       size="sm"
