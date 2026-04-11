@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/shared/toast-provider';
-import { addContact, updateContact, deleteContact } from '@/app/(app)/customers/actions';
+import { addContact, updateContact } from '@/app/(app)/customers/actions';
 import { Search, Loader2 } from 'lucide-react';
 
 interface Contact {
@@ -100,17 +100,6 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
       router.refresh();
     }
     setSaving(false);
-  };
-
-  const handleDelete = async (contactId: string) => {
-    if (!window.confirm('Er du sikker på at du vil slette denne kontakten?')) return;
-
-    const result = await deleteContact(contactId);
-    if (result?.error) {
-      alert(result.error);
-    } else {
-      router.refresh();
-    }
   };
 
   return (
