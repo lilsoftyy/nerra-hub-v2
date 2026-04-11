@@ -169,10 +169,17 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                 return (
                   <TableRow key={p.id} className={selected.has(p.id) ? 'bg-primary/[0.03]' : ''}>
                     <TableCell>
-                      <div>
-                        <p className="text-sm font-medium">{p.full_name}</p>
-                        {p.role && <p className="text-xs text-muted-foreground">{p.role}</p>}
-                      </div>
+                      {p.company_id ? (
+                        <Link href={`/customers/${p.company_id}`} className="block">
+                          <p className="text-sm font-medium hover:text-primary transition-[color] duration-150">{p.full_name}</p>
+                          {p.role && <p className="text-xs text-muted-foreground">{p.role}</p>}
+                        </Link>
+                      ) : (
+                        <div>
+                          <p className="text-sm font-medium">{p.full_name}</p>
+                          {p.role && <p className="text-xs text-muted-foreground">{p.role}</p>}
+                        </div>
+                      )}
                     </TableCell>
                     <TableCell>
                       {p.email ? (
