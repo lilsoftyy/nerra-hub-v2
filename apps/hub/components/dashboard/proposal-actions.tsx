@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/shared/toast-provider';
 import { approveProposal, rejectProposal } from '@/app/(app)/dashboard/actions';
 
 interface ProposalActionsProps {
@@ -11,13 +12,14 @@ interface ProposalActionsProps {
 
 export function ProposalActions({ proposalId }: ProposalActionsProps) {
   const router = useRouter();
+  const { addToast } = useToast();
   const [loading, setLoading] = useState<'approve' | 'reject' | null>(null);
 
   const handleApprove = async () => {
     setLoading('approve');
     const result = await approveProposal(proposalId);
     if (result.error) {
-      alert(`Feil: ${result.error}`);
+      addToast({ type: 'error', title: 'Feil', description: result.error });
     }
     router.refresh();
     setLoading(null);
@@ -29,7 +31,7 @@ export function ProposalActions({ proposalId }: ProposalActionsProps) {
     setLoading('reject');
     const result = await rejectProposal(proposalId, reason || undefined);
     if (result.error) {
-      alert(`Feil: ${result.error}`);
+      addToast({ type: 'error', title: 'Feil', description: result.error });
     }
     router.refresh();
     setLoading(null);

@@ -82,7 +82,7 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
     setSaving(true);
     const result = await addContact(companyId, formData);
     if (result?.error) {
-      alert(result.error);
+      addToast({ type: 'error', title: 'Feil', description: result.error });
     } else {
       setAdding(false);
       router.refresh();
@@ -94,7 +94,7 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
     setSaving(true);
     const result = await updateContact(contactId, formData);
     if (result?.error) {
-      alert(result.error);
+      addToast({ type: 'error', title: 'Feil', description: result.error });
     } else {
       setEditingId(null);
       router.refresh();

@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useToast } from '@/components/shared/toast-provider';
 import { updateCompany } from '@/app/(app)/customers/actions';
 
 interface Company {
@@ -23,6 +24,7 @@ interface Company {
 
 export function CustomerEditForm({ company }: { company: Company }) {
   const router = useRouter();
+  const { addToast } = useToast();
   const [editing, setEditing] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -30,7 +32,7 @@ export function CustomerEditForm({ company }: { company: Company }) {
     setSaving(true);
     const result = await updateCompany(company.id, formData);
     if (result?.error) {
-      alert(result.error);
+      addToast({ type: 'error', title: 'Feil', description: result.error });
     } else {
       setEditing(false);
       router.refresh();

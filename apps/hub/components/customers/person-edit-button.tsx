@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { updateContact } from '@/app/(app)/customers/actions';
+import { useToast } from '@/components/shared/toast-provider';
 import { Settings } from 'lucide-react';
 
 interface PersonEditButtonProps {
@@ -19,6 +20,7 @@ interface PersonEditButtonProps {
 
 export function PersonEditButton({ contactId, fullName, email, phone, role }: PersonEditButtonProps) {
   const router = useRouter();
+  const { addToast } = useToast();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -27,7 +29,7 @@ export function PersonEditButton({ contactId, fullName, email, phone, role }: Pe
     setSaving(true);
     const formData = new FormData(e.currentTarget);
     const result = await updateContact(contactId, formData);
-    if (result?.error) alert(result.error);
+    if (result?.error) addToast({ type: 'error', title: 'Feil', description: result.error });
     else { setOpen(false); router.refresh(); }
     setSaving(false);
   };

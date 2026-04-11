@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { deleteCalendarEvent } from '@/app/(app)/calendar/actions';
+import { useToast } from '@/components/shared/toast-provider';
 import { Trash2 } from 'lucide-react';
 
 interface DeleteEventButtonProps {
@@ -11,6 +12,7 @@ interface DeleteEventButtonProps {
 
 export function DeleteEventButton({ eventId }: DeleteEventButtonProps) {
   const router = useRouter();
+  const { addToast } = useToast();
   const [deleting, setDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -18,7 +20,7 @@ export function DeleteEventButton({ eventId }: DeleteEventButtonProps) {
     setDeleting(true);
     const result = await deleteCalendarEvent(eventId);
     if (result.error) {
-      alert(result.error);
+      addToast({ type: 'error', title: 'Feil', description: result.error });
     }
     router.refresh();
     setDeleting(false);

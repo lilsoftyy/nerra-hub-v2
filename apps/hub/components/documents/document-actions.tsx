@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { AnimatedPanel } from '@/components/shared/animated-panel';
 import { Button } from '@/components/ui/button';
 import { deleteDocument } from '@/app/(app)/documents/[documentId]/actions';
+import { useToast } from '@/components/shared/toast-provider';
 import { Settings, Trash2 } from 'lucide-react';
 
 interface DocumentActionsProps {
@@ -12,6 +13,7 @@ interface DocumentActionsProps {
 }
 
 export function DocumentActions({ documentId, title }: DocumentActionsProps) {
+  const { addToast } = useToast();
   const [open, setOpen] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -21,7 +23,7 @@ export function DocumentActions({ documentId, title }: DocumentActionsProps) {
     try {
       await deleteDocument(documentId);
     } catch {
-      alert('Kunne ikke slette dokumentet.');
+      addToast({ type: 'error', title: 'Feil', description: 'Kunne ikke slette dokumentet.' });
       setDeleting(false);
       setConfirmDelete(false);
     }

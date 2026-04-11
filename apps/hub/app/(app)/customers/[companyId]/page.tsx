@@ -102,7 +102,6 @@ export default async function CustomerDetailPage({
           {nextPhase && (
             <PhaseChangeButton
               companyId={company.id}
-              currentPhase={company.phase}
               nextPhase={nextPhase}
               nextPhaseLabel={phaseLabels[nextPhase] ?? nextPhase}
             />
