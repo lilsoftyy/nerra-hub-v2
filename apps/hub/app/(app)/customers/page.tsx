@@ -31,15 +31,14 @@ export default async function CustomersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold tracking-tight">Personer</h1>
-        <div className="flex items-center gap-4">
-          <span className="text-xs text-muted-foreground/40">Legg til:</span>
+        <div className="flex items-center gap-2">
           <AIContactLookup />
           <Link
             href="/customers/new"
-            className="flex items-center gap-1.5 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
+            className="flex size-10 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]"
+            title="Legg til manuelt"
           >
-            <Plus className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
-            Manuelt
+            <Plus className="size-4" strokeWidth={1.75} aria-hidden="true" />
           </Link>
         </div>
       </div>
