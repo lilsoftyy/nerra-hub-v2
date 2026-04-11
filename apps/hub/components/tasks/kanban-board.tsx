@@ -6,13 +6,13 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { updateTaskStatus } from '@/app/(app)/tasks/actions';
 import { TaskEditDialog } from './task-edit-dialog';
+import { TaskCreateDialog } from './task-create-dialog';
 import {
   taskPriorityLabels,
   taskPriorityColors,
   taskCategoryLabels,
 } from '@/lib/labels';
-import { GripVertical, Plus } from 'lucide-react';
-import Link from 'next/link';
+import { GripVertical } from 'lucide-react';
 import { formatShortDate } from '@/lib/formatters';
 
 interface Task {
@@ -130,13 +130,7 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                 </span>
               </div>
               {column.id === 'open' && (
-                <Link
-                  href="/tasks/new"
-                  className="flex items-center gap-1 rounded-md px-1.5 py-0.5 text-xs text-muted-foreground transition-[color,background-color] duration-150 hover:bg-muted hover:text-foreground"
-                >
-                  <Plus className="size-3" strokeWidth={2} aria-hidden="true" />
-                  Ny
-                </Link>
+                <TaskCreateDialog companies={companies} />
               )}
             </div>
 

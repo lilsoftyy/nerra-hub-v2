@@ -296,7 +296,7 @@ export default async function DashboardPage() {
                 <div className="flex flex-col items-center justify-center py-8 text-center">
                   <p className="text-sm text-muted-foreground">Ingen åpne oppgaver</p>
                   <Link
-                    href="/tasks/new"
+                    href="/tasks"
                     className="mt-2 flex items-center gap-1 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
                   >
                     <Plus className="size-3" strokeWidth={2} aria-hidden="true" />
