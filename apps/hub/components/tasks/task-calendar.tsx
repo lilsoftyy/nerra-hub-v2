@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { taskPriorityColors } from '@/lib/labels';
 
 interface Task {
   id: string;
