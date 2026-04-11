@@ -18,6 +18,7 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { PersonEditButton } from '@/components/customers/person-edit-button';
+import { PersonDetailPanel } from '@/components/customers/person-detail-panel';
 import { QuickEmailButton } from '@/components/customers/quick-email-button';
 import { countryName } from '@/lib/countries';
 import { sortableHeadClassName, buildMailtoUrl } from '@/lib/ui-utils';
@@ -49,6 +50,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
   const [emailOpen, setEmailOpen] = useState(false);
   const [subject, setSubject] = useState('');
   const [body, setBody] = useState('');
+  const [detailPerson, setDetailPerson] = useState<Person | null>(null);
 
   const handleSort = (key: SortKey) => {
     if (sortKey === key) setSortDir(sortDir === 'asc' ? 'desc' : 'asc');
@@ -169,17 +171,14 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                 return (
                   <TableRow key={p.id} className={selected.has(p.id) ? 'bg-primary/[0.03]' : ''}>
                     <TableCell>
-                      {p.company_id ? (
-                        <Link href={`/customers/${p.company_id}`} className="block">
-                          <p className="text-sm font-medium hover:text-primary transition-[color] duration-150">{p.full_name}</p>
-                          {p.role && <p className="text-xs text-muted-foreground">{p.role}</p>}
-                        </Link>
-                      ) : (
-                        <div>
-                          <p className="text-sm font-medium">{p.full_name}</p>
-                          {p.role && <p className="text-xs text-muted-foreground">{p.role}</p>}
-                        </div>
-                      )}
+                      <button
+                        type="button"
+                        onClick={() => setDetailPerson(p)}
+                        className="text-left"
+                      >
+                        <p className="text-sm font-medium hover:text-primary transition-[color] duration-150">{p.full_name}</p>
+                        {p.role && <p className="text-xs text-muted-foreground">{p.role}</p>}
+                      </button>
                     </TableCell>
                     <TableCell>
                       {p.email ? (
@@ -227,6 +226,18 @@ export function PersonsList({ persons }: { persons: Person[] }) {
           </TableBody>
         </Table>
       </div>
+
+      <PersonDetailPanel
+        contactId={detailPerson?.id ?? ''}
+        fullName={detailPerson?.full_name ?? ''}
+        email={detailPerson?.email ?? null}
+        phone={detailPerson?.phone ?? null}
+        role={detailPerson?.role ?? null}
+        companyName={detailPerson?.company_name ?? null}
+        companyId={detailPerson?.company_id ?? null}
+        open={detailPerson !== null}
+        onOpenChange={(open) => { if (!open) setDetailPerson(null); }}
+      />
     </div>
   );
 }
