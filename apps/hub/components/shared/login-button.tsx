@@ -21,7 +21,7 @@ export function LoginButton() {
   return (
     <button
       onClick={handleLogin}
-      className="relative hover:bg-slate-50/10 transition-all text-sm font-medium rounded-full py-3 px-6 gap-2 tracking-tight text-center flex items-center justify-center"
+      className="relative hover:bg-slate-50/10 hover:scale-105 hover:shadow-[0_24px_50px_rgba(31,41,55,0.35),0_0_0_1px_rgba(209,213,219,0.45)] active:scale-[0.98] transition-all duration-300 ease-out text-sm font-medium rounded-full py-3 px-6 gap-2 tracking-tight text-center flex items-center justify-center"
       style={{
         background: 'linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.2), rgba(0,0,0,0.1))',
         boxShadow: '0 18px 35px rgba(31, 41, 55, 0.25), 0 0 0 1px rgba(209, 213, 219, 0.3)',

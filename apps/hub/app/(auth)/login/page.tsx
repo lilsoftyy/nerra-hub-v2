@@ -11,11 +11,11 @@ export default function LoginPage() {
         <img
           src="/logo.svg"
           alt="Nerra"
-          className="h-24 opacity-80 brightness-200"
+          className="h-24 opacity-80 brightness-200 transition-all duration-500 ease-out hover:scale-110 hover:opacity-100 hover:brightness-[2.5]"
         />
 
         <p className="text-sm text-white/30">
-          Internt kommandosenter for Nerra AS
+          M&M&apos;s interne kommandosenter
         </p>
 
         <LoginButton />
