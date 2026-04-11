@@ -76,7 +76,10 @@ export function Sidebar({ userEmail, showLogout }: SidebarProps) {
               {group.items.map((item) => {
                 const isActive =
                   pathname === item.href ||
-                  (item.href !== '/dashboard' && pathname.startsWith(item.href));
+                  // Firmaprofiler (/customers/[id]) matcher "Firma", ikke "Personer"
+                  (item.href === '/companies' && pathname.startsWith('/customers/') && pathname !== '/customers') ||
+                  (item.href === '/customers' && pathname === '/customers') ||
+                  (item.href !== '/dashboard' && item.href !== '/customers' && item.href !== '/companies' && pathname.startsWith(item.href));
                 const Icon = item.icon;
                 return (
                   <Link

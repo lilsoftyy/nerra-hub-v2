@@ -12,7 +12,7 @@ import { ContactList } from '@/components/customers/contact-list';
 import { QualificationResponse } from '@/components/customers/qualification-response';
 import { CreateContractForm } from '@/components/contracts/create-contract-form';
 import Link from 'next/link';
-import { FileText } from 'lucide-react';
+import { FileText, FileSignature } from 'lucide-react';
 import { PHASES } from '@/lib/constants';
 import { phaseLabels, phaseColors } from '@/lib/labels';
 
@@ -91,14 +91,23 @@ export default async function CustomerDetailPage({
             ))}
           </div>
         </div>
-        {nextPhase && (
-          <PhaseChangeButton
-            companyId={company.id}
-            currentPhase={company.phase}
-            nextPhase={nextPhase}
-            nextPhaseLabel={phaseLabels[nextPhase] ?? nextPhase}
-          />
-        )}
+        <div className="flex items-center gap-2">
+          <Link
+            href={`/contracts?company=${company.id}`}
+            className="flex size-12 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]"
+            title="Opprett kontrakt"
+          >
+            <FileSignature className="size-5" strokeWidth={1.75} aria-hidden="true" />
+          </Link>
+          {nextPhase && (
+            <PhaseChangeButton
+              companyId={company.id}
+              currentPhase={company.phase}
+              nextPhase={nextPhase}
+              nextPhaseLabel={phaseLabels[nextPhase] ?? nextPhase}
+            />
+          )}
+        </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
