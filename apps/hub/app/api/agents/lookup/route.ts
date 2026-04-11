@@ -47,7 +47,7 @@ Returner følgende i JSON-format (ingenting annet, bare ren JSON):
 {
   "person_name": "Fullt navn",
   "person_email": "personens DIREKTE e-postadresse hvis funnet, ellers null. IKKE selskapets generelle e-post (post@, info@, kontakt@). Kun personlig e-post som fornavn@selskap.com eller lignende.",
-  "person_role": "stilling/rolle hvis funnet, ellers null",
+  "person_role": "stilling/rolle OVERSATT TIL NORSK (f.eks. 'Daglig leder', ikke 'Geschäftsführer' eller 'CEO'), ellers null",
   "person_phone": "personens direkte telefonnummer hvis funnet, ellers null. IKKE selskapets sentralbord.",
   "person_linkedin": "URL til LinkedIn-profil hvis funnet, ellers null",
   "company_name": "Offisielt firmanavn",
@@ -56,11 +56,13 @@ Returner følgende i JSON-format (ingenting annet, bare ren JSON):
   "company_email": "selskapets generelle e-postadresse (post@, info@, kontakt@) hvis funnet, ellers null",
   "company_phone": "selskapets hovednummer hvis funnet, ellers null",
   "company_employee_count": tall eller null,
-  "company_description": "Kort beskrivelse av hva selskapet gjør (1-2 setninger)",
+  "company_description": "Kort beskrivelse PÅ NORSK av hva selskapet gjør (1-2 setninger, alltid norsk bokmål)",
   "company_operational_area": "Geografisk operasjonsområde hvis relevant, ellers null"
 }
 
-Viktig: Returner KUN gyldig JSON. Ingen markdown, ingen forklaring.`,
+Viktig:
+- Returner KUN gyldig JSON. Ingen markdown, ingen forklaring.
+- ALL tekst (stilling, beskrivelse, operasjonsområde) skal være på NORSK BOKMÅL med korrekte æ, ø, å. Oversett fra alle språk.`,
       }],
     });
 
