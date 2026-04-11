@@ -90,7 +90,8 @@ export function AIContactLookup() {
     >
       {step === 'search' && (
         <div className="space-y-3">
-          <h3 className="text-base font-semibold">Finn kontakt</h3>
+          <h3 className="text-base font-semibold">AI-søk — legg til person</h3>
+          <p className="text-xs text-muted-foreground">Søker nettet etter kontaktinfo og legger til automatisk</p>
           <div className="space-y-2">
             <Label htmlFor="lookup-name">Navn</Label>
             <Input id="lookup-name" value={name} onChange={(e) => setName(e.target.value)} autoFocus onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }} />

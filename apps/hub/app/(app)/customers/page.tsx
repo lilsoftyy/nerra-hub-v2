@@ -1,8 +1,7 @@
 import { createClient } from '@/lib/supabase/server';
-import Link from 'next/link';
 import { AIContactLookup } from '@/components/customers/ai-contact-lookup';
+import { ManualAddDialog } from '@/components/customers/manual-add-dialog';
 import { PersonsList } from '@/components/customers/persons-list';
-import { Plus } from 'lucide-react';
 
 export default async function CustomersPage() {
   const supabase = await createClient();
@@ -33,13 +32,7 @@ export default async function CustomersPage() {
         <h1 className="text-xl font-semibold tracking-tight">Personer</h1>
         <div className="flex items-center gap-2">
           <AIContactLookup />
-          <Link
-            href="/customers/new"
-            className="flex size-10 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]"
-            title="Legg til manuelt"
-          >
-            <Plus className="size-4" strokeWidth={1.75} aria-hidden="true" />
-          </Link>
+          <ManualAddDialog />
         </div>
       </div>
 
