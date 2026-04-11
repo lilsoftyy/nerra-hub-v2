@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
 import { selectClassName } from '@/lib/ui-utils';
+import { QuickDatePicker } from '@/components/tasks/quick-date-picker';
 import { updateTask, deleteTask } from '@/app/(app)/tasks/actions';
 import { Trash2, X } from 'lucide-react';
 
@@ -29,6 +30,13 @@ interface TaskEditDialogProps {
   companies: { id: string; name: string }[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
+}
+
+/** Konverter timestamp til YYYY-MM-DD for date input */
+function toDateString(timestamp: string | null): string {
+  if (!timestamp) return '';
+  // Håndter både "2026-04-25" og "2026-04-25 00:00:00+00"
+  return timestamp.split(/[T ]/)[0] ?? '';
 }
 
 export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEditDialogProps) {
@@ -68,6 +76,7 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
   if (!task || !open) return null;
 
   const isVisible = mounted && !closing;
+  const existingDueDate = toDateString(task.due_date);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -128,12 +137,6 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
               </select>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="edit-due-date">Frist</Label>
-              <Input id="edit-due-date" name="due_date" type="date" defaultValue={task.due_date ?? ''} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="space-y-2">
               <Label htmlFor="edit-category">Kategori</Label>
               <select id="edit-category" name="category" defaultValue={task.category ?? ''} className={selectClassName}>
                 <option value="">Ingen</option>
@@ -142,15 +145,19 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
                 ))}
               </select>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="edit-company">Kontakt</Label>
-              <select id="edit-company" name="company_id" defaultValue={task.company_id ?? ''} className={selectClassName}>
-                <option value="">Ingen</option>
-                {companies.map((c) => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
+          </div>
+          <div className="space-y-2">
+            <Label>Frist</Label>
+            <QuickDatePicker value={existingDueDate} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="edit-company">Kontakt</Label>
+            <select id="edit-company" name="company_id" defaultValue={task.company_id ?? ''} className={selectClassName}>
+              <option value="">Ingen</option>
+              {companies.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
+            </select>
           </div>
 
           <div className="flex items-center justify-between pt-1">

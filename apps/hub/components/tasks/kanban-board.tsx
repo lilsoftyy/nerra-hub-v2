@@ -11,6 +11,7 @@ import {
   taskPriorityLabels,
   taskPriorityColors,
   taskCategoryLabels,
+  taskCategoryColors,
 } from '@/lib/labels';
 import { GripVertical } from 'lucide-react';
 import { formatShortDate } from '@/lib/formatters';
@@ -167,7 +168,7 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                             {taskPriorityLabels[task.priority] ?? task.priority}
                           </Badge>
                           {task.category && (
-                            <Badge variant="outline" className="text-[10px]">
+                            <Badge className={`text-[10px] ${taskCategoryColors[task.category] ?? ''}`}>
                               {taskCategoryLabels[task.category] ?? task.category}
                             </Badge>
                           )}

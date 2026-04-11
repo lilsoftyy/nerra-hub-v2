@@ -56,6 +56,24 @@ export const taskCategoryLabels: Record<string, string> = {
   other: 'Annet',
 };
 
+export const taskCategoryColors: Record<string, string> = {
+  sales: 'bg-emerald-100 text-emerald-700',
+  training: 'bg-amber-100 text-amber-700',
+  admin: 'bg-slate-100 text-slate-600',
+  development: 'bg-violet-100 text-violet-700',
+  research: 'bg-sky-100 text-sky-700',
+  other: 'bg-stone-100 text-stone-600',
+};
+
+export const taskCategoryBarColors: Record<string, string> = {
+  sales: 'bg-emerald-300/60',
+  training: 'bg-amber-300/60',
+  admin: 'bg-slate-300/50',
+  development: 'bg-violet-300/60',
+  research: 'bg-sky-300/60',
+  other: 'bg-stone-300/50',
+};
+
 export const documentKindLabels: Record<string, string> = {
   research: 'Firmasøk',
   customer_report: 'Kunderesearch',
