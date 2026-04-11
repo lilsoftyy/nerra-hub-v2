@@ -144,16 +144,35 @@
                 opacity 150ms cubic-bezier(0.23, 1, 0.32, 1);
   }
 
-  /* Badge, Card, interaktive kort */
+  /* Badge, Card, interaktive kort — dybdeeffekt */
   [data-slot="card"] {
     transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
                 box-shadow 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  [data-slot="card"]:hover {
+    transform: scale(1.03);
   }
   [data-slot="card"]:active {
     transform: scale(0.985);
   }
 
-  /* Sidebar-lenker */
+  /* Knapper — dybdeeffekt */
+  button:hover, [role="button"]:hover {
+    transform: scale(1.05);
+  }
+  button:active, [role="button"]:active {
+    transform: scale(0.97);
+  }
+
+  /* Sidebar-lenker — dybdeeffekt */
+  nav a {
+    transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1),
+                color 150ms cubic-bezier(0.23, 1, 0.32, 1),
+                background-color 150ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  nav a:hover {
+    transform: scale(1.05);
+  }
   nav a:active {
     transform: scale(0.97);
   }
