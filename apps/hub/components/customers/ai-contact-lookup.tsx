@@ -79,10 +79,13 @@ export function AIContactLookup() {
       open={open}
       onClose={() => { setOpen(false); resetState(); }}
       trigger={
-        <Button size="sm" onClick={() => { resetState(); setOpen(true); }}>
-          <Search className="size-4" strokeWidth={1.75} aria-hidden="true" />
+        <button
+          onClick={() => { resetState(); setOpen(true); }}
+          className="flex items-center gap-1.5 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
+        >
+          <Search className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
           AI-søk
-        </Button>
+        </button>
       }
     >
       {step === 'search' && (

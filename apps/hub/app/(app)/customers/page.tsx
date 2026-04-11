@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { AIContactLookup } from '@/components/customers/ai-contact-lookup';
 import { PersonsList } from '@/components/customers/persons-list';
 import { Plus } from 'lucide-react';
@@ -32,15 +31,16 @@ export default async function CustomersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold tracking-tight">Personer</h1>
-        <div className="flex items-center gap-3">
-          <span className="text-xs text-muted-foreground/50">Legg til ny:</span>
-          <div className="flex items-center gap-2">
-            <AIContactLookup />
-            <Button size="sm" variant="outline" render={<Link href="/customers/new" />}>
-              <Plus className="size-4" strokeWidth={1.75} aria-hidden="true" />
-              Manuelt
-            </Button>
-          </div>
+        <div className="flex items-center gap-4">
+          <span className="text-xs text-muted-foreground/40">Legg til:</span>
+          <AIContactLookup />
+          <Link
+            href="/customers/new"
+            className="flex items-center gap-1.5 text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
+          >
+            <Plus className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+            Manuelt
+          </Link>
         </div>
       </div>
 
