@@ -158,23 +158,4 @@
     transform: scale(0.97);
   }
 
-  /* Login bakgrunn — flytende lysformer */
-  @keyframes drift {
-    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-    25% { transform: translate(30px, -40px) scale(1.05) rotate(5deg); }
-    50% { transform: translate(-20px, 20px) scale(0.95) rotate(-3deg); }
-    75% { transform: translate(40px, 30px) scale(1.08) rotate(4deg); }
-  }
-  @keyframes drift2 {
-    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-    33% { transform: translate(-40px, 30px) scale(1.1) rotate(-6deg); }
-    66% { transform: translate(30px, -20px) scale(0.92) rotate(5deg); }
-  }
-  @keyframes drift3 {
-    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
-    20% { transform: translate(20px, 40px) scale(1.06) rotate(3deg); }
-    40% { transform: translate(-30px, -10px) scale(0.94) rotate(-4deg); }
-    60% { transform: translate(10px, -30px) scale(1.08) rotate(6deg); }
-    80% { transform: translate(-20px, 20px) scale(0.96) rotate(-2deg); }
-  }
 }
