@@ -173,11 +173,6 @@ export function TaskTimeline({ tasks }: TaskTimelineProps) {
             })}
           </div>
 
-          {/* Dagens linje */}
-          <div
-            className="absolute top-0 bottom-0 w-px bg-primary/40 pointer-events-none z-10"
-            style={{ left: `${daysBetween(timelineStart, today) * dayWidth + dayWidth / 2}px` }}
-          />
         </div>
       </div>
     </div>
