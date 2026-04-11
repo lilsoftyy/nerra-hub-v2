@@ -13,6 +13,7 @@ import {
   FolderCheck,
   Play,
   Sparkles,
+  Globe,
 } from 'lucide-react';
 
 interface Company { id: string; name: string }
@@ -48,11 +49,34 @@ function ResearchPanel({
   );
 }
 
+function LeadResearchPanel({ onRun }: { onRun: (country: string) => void }) {
+  const [country, setCountry] = useState('');
+  return (
+    <div className="space-y-3">
+      <h3 className="text-base font-semibold">Lead Research</h3>
+      <div className="space-y-2">
+        <Label>Land</Label>
+        <input
+          type="text"
+          value={country}
+          onChange={(e) => setCountry(e.target.value)}
+          placeholder="F.eks. Tyskland, Nederland, Østerrike"
+          className={selectClassName}
+        />
+      </div>
+      <Button size="sm" className="w-full" disabled={!country.trim()} onClick={() => onRun(country.trim())}>
+        Kjør
+      </Button>
+    </div>
+  );
+}
+
 export function AgentCommands({ companies, suggestions }: { companies: Company[]; suggestions: Suggestion[] }) {
   const router = useRouter();
   const { addToast, updateToast } = useToast();
   const [researchOpen, setResearchOpen] = useState(false);
   const [deepResearchOpen, setDeepResearchOpen] = useState(false);
+  const [leadResearchOpen, setLeadResearchOpen] = useState(false);
 
   const runAgent = async (agent: string, companyId: string, label: string) => {
     const companyName = companies.find((c) => c.id === companyId)?.name ?? '';
@@ -74,6 +98,29 @@ export function AgentCommands({ companies, suggestions }: { companies: Company[]
         updateToast(toastId, { type: 'success', title: `${label} ferdig`, action: { label: 'Se rapport', onClick: () => router.push(`/documents/${data.document_id}`) } });
       } else {
         updateToast(toastId, { type: 'success', title: `${label} ferdig` });
+      }
+      router.refresh();
+    } catch {
+      updateToast(toastId, { type: 'error', title: 'Noe gikk galt' });
+    }
+  };
+
+  const runLeadResearch = async (country: string) => {
+    setLeadResearchOpen(false);
+    const toastId = addToast({ type: 'loading', title: `Lead Research — ${country}` });
+    try {
+      const res = await fetch('/api/agents/run', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ agent: 'lead_research_agent', country }),
+      });
+      const data = await res.json();
+      if (data.error) {
+        updateToast(toastId, { type: 'error', title: 'Feil', description: data.error });
+      } else if (data.document_id) {
+        updateToast(toastId, { type: 'success', title: 'Lead Research ferdig', action: { label: 'Se rapport', onClick: () => router.push(`/documents/${data.document_id}`) } });
+      } else {
+        updateToast(toastId, { type: 'success', title: 'Lead Research ferdig' });
       }
       router.refresh();
     } catch {
@@ -129,6 +176,11 @@ export function AgentCommands({ companies, suggestions }: { companies: Company[]
           <AnimatedPanel open={deepResearchOpen} onClose={() => setDeepResearchOpen(false)} width={320} anchor="bottom-left"
             trigger={<div onClick={() => setDeepResearchOpen(true)} className={cmdClass}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted"><Users className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" /></div><div className="text-left"><p className="font-medium">Kunderesearch</p><p className="text-xs text-muted-foreground">Full analyse — relevans, konkurrenter og neste steg</p></div></div>}>
             <ResearchPanel title="Kunderesearch" agentName="customer_research_agent" label="Kunderesearch" companies={companies} onRun={runAgent} />
+          </AnimatedPanel>
+
+          <AnimatedPanel open={leadResearchOpen} onClose={() => setLeadResearchOpen(false)} width={320} anchor="bottom-left"
+            trigger={<div onClick={() => setLeadResearchOpen(true)} className={cmdClass}><div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-muted"><Globe className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" /></div><div className="text-left"><p className="font-medium">Lead Research</p><p className="text-xs text-muted-foreground">Finn nye prospekter i et land</p></div></div>}>
+            <LeadResearchPanel onRun={runLeadResearch} />
           </AnimatedPanel>
 
           <div onClick={runProjectAgent} className={cmdClass}>

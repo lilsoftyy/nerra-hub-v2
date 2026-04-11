@@ -1,0 +1,97 @@
+import { createClient } from '@/lib/supabase/server';
+import { getAnthropicClient } from '@/lib/ai/anthropic';
+import { loadSkill } from '@/lib/agents/skill-loader';
+import { cleanAgentContent, getAgentMemory } from '@/lib/agents/utils';
+import { v7 as uuidv7 } from 'uuid';
+
+export interface LeadResearchResult {
+  document_id: string | null;
+  error?: string;
+}
+
+export async function runLeadResearchAgent(country: string): Promise<LeadResearchResult> {
+  const supabase = await createClient();
+  const anthropic = getAnthropicClient();
+
+  // Hent eksisterende selskaper for å unngå duplikater
+  const { data: existingCompanies } = await supabase
+    .from('companies')
+    .select('name, country')
+    .is('deleted_at', null);
+
+  const existingNames = (existingCompanies ?? [])
+    .map((c) => c.name.toLowerCase());
+
+  const skill = loadSkill('lead-research');
+  const memory = await getAgentMemory(supabase, 'lead_research_agent');
+
+  const prompt = `${skill}${memory}
+
+---
+
+## Oppdrag
+
+Utfør lead research i dette landet: **${country}**
+
+Finn 5-15 selskaper som matcher målprofilen beskrevet over.
+
+### Selskaper som allerede finnes i CRM (IKKE ta med disse):
+${existingNames.length > 0 ? existingNames.map((n) => `- ${n}`).join('\n') : '(ingen)'}
+
+## VIKTIG: Format og stil
+
+1. Start med en kort oppsummering (2-3 setninger) om søket
+2. Bruk den EKSAKTE strukturen beskrevet i skill-filen for hvert selskap
+3. ALLTID norsk bokmål med korrekte æ, ø, å
+4. Sorter etter relevans (mest relevant først)
+5. Finn reelle kontaktpersoner med e-post og LinkedIn — dette er det mest verdifulle`;
+
+  const message = await anthropic.messages.create({
+    model: 'claude-sonnet-4-20250514',
+    max_tokens: 8192,
+    tools: [
+      {
+        type: 'web_search_20250305',
+        name: 'web_search',
+        max_uses: 20,
+      },
+    ],
+    messages: [{ role: 'user', content: prompt }],
+  });
+
+  const { content, summary } = cleanAgentContent(message);
+
+  if (!content) {
+    return { document_id: null, error: 'Agenten genererte ingen tekst' };
+  }
+
+  const docId = uuidv7();
+  const { error } = await supabase.from('documents').insert({
+    id: docId,
+    company_id: null,
+    kind: 'lead_research',
+    visibility: 'internal',
+    title: `Lead Research: ${country}`,
+    summary,
+    content_markdown: content,
+    language: 'no',
+    generated_by_agent: 'lead_research_agent',
+  });
+
+  if (error) {
+    return { document_id: null, error: error.message };
+  }
+
+  // Log activity
+  await supabase.from('activity_log').insert({
+    id: uuidv7(),
+    actor_type: 'agent',
+    actor_name: 'lead_research_agent',
+    action: 'document.created',
+    entity_type: 'document',
+    entity_id: docId,
+    details: { kind: 'lead_research', country },
+  });
+
+  return { document_id: docId };
+}

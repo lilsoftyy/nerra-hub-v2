@@ -3,6 +3,7 @@ import { createClient } from '@/lib/supabase/server';
 import { runProjectAgent } from '@/lib/agents/project-agent';
 import { runResearchAgent } from '@/lib/agents/research-agent';
 import { runCustomerResearchAgent } from '@/lib/agents/customer-research-agent';
+import { runLeadResearchAgent } from '@/lib/agents/lead-research-agent';
 
 export async function POST(request: NextRequest) {
   // Verify user is authenticated
@@ -14,7 +15,7 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-  const { agent, company_id } = body as { agent: string; company_id?: string };
+  const { agent, company_id, country } = body as { agent: string; company_id?: string; country?: string };
 
   try {
     switch (agent) {
@@ -34,6 +35,13 @@ export async function POST(request: NextRequest) {
           return NextResponse.json({ error: 'company_id er påkrevd for kunderesearch-agenten' }, { status: 400 });
         }
         const result = await runCustomerResearchAgent(company_id, supabase);
+        return NextResponse.json(result);
+      }
+      case 'lead_research_agent': {
+        if (!country) {
+          return NextResponse.json({ error: 'country er påkrevd for lead research' }, { status: 400 });
+        }
+        const result = await runLeadResearchAgent(country);
         return NextResponse.json(result);
       }
       default:
