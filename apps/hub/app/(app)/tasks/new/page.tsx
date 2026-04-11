@@ -6,6 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
 import { selectClassName } from '@/lib/ui-utils';
+import { QuickDatePicker } from '@/components/tasks/quick-date-picker';
 import { createTask } from '../actions';
 
 async function createTaskAction(formData: FormData): Promise<void> {
@@ -82,28 +83,26 @@ export default async function NewTaskPage() {
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="company_id">Kunde</Label>
-                <select
-                  id="company_id"
-                  name="company_id"
-                  defaultValue=""
-                  className={selectClassName}
-                >
-                  <option value="">Ingen kunde</option>
-                  {companies?.map((company) => (
-                    <option key={company.id} value={company.id}>
-                      {company.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
+            <div className="space-y-2">
+              <Label htmlFor="company_id">Kunde</Label>
+              <select
+                id="company_id"
+                name="company_id"
+                defaultValue=""
+                className={selectClassName}
+              >
+                <option value="">Ingen kunde</option>
+                {companies?.map((company) => (
+                  <option key={company.id} value={company.id}>
+                    {company.name}
+                  </option>
+                ))}
+              </select>
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="due_date">Forfallsdato</Label>
-                <Input id="due_date" name="due_date" type="date" />
-              </div>
+            <div className="space-y-2">
+              <Label>Frist</Label>
+              <QuickDatePicker />
             </div>
 
             <div className="flex gap-3 pt-2">

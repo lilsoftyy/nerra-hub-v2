@@ -12,9 +12,27 @@ import {
   Building2,
   Calendar,
   Search,
+  CheckSquare,
 } from 'lucide-react';
+import { selectClassName } from '@/lib/ui-utils';
+import { taskPriorityLabels } from '@/lib/labels';
 import { createContactFromLookup } from '@/app/(app)/customers/actions';
 import { createCalendarEvent } from '@/app/(app)/calendar/actions';
+import { createTaskFromDialog } from '@/app/(app)/tasks/actions';
+
+function addDays(days: number): string {
+  const d = new Date();
+  d.setDate(d.getDate() + days);
+  return d.toISOString().split('T')[0]!;
+}
+
+const quickDates = [
+  { label: 'I dag', days: 0 },
+  { label: 'I morgen', days: 1 },
+  { label: '3 dager', days: 3 },
+  { label: '1 uke', days: 7 },
+  { label: '2 uker', days: 14 },
+];
 
 function AILookupPanel({ onClose, defaultMode }: { onClose: () => void; defaultMode: 'person' | 'company' }) {
   const router = useRouter();
@@ -158,10 +176,70 @@ function NewEventPanel({ onClose }: { onClose: () => void }) {
   );
 }
 
+function NewTaskPanel({ onClose }: { onClose: () => void }) {
+  const router = useRouter();
+  const [saving, setSaving] = useState(false);
+  const [dueDate, setDueDate] = useState('');
+  const [activeDays, setActiveDays] = useState<number | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (saving) return;
+    setSaving(true);
+    const formData = new FormData(e.currentTarget);
+    formData.set('due_date', dueDate);
+    const res = await createTaskFromDialog(formData);
+    if (res?.error) alert(res.error);
+    else { onClose(); router.refresh(); }
+    setSaving(false);
+  };
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3">
+      <h3 className="text-base font-semibold">Ny oppgave</h3>
+      <div className="space-y-2">
+        <Label htmlFor="qa-task-title">Tittel</Label>
+        <Input id="qa-task-title" name="title" required autoFocus />
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="qa-task-priority">Prioritet</Label>
+        <select id="qa-task-priority" name="priority" defaultValue="medium" className={selectClassName}>
+          {Object.entries(taskPriorityLabels).map(([value, label]) => (
+            <option key={value} value={value}>{label}</option>
+          ))}
+        </select>
+      </div>
+      <div className="space-y-2">
+        <Label>Frist</Label>
+        <div className="flex flex-wrap gap-1.5">
+          {quickDates.map((q) => (
+            <button
+              key={q.days}
+              type="button"
+              onClick={() => { setDueDate(addDays(q.days)); setActiveDays(q.days); }}
+              className={`rounded-full px-3 py-1 text-xs font-medium transition-all duration-150 ${
+                activeDays === q.days
+                  ? 'bg-foreground text-background'
+                  : 'bg-foreground/[0.06] text-muted-foreground hover:bg-foreground/[0.1] hover:text-foreground'
+              }`}
+            >
+              {q.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <Button type="submit" size="sm" className="w-full" disabled={saving}>
+        {saving ? 'Oppretter...' : 'Opprett'}
+      </Button>
+    </form>
+  );
+}
+
 export function QuickActions() {
   const [personOpen, setPersonOpen] = useState(false);
   const [companyOpen, setCompanyOpen] = useState(false);
   const [calendarOpen, setCalendarOpen] = useState(false);
+  const [taskOpen, setTaskOpen] = useState(false);
 
   const iconClass = "flex size-12 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]";
 
@@ -195,6 +273,21 @@ export function QuickActions() {
         }
       >
         <AILookupPanel onClose={() => setCompanyOpen(false)} defaultMode="company" />
+      </AnimatedPanel>
+
+      <AnimatedPanel
+        open={taskOpen}
+        onClose={() => setTaskOpen(false)}
+        width={340}
+        anchor="bottom-left"
+        showClose={true}
+        trigger={
+          <button onClick={() => setTaskOpen(true)} className={iconClass} title="Ny oppgave">
+            <CheckSquare className="size-5" strokeWidth={1.75} />
+          </button>
+        }
+      >
+        <NewTaskPanel onClose={() => setTaskOpen(false)} />
       </AnimatedPanel>
 
       <AnimatedPanel
