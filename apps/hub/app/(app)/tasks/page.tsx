@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { KanbanBoard } from '@/components/tasks/kanban-board';
+import { TaskCalendar } from '@/components/tasks/task-calendar';
 
 export default async function TasksPage() {
   const supabase = await createClient();
@@ -27,11 +28,25 @@ export default async function TasksPage() {
     name: c.name,
   }));
 
+  const calendarTasks = kanbanTasks.map((t) => ({
+    id: t.id,
+    title: t.title,
+    due_date: t.due_date,
+    priority: t.priority,
+    status: t.status,
+    companies: t.companies,
+  }));
+
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-semibold tracking-tight">Oppgaver</h1>
 
-      <KanbanBoard tasks={kanbanTasks} companies={companies} />
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-6">
+        <KanbanBoard tasks={kanbanTasks} companies={companies} />
+        <aside>
+          <TaskCalendar tasks={calendarTasks} />
+        </aside>
+      </div>
     </div>
   );
 }
