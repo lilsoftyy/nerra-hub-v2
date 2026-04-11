@@ -195,7 +195,11 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                   </div>
                 </form>
               ) : (
-                <div key={contact.id} className="flex items-start justify-between p-3 rounded-lg border">
+                <div
+                  key={contact.id}
+                  className="flex items-start justify-between p-3 rounded-lg border cursor-pointer transition-[background-color] duration-150 hover:bg-muted/30"
+                  onClick={() => setEditingId(contact.id)}
+                >
                   <div>
                     <p className="font-medium">
                       {contact.full_name}
@@ -206,23 +210,21 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                     {contact.role && <p className="text-sm text-muted-foreground">{contact.role}</p>}
                     {contact.email && <p className="text-sm">{contact.email}</p>}
                     {contact.phone && <p className="text-sm">{contact.phone}</p>}
+                    {!contact.email && !contact.phone && (
+                      <p className="text-xs text-muted-foreground/40 mt-1">Trykk for å redigere eller bruk AI-søk</p>
+                    )}
                   </div>
-                  <div className="flex gap-1">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditingId(contact.id)}
-                    >
-                      Rediger
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(contact.id)}
-                    >
-                      Slett
-                    </Button>
-                  </div>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); enrichContact(contact); }}
+                    disabled={enrichingId === contact.id}
+                    className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted-foreground/40 transition-[color,background-color] duration-150 hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                    title="Fyll ut med AI"
+                  >
+                    {enrichingId === contact.id
+                      ? <Loader2 className="size-3.5 animate-spin" aria-hidden="true" />
+                      : <Search className="size-3.5" strokeWidth={1.75} aria-hidden="true" />
+                    }
+                  </button>
                 </div>
               ),
             )}
