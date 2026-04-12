@@ -107,7 +107,7 @@ export function Sidebar({ userEmail, showLogout }: SidebarProps) {
 
       {/* User section */}
       <div className="px-3 py-3">
-        <div className="flex flex-col items-center gap-2 px-2">
+        <div className="flex flex-col items-start gap-2 px-2">
           {avatarSrc && (
             <img
               src={avatarSrc}

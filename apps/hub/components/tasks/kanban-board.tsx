@@ -13,6 +13,7 @@ import {
   taskCategoryLabels,
   taskCategoryColors,
 } from '@/lib/labels';
+import { TEAM_MEMBERS } from '@/lib/constants';
 import { GripVertical, Clock } from 'lucide-react';
 import { formatShortDate } from '@/lib/formatters';
 
@@ -179,6 +180,11 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                             <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
                               <Clock className="size-2.5" strokeWidth={1.75} />
                               {task.estimated_hours}t
+                            </span>
+                          )}
+                          {task.assignee_agent && (
+                            <span className="text-[10px] font-medium text-muted-foreground/60">
+                              {TEAM_MEMBERS[task.assignee_agent]?.slice(0, 3) ?? ''}
                             </span>
                           )}
                           {task.due_date && (
