@@ -112,7 +112,7 @@ export function Sidebar({ userEmail, showLogout }: SidebarProps) {
             <img
               src={avatarSrc}
               alt={userName}
-              className="h-40 w-auto opacity-70"
+              className="h-32 w-auto rounded-xl opacity-70"
               style={{ filter: 'grayscale(0.1)' }}
             />
           )}
