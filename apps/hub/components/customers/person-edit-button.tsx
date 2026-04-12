@@ -6,9 +6,9 @@ import { AnimatedPanel } from '@/components/shared/animated-panel';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { updateContact } from '@/app/(app)/customers/actions';
+import { updateContact, deleteContact } from '@/app/(app)/customers/actions';
 import { useToast } from '@/components/shared/toast-provider';
-import { Settings } from 'lucide-react';
+import { Settings, Trash2 } from 'lucide-react';
 
 interface PersonEditButtonProps {
   contactId: string;
@@ -23,6 +23,8 @@ export function PersonEditButton({ contactId, fullName, email, phone, role }: Pe
   const { addToast } = useToast();
   const [open, setOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -67,9 +69,30 @@ export function PersonEditButton({ contactId, fullName, email, phone, role }: Pe
           <Label htmlFor={`pe-role-${contactId}`}>Rolle</Label>
           <Input id={`pe-role-${contactId}`} name="role" defaultValue={role ?? ''} />
         </div>
-        <Button type="submit" size="sm" className="w-full" disabled={saving}>
-          {saving ? 'Lagrer...' : 'Lagre'}
-        </Button>
+        <div className="flex items-center justify-between pt-1">
+          {!confirmDelete ? (
+            <button type="button" onClick={() => setConfirmDelete(true)} className="flex items-center gap-1 text-xs text-muted-foreground transition-[color] duration-150 hover:text-red-500">
+              <Trash2 className="size-3.5" strokeWidth={1.75} />
+              Slett
+            </button>
+          ) : (
+            <div className="flex items-center gap-2">
+              <Button type="button" variant="destructive" size="sm" onClick={async () => {
+                setDeleting(true);
+                const result = await deleteContact(contactId);
+                if (result?.error) addToast({ type: 'error', title: 'Feil', description: result.error });
+                else { setOpen(false); router.refresh(); }
+                setDeleting(false);
+              }} disabled={deleting}>
+                {deleting ? 'Sletter...' : 'Bekreft'}
+              </Button>
+              <button type="button" onClick={() => setConfirmDelete(false)} className="text-xs text-muted-foreground hover:text-foreground">Avbryt</button>
+            </div>
+          )}
+          <Button type="submit" size="sm" disabled={saving}>
+            {saving ? 'Lagrer...' : 'Lagre'}
+          </Button>
+        </div>
       </form>
     </AnimatedPanel>
   );

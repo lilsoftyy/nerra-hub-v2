@@ -19,7 +19,6 @@ import {
 } from '@/components/ui/table';
 import { PersonEditButton } from '@/components/customers/person-edit-button';
 import { PersonDetailTrigger } from '@/components/customers/person-detail-panel';
-import { ContactRowActions } from '@/components/customers/contact-row-actions';
 import { QuickEmailButton } from '@/components/customers/quick-email-button';
 import { countryName } from '@/lib/countries';
 import { sortableHeadClassName, buildMailtoUrl } from '@/lib/ui-utils';
@@ -198,7 +197,6 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                       <div className="flex items-center gap-1">
                         {p.email && <QuickEmailButton email={p.email} name={p.full_name} />}
                         <PersonEditButton contactId={p.id} fullName={p.full_name} email={p.email} phone={p.phone} role={p.role} />
-                        <ContactRowActions contactId={p.id} contactName={p.full_name} />
                       </div>
                     </TableCell>
                     <TableCell>
