@@ -27,6 +27,15 @@ export function cleanAgentContent(message: Anthropic.Message): { content: string
     .replace(/\[\d+\]/g, '')
     .replace(/[\u{E000}-\u{F8FF}\u{F0000}-\u{FFFFD}\u{100000}-\u{10FFFD}]/gu, '')
     .replace(/\u200B/g, '')
+    // Fix "**Label:** \n\nVerdi" → "**Label:** Verdi"
+    .replace(/(\*\*[^*]+:\*\*)\s*\n+\s*/g, '$1 ')
+    // Fix linjeskift foran punktum/komma
+    .replace(/\n+\.\s*/g, '. ')
+    .replace(/\n+,\s*/g, ', ')
+    // Fix "tekst\n\n. \n\ntekst" → "tekst. tekst"
+    .replace(/\s*\n\n\.\s*\n\n/g, '. ')
+    // Fix løse linjeskift midt i setninger (lowercase før \n\n + lowercase etter)
+    .replace(/([a-zæøå,])\s*\n\n\s*([a-zæøå])/g, '$1 $2')
     .replace(/\n{3,}/g, '\n\n')
     .replace(/[^\S\n]{2,}/g, ' ')
     .replace(/\\"/g, '"')

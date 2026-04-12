@@ -57,9 +57,15 @@ ${existingNames.length > 0 ? existingNames.map((n) => `- ${n}`).join('\n') : '(i
 
 1. Start med en kort oppsummering (2-3 setninger) om søket
 2. Bruk den EKSAKTE strukturen beskrevet i skill-filen for hvert selskap
-3. ALLTID norsk bokmål med korrekte æ, ø, å
+3. ALLTID norsk bokmål med korrekte æ, ø, å — OVERSETT ALLE tyske/engelske fagord til norsk:
+   - "Fassadenreinigung" → "fasadevask"
+   - "Gebäudereinigung" → "bygningsrengjøring"
+   - "Glasreinigung" → "glassrengjøring"
+   - "Facility Service" → "eiendomsservice"
+   - Bruk ALDRI tyske, engelske eller andre fremmedspråklige ord i beskrivelsene
 4. Sorter etter relevans (mest relevant først)
-5. Finn reelle kontaktpersoner med e-post og LinkedIn — dette er det mest verdifulle`;
+5. Finn reelle kontaktpersoner med e-post og LinkedIn — dette er det mest verdifulle
+6. Ikke legg inn linjeskift mellom label og verdi. Skriv "**Ansatte:** 50+" ikke "**Ansatte:**\\n\\n50+"`;
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
