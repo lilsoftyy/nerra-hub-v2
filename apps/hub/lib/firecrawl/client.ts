@@ -14,25 +14,21 @@ export function getFirecrawlClient(): Firecrawl {
 }
 
 /**
- * Søk nettet via Firecrawl og returner markdown-innhold fra resultatene.
- * Returnerer de beste treffene med fullt sideinnhold.
+ * Søk nettet via Firecrawl og returner resultater som tekst.
  */
 export async function firecrawlSearch(query: string, limit = 5): Promise<string> {
   const fc = getFirecrawlClient();
   const result = await fc.search(query, { limit });
 
-  if (!result.success || !result.data || result.data.length === 0) {
-    return '';
-  }
+  const items = result.web ?? [];
+  if (items.length === 0) return '';
 
-  return result.data
-    .map((item: { title?: string; url?: string; markdown?: string }, i: number) => {
-      const title = item.title ?? 'Uten tittel';
-      const url = item.url ?? '';
-      const content = item.markdown ?? '';
-      // Begrens innhold per resultat for å spare tokens
-      const trimmed = content.length > 2000 ? content.slice(0, 2000) + '...' : content;
-      return `### Resultat ${i + 1}: ${title}\nURL: ${url}\n\n${trimmed}`;
+  return items
+    .map((item, i) => {
+      const title = ('title' in item ? item.title : '') ?? 'Uten tittel';
+      const url = ('url' in item ? item.url : '') ?? '';
+      const description = ('description' in item ? item.description : '') ?? '';
+      return `### Resultat ${i + 1}: ${title}\nURL: ${url}\n${description}`;
     })
     .join('\n\n---\n\n');
 }
@@ -42,12 +38,10 @@ export async function firecrawlSearch(query: string, limit = 5): Promise<string>
  */
 export async function firecrawlScrape(url: string): Promise<string> {
   const fc = getFirecrawlClient();
-  const result = await fc.scrapeUrl(url, { formats: ['markdown'] });
+  const result = await fc.scrape(url, { formats: ['markdown'] });
 
-  if (!result.success || !result.markdown) {
-    return '';
-  }
+  const markdown = ('markdown' in result ? result.markdown : '') as string ?? '';
+  if (!markdown) return '';
 
-  // Begrens for å spare tokens
-  return result.markdown.length > 5000 ? result.markdown.slice(0, 5000) + '...' : result.markdown;
+  return markdown.length > 5000 ? markdown.slice(0, 5000) + '...' : markdown;
 }
