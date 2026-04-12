@@ -69,7 +69,8 @@ export default async function DashboardPage() {
       .from('companies')
       .select('id', { count: 'exact', head: true })
       .is('deleted_at', null)
-      .neq('phase', 'finished'),
+      .neq('phase', 'finished')
+      .neq('phase', 'contact'),
     supabase
       .from('tasks')
       .select('id', { count: 'exact', head: true })

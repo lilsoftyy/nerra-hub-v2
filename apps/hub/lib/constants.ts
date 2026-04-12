@@ -1,5 +1,6 @@
 /** Ordered list of all customer phases */
 export const PHASES = [
+  'contact',
   'lead',
   'qualification',
   'sales',

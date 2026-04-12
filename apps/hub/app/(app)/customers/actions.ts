@@ -33,7 +33,7 @@ export async function createCompany(
     org_number: parsed.data.org_number || null,
     employee_count: parsed.data.employee_count || null,
     notes: parsed.data.notes || null,
-    phase: 'lead',
+    phase: 'contact',
   });
 
   if (companyError) {

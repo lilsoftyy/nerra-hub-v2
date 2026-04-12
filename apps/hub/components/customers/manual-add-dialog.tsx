@@ -32,7 +32,7 @@ async function createCompanyFromDialog(data: {
     name: data.name,
     country: data.country,
     website: data.website || null,
-    phase: 'lead',
+    phase: 'contact',
   });
 
   if (companyError) return { error: companyError.message };

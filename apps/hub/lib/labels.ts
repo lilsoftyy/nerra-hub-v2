@@ -1,6 +1,6 @@
 export const phaseLabels: Record<string, string> = {
   contact: 'Kontakt',
-  lead: 'Lead',
+  lead: 'Prospekt',
   qualification: 'Kvalifisering',
   sales: 'Salg',
   onboarding: 'Onboarding',
@@ -10,6 +10,7 @@ export const phaseLabels: Record<string, string> = {
 };
 
 export const phaseColors: Record<string, string> = {
+  contact: 'bg-slate-100 text-slate-600',
   lead: 'bg-gray-100 text-gray-800',
   qualification: 'bg-blue-100 text-blue-800',
   sales: 'bg-yellow-100 text-yellow-800',
