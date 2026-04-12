@@ -16,7 +16,8 @@ import {
 } from 'lucide-react';
 import { Tooltip } from '@/components/shared/tooltip';
 import { selectClassName } from '@/lib/ui-utils';
-import { taskPriorityLabels } from '@/lib/labels';
+import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
+import { TEAM_MEMBERS } from '@/lib/constants';
 import { QuickDatePicker } from '@/components/tasks/quick-date-picker';
 import { createContactFromLookup } from '@/app/(app)/customers/actions';
 import { createCalendarEvent } from '@/app/(app)/calendar/actions';
@@ -187,13 +188,43 @@ function NewTaskPanel({ onClose }: { onClose: () => void }) {
         <Label htmlFor="qa-task-title">Tittel</Label>
         <Input id="qa-task-title" name="title" required autoFocus />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="qa-task-priority">Prioritet</Label>
-        <select id="qa-task-priority" name="priority" defaultValue="medium" className={selectClassName}>
-          {Object.entries(taskPriorityLabels).map(([value, label]) => (
-            <option key={value} value={value}>{label}</option>
-          ))}
-        </select>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="qa-task-priority">Prioritet</Label>
+          <select id="qa-task-priority" name="priority" defaultValue="medium" className={selectClassName}>
+            {Object.entries(taskPriorityLabels).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+        </div>
+        <div className="space-y-1.5">
+          <Label htmlFor="qa-task-category">Kategori</Label>
+          <select id="qa-task-category" name="category" defaultValue="" className={selectClassName}>
+            <option value="">Ingen</option>
+            {Object.entries(taskCategoryLabels).map(([value, label]) => (
+              <option key={value} value={value}>{label}</option>
+            ))}
+          </select>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="space-y-1.5">
+          <Label htmlFor="qa-task-hours">Timer</Label>
+          <Input id="qa-task-hours" name="estimated_hours" type="number" min="0.5" step="0.5" placeholder="f.eks. 6" />
+        </div>
+        <div className="space-y-1.5">
+          <Label>Ansvarlig</Label>
+          <div className="flex gap-1">
+            {Object.entries(TEAM_MEMBERS).map(([email, name]) => (
+              <label key={email} className="flex-1">
+                <input type="radio" name="assignee_email" value={email} className="sr-only peer" />
+                <div className="flex items-center justify-center rounded-lg border py-1.5 text-xs font-medium text-muted-foreground cursor-pointer transition-all duration-150 peer-checked:bg-foreground peer-checked:text-background peer-checked:border-foreground hover:border-foreground/30">
+                  {name}
+                </div>
+              </label>
+            ))}
+          </div>
+        </div>
       </div>
       <div className="space-y-2">
         <Label>Frist</Label>
