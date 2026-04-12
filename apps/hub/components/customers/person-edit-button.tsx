@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { updateContact, deleteContact } from '@/app/(app)/customers/actions';
 import { useToast } from '@/components/shared/toast-provider';
+import { selectClassName } from '@/lib/ui-utils';
 import { Settings, Trash2 } from 'lucide-react';
 
 interface PersonEditButtonProps {
@@ -16,9 +17,10 @@ interface PersonEditButtonProps {
   email: string | null;
   phone: string | null;
   role: string | null;
+  contactType?: string;
 }
 
-export function PersonEditButton({ contactId, fullName, email, phone, role }: PersonEditButtonProps) {
+export function PersonEditButton({ contactId, fullName, email, phone, role, contactType }: PersonEditButtonProps) {
   const router = useRouter();
   const { addToast } = useToast();
   const [open, setOpen] = useState(false);
@@ -65,9 +67,20 @@ export function PersonEditButton({ contactId, fullName, email, phone, role }: Pe
           <Label htmlFor={`pe-phone-${contactId}`}>Telefon</Label>
           <Input id={`pe-phone-${contactId}`} name="phone" defaultValue={phone ?? ''} />
         </div>
-        <div className="space-y-2">
-          <Label htmlFor={`pe-role-${contactId}`}>Rolle</Label>
-          <Input id={`pe-role-${contactId}`} name="role" defaultValue={role ?? ''} />
+        <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-2">
+            <Label htmlFor={`pe-role-${contactId}`}>Rolle</Label>
+            <Input id={`pe-role-${contactId}`} name="role" defaultValue={role ?? ''} />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor={`pe-type-${contactId}`}>Type</Label>
+            <select id={`pe-type-${contactId}`} name="contact_type" defaultValue={contactType ?? 'contact'} className={selectClassName}>
+              <option value="contact">Kontakt</option>
+              <option value="customer">Kunde</option>
+              <option value="partner">Partner</option>
+              <option value="supplier">Leverandør</option>
+            </select>
+          </div>
         </div>
         <div className="flex items-center justify-between pt-1">
           {!confirmDelete ? (

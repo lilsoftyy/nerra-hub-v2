@@ -151,6 +151,7 @@ export async function updateContact(contactId: string, formData: FormData) {
       email: (formData.get('email') as string) || null,
       phone: (formData.get('phone') as string) || null,
       role: (formData.get('role') as string) || null,
+      contact_type: (formData.get('contact_type') as string) || 'contact',
     })
     .eq('id', contactId);
 

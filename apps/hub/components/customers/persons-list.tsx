@@ -35,9 +35,22 @@ interface Person {
   company_name: string | null;
   company_phase: string | null;
   company_country: string | null;
+  contact_type: string;
 }
 
-const potentialCustomerPhases: string[] = ['lead', 'qualification', 'sales', 'onboarding', 'training'];
+const contactTypeLabels: Record<string, string> = {
+  customer: 'Kunde',
+  partner: 'Partner',
+  supplier: 'Leverandør',
+  contact: 'Kontakt',
+};
+
+const contactTypeColors: Record<string, string> = {
+  customer: 'bg-primary/10 text-primary',
+  partner: 'bg-emerald-100 text-emerald-700',
+  supplier: 'bg-amber-100 text-amber-700',
+  contact: '',
+};
 
 type SortKey = 'full_name' | 'company_name';
 type SortDir = 'asc' | 'desc';
@@ -166,7 +179,8 @@ export function PersonsList({ persons }: { persons: Person[] }) {
           <TableBody>
             {filtered.length > 0 ? (
               filtered.map((p) => {
-                const isPotentialCustomer = p.company_phase ? potentialCustomerPhases.includes(p.company_phase) : false;
+                const typeLabel = contactTypeLabels[p.contact_type] ?? 'Kontakt';
+                const typeColor = contactTypeColors[p.contact_type] ?? '';
                 return (
                   <TableRow key={p.id} className={selected.has(p.id) ? 'bg-primary/[0.03]' : ''}>
                     <TableCell>
@@ -184,10 +198,10 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                       ) : <span className="text-xs text-muted-foreground">—</span>}
                     </TableCell>
                     <TableCell>
-                      {isPotentialCustomer ? (
-                        <Badge className="bg-primary/10 text-primary text-[10px]">Kunde</Badge>
+                      {typeColor ? (
+                        <Badge className={`text-[10px] ${typeColor}`}>{typeLabel}</Badge>
                       ) : (
-                        <Badge variant="outline" className="text-[10px]">Kontakt</Badge>
+                        <Badge variant="outline" className="text-[10px]">{typeLabel}</Badge>
                       )}
                     </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
@@ -196,7 +210,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                     <TableCell>
                       <div className="flex items-center gap-1">
                         {p.email && <QuickEmailButton email={p.email} name={p.full_name} />}
-                        <PersonEditButton contactId={p.id} fullName={p.full_name} email={p.email} phone={p.phone} role={p.role} />
+                        <PersonEditButton contactId={p.id} fullName={p.full_name} email={p.email} phone={p.phone} role={p.role} contactType={p.contact_type} />
                       </div>
                     </TableCell>
                     <TableCell>

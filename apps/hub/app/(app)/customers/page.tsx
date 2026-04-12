@@ -8,7 +8,7 @@ export default async function CustomersPage() {
 
   const { data: contacts } = await supabase
     .from('contacts')
-    .select('id, full_name, email, phone, role, is_primary, company_id, companies(id, name, phase, country)')
+    .select('id, full_name, email, phone, role, is_primary, contact_type, company_id, companies(id, name, phase, country)')
     .order('created_at', { ascending: false });
 
   const persons = (contacts ?? []).map((c) => {
@@ -23,6 +23,7 @@ export default async function CustomersPage() {
       company_name: company?.name ?? null,
       company_phase: company?.phase ?? null,
       company_country: company?.country ?? null,
+      contact_type: (c as Record<string, unknown>).contact_type as string ?? 'contact',
     };
   });
 
