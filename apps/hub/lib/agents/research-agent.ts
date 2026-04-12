@@ -3,6 +3,7 @@ import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { notifyResearchComplete } from '@/lib/slack/notifications';
 import { loadSkill } from '@/lib/agents/skill-loader';
 import { cleanAgentContent, getAgentMemory } from '@/lib/agents/utils';
+import { firecrawlSearch } from '@/lib/firecrawl/client';
 import { v7 as uuidv7 } from 'uuid';
 
 export interface ResearchResult {
@@ -37,14 +38,22 @@ export async function runResearchAgent(companyId: string): Promise<ResearchResul
   const contactInfo = contacts.map((c) => `${c.full_name}${c.role ? ` (${c.role})` : ''}`).join(', ');
 
   const skill = loadSkill('research');
-
   const memory = await getAgentMemory(supabase, 'agent_6_lead_research');
+
+  // Firecrawl: hent data fra nettet før Claude analyserer
+  let firecrawlData = '';
+  try {
+    const searchQuery = `${company.name} ${company.country} fasadevask facade cleaning`;
+    firecrawlData = await firecrawlSearch(searchQuery, 5);
+  } catch {
+    // Firecrawl er valgfritt — fortsett uten hvis det feiler
+  }
 
   const prompt = `${skill}${memory}
 
 ---
 
-## Oppdrag
+${firecrawlData ? `## Forhåndsinnhentet data fra nettet\n\n${firecrawlData}\n\n---\n\n` : ''}## Oppdrag
 
 Utfør research på dette firmaet:
 
@@ -73,13 +82,6 @@ Regler:
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 4096,
-    tools: [
-      {
-        type: 'web_search_20250305',
-        name: 'web_search',
-        max_uses: 10,
-      },
-    ],
     messages: [{ role: 'user', content: prompt }],
   });
 

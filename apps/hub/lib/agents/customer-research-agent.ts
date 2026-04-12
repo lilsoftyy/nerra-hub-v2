@@ -2,6 +2,7 @@ import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { notifyResearchComplete } from '@/lib/slack/notifications';
 import { loadSkill } from '@/lib/agents/skill-loader';
 import { cleanAgentContent, getAgentMemory } from '@/lib/agents/utils';
+import { firecrawlSearch } from '@/lib/firecrawl/client';
 import { v7 as uuidv7 } from 'uuid';
 import { SupabaseClient } from '@supabase/supabase-js';
 
@@ -69,11 +70,24 @@ export async function runCustomerResearchAgent(
 
   const memory = await getAgentMemory(supabase, 'customer_research_agent');
 
+  // Firecrawl: hent detaljert data fra nettet
+  let firecrawlData = '';
+  try {
+    const queries = [
+      `${company.name} ${company.country}`,
+      `${company.name} LinkedIn`,
+    ];
+    const results = await Promise.all(queries.map((q) => firecrawlSearch(q, 3)));
+    firecrawlData = results.filter(Boolean).join('\n\n---\n\n');
+  } catch {
+    // Firecrawl er valgfritt
+  }
+
   const prompt = `${skill}${memory}
 
 ---
 
-## Oppdrag
+${firecrawlData ? `## Forhåndsinnhentet data fra nettet (Firecrawl)\n\nBruk denne dataen som kilde i tillegg til dine egne søk:\n\n${firecrawlData}\n\n---\n\n` : ''}## Oppdrag
 
 Gjennomfør dyp kunderesearch på dette selskapet${options?.isAutoTriggered ? ' (automatisk trigger etter kvalifiseringsskjema)' : ' (manuell trigger)'}:
 
@@ -131,13 +145,6 @@ START NÅ med "# ${company.name}".`;
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 4096,
-    tools: [
-      {
-        type: 'web_search_20250305',
-        name: 'web_search',
-        max_uses: 15,
-      },
-    ],
     messages: [{ role: 'user', content: prompt }],
   });
 

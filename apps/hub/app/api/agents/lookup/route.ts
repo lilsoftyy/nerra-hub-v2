@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { getAnthropicClient } from '@/lib/ai/anthropic';
+import { firecrawlSearch } from '@/lib/firecrawl/client';
 
 export async function POST(request: NextRequest) {
   const supabase = await createClient();
@@ -17,30 +18,29 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    // Firecrawl: søk etter person og selskap
+    let webData = '';
+    try {
+      const results = await Promise.all([
+        firecrawlSearch(`${name} ${company} LinkedIn`, 3),
+        firecrawlSearch(`${company} contact email website`, 3),
+      ]);
+      webData = results.filter(Boolean).join('\n\n---\n\n');
+    } catch {
+      // Fortsett uten Firecrawl-data
+    }
+
     const anthropic = getAnthropicClient();
 
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,
-      tools: [
-        {
-          type: 'web_search_20250305',
-          name: 'web_search',
-          max_uses: 5,
-        },
-      ],
       messages: [{
         role: 'user',
-        content: `Finn informasjon om denne personen og selskapet:
+        content: `${webData ? `## Data fra nettet\n\n${webData}\n\n---\n\n` : ''}Finn informasjon om denne personen og selskapet basert på dataen over:
 
 Personnavn: ${name}
 Selskap: ${company}
-
-Søkestrategi:
-1. Søk etter personens LinkedIn-profil: "${name} ${company} LinkedIn"
-2. Søk etter personens direkte e-post og telefonnummer
-3. Søk etter selskapets nettside og generell info
-4. Søk etter selskapets generelle e-post/kontaktinfo (f.eks. post@selskap.com)
 
 Returner følgende i JSON-format (ingenting annet, bare ren JSON):
 

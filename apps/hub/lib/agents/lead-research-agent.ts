@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { getAnthropicClient } from '@/lib/ai/anthropic';
 import { loadSkill } from '@/lib/agents/skill-loader';
 import { cleanAgentContent, getAgentMemory } from '@/lib/agents/utils';
+import { firecrawlSearch } from '@/lib/firecrawl/client';
 import { v7 as uuidv7 } from 'uuid';
 
 export interface LeadResearchResult {
@@ -25,11 +26,25 @@ export async function runLeadResearchAgent(country: string): Promise<LeadResearc
   const skill = loadSkill('lead-research');
   const memory = await getAgentMemory(supabase, 'lead_research_agent');
 
+  // Firecrawl: bred søk etter fasadevask-selskaper i landet
+  let firecrawlData = '';
+  try {
+    const queries = [
+      `facade cleaning companies ${country}`,
+      `Fassadenreinigung Unternehmen ${country}`,
+      `building maintenance facade wash ${country}`,
+    ];
+    const results = await Promise.all(queries.map((q) => firecrawlSearch(q, 5)));
+    firecrawlData = results.filter(Boolean).join('\n\n---\n\n');
+  } catch {
+    // Firecrawl er valgfritt
+  }
+
   const prompt = `${skill}${memory}
 
 ---
 
-## Oppdrag
+${firecrawlData ? `## Data innhentet fra nettet (Firecrawl)\n\nHer er søkeresultater med fullt sideinnhold. Bruk denne dataen som hovedkilde:\n\n${firecrawlData}\n\n---\n\n` : ''}## Oppdrag
 
 Utfør lead research i dette landet: **${country}**
 
@@ -49,13 +64,6 @@ ${existingNames.length > 0 ? existingNames.map((n) => `- ${n}`).join('\n') : '(i
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 8192,
-    tools: [
-      {
-        type: 'web_search_20250305',
-        name: 'web_search',
-        max_uses: 20,
-      },
-    ],
     messages: [{ role: 'user', content: prompt }],
   });
 
