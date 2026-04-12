@@ -14,6 +14,7 @@ import {
   Search,
   CheckSquare,
 } from 'lucide-react';
+import { Tooltip } from '@/components/shared/tooltip';
 import { selectClassName } from '@/lib/ui-utils';
 import { taskPriorityLabels } from '@/lib/labels';
 import { QuickDatePicker } from '@/components/tasks/quick-date-picker';
@@ -222,9 +223,11 @@ export function QuickActions() {
         anchor="bottom-left"
         showClose={true}
         trigger={
-          <button onClick={() => setPersonOpen(true)} className={iconClass} title="Ny person">
-            <UserPlus className="size-5" strokeWidth={1.75} />
-          </button>
+          <Tooltip label="Ny person">
+            <button onClick={() => setPersonOpen(true)} className={iconClass}>
+              <UserPlus className="size-5" strokeWidth={1.75} />
+            </button>
+          </Tooltip>
         }
       >
         <AILookupPanel onClose={() => setPersonOpen(false)} defaultMode="person" />
@@ -237,9 +240,11 @@ export function QuickActions() {
         anchor="bottom-left"
         showClose={true}
         trigger={
-          <button onClick={() => setCompanyOpen(true)} className={iconClass} title="Nytt selskap">
-            <Building2 className="size-5" strokeWidth={1.75} />
-          </button>
+          <Tooltip label="Nytt selskap">
+            <button onClick={() => setCompanyOpen(true)} className={iconClass}>
+              <Building2 className="size-5" strokeWidth={1.75} />
+            </button>
+          </Tooltip>
         }
       >
         <AILookupPanel onClose={() => setCompanyOpen(false)} defaultMode="company" />
@@ -252,9 +257,11 @@ export function QuickActions() {
         anchor="bottom-left"
         showClose={true}
         trigger={
-          <button onClick={() => setTaskOpen(true)} className={iconClass} title="Ny oppgave">
-            <CheckSquare className="size-5" strokeWidth={1.75} />
-          </button>
+          <Tooltip label="Ny oppgave">
+            <button onClick={() => setTaskOpen(true)} className={iconClass}>
+              <CheckSquare className="size-5" strokeWidth={1.75} />
+            </button>
+          </Tooltip>
         }
       >
         <NewTaskPanel onClose={() => setTaskOpen(false)} />
@@ -267,9 +274,11 @@ export function QuickActions() {
         anchor="bottom-left"
         showClose={true}
         trigger={
-          <button onClick={() => setCalendarOpen(true)} className={iconClass} title="Ny hendelse">
-            <Calendar className="size-5" strokeWidth={1.75} />
-          </button>
+          <Tooltip label="Ny hendelse">
+            <button onClick={() => setCalendarOpen(true)} className={iconClass}>
+              <Calendar className="size-5" strokeWidth={1.75} />
+            </button>
+          </Tooltip>
         }
       >
         <NewEventPanel onClose={() => setCalendarOpen(false)} />
