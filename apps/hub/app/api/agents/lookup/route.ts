@@ -35,6 +35,13 @@ export async function POST(request: NextRequest) {
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,
+      tools: [
+        {
+          type: 'web_search_20250305',
+          name: 'web_search',
+          max_uses: 5,
+        },
+      ],
       messages: [{
         role: 'user',
         content: `${webData ? `## Data fra nettet\n\n${webData}\n\n---\n\n` : ''}Finn informasjon om denne personen og selskapet basert på dataen over:

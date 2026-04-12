@@ -145,6 +145,13 @@ START NÅ med "# ${company.name}".`;
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
     max_tokens: 4096,
+    tools: [
+      {
+        type: 'web_search_20250305',
+        name: 'web_search',
+        max_uses: 15,
+      },
+    ],
     messages: [{ role: 'user', content: prompt }],
   });
 
