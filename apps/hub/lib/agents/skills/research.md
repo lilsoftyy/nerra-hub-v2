@@ -11,6 +11,12 @@ Skriv ALLTID på norsk bokmål med korrekte æ, ø, å. Uansett hvilket språk k
 
 ---
 
+## Fakta — KRITISK
+
+Skriv KUN det som er bekreftet fra kildene. Aldri anta, gjett eller dikt opp informasjon. Hvis noe ikke står eksplisitt i søkeresultatene, skal det ikke stå i rapporten.
+
+---
+
 ## Søkestrategi
 
 Søk i denne rekkefølgen:

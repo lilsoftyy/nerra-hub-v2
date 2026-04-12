@@ -67,6 +67,12 @@ Skriv ALLTID på norsk bokmål med korrekte æ, ø, å. Uansett hvilket land du 
 
 ---
 
+## Fakta — KRITISK
+
+Skriv KUN det som er bekreftet fra kildene. Aldri anta, gjett eller diktes opp. Hvis noe ikke står eksplisitt på selskapets nettside eller i søkeresultatene, skal det ikke stå i rapporten. Hvis du ikke finner informasjon om noe, skriv at det ikke ble funnet — ikke fyll inn med antakelser.
+
+---
+
 ## Hva agenten samler per prospekt
 
 For hvert selskap som passerer innledende filtrering:
