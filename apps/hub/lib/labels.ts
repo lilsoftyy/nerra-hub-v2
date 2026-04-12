@@ -53,6 +53,7 @@ export const taskCategoryLabels: Record<string, string> = {
   admin: 'Administrasjon',
   development: 'Utvikling',
   research: 'Research',
+  personal: 'Personlig',
   other: 'Annet',
 };
 
@@ -62,6 +63,7 @@ export const taskCategoryColors: Record<string, string> = {
   admin: 'bg-slate-100 text-slate-600',
   development: 'bg-violet-100 text-violet-700',
   research: 'bg-sky-100 text-sky-700',
+  personal: 'bg-rose-100 text-rose-700',
   other: 'bg-stone-100 text-stone-600',
 };
 
@@ -71,6 +73,7 @@ export const taskCategoryBarColors: Record<string, string> = {
   admin: 'bg-slate-300/50',
   development: 'bg-violet-300/60',
   research: 'bg-sky-300/60',
+  personal: 'bg-rose-300/60',
   other: 'bg-stone-300/50',
 };
 

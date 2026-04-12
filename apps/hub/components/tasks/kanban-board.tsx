@@ -13,7 +13,7 @@ import {
   taskCategoryLabels,
   taskCategoryColors,
 } from '@/lib/labels';
-import { GripVertical } from 'lucide-react';
+import { GripVertical, Clock } from 'lucide-react';
 import { formatShortDate } from '@/lib/formatters';
 
 interface Task {
@@ -23,6 +23,8 @@ interface Task {
   priority: string;
   category: string | null;
   due_date: string | null;
+  estimated_hours: number | null;
+  assignee_agent: string | null;
   company_id: string | null;
   companies: { name: string } | null;
   description?: string | null;
@@ -149,7 +151,7 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                     onDragStart={(e) => handleDragStart(e, task.id)}
                     onDragEnd={handleDragEnd}
                     onClick={() => handleCardClick(task)}
-                    className={`cursor-grab p-3 !shadow-none border transition-[opacity] duration-150 active:cursor-grabbing ${
+                    className={`cursor-grab px-2.5 py-2 !shadow-none border transition-[opacity] duration-150 active:cursor-grabbing ${
                       isDragging ? 'opacity-50' : ''
                     } ${isUpdating ? 'opacity-70' : ''}`}
                   >
@@ -160,7 +162,7 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                         aria-hidden="true"
                       />
                       <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium leading-snug">{task.title}</p>
+                        <p className="text-xs font-medium leading-snug">{task.title}</p>
                         {company && (
                           <p className="mt-0.5 text-xs text-muted-foreground">{company.name}</p>
                         )}
@@ -172,6 +174,12 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                             <Badge className={`text-[10px] ${taskCategoryColors[task.category] ?? ''}`}>
                               {taskCategoryLabels[task.category] ?? task.category}
                             </Badge>
+                          )}
+                          {task.estimated_hours && (
+                            <span className="flex items-center gap-0.5 text-[10px] text-muted-foreground">
+                              <Clock className="size-2.5" strokeWidth={1.75} />
+                              {task.estimated_hours}t
+                            </span>
                           )}
                           {task.due_date && (
                             <span className="text-[10px] text-muted-foreground tabular-nums">

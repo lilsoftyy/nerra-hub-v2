@@ -11,6 +11,7 @@ import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
 import { selectClassName } from '@/lib/ui-utils';
 import { QuickDatePicker } from '@/components/tasks/quick-date-picker';
 import { useToast } from '@/components/shared/toast-provider';
+import { TEAM_MEMBERS } from '@/lib/constants';
 import { updateTask, deleteTask } from '@/app/(app)/tasks/actions';
 import { Trash2, X } from 'lucide-react';
 
@@ -21,6 +22,8 @@ interface Task {
   priority: string;
   category: string | null;
   due_date: string | null;
+  estimated_hours: number | null;
+  assignee_agent: string | null;
   company_id: string | null;
   companies: { name: string } | null;
   description?: string | null;
@@ -146,6 +149,25 @@ export function TaskEditDialog({ task, companies, open, onOpenChange }: TaskEdit
                   <option key={value} value={value}>{label}</option>
                 ))}
               </select>
+            </div>
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="space-y-2">
+              <Label htmlFor="edit-hours">Timer</Label>
+              <Input id="edit-hours" name="estimated_hours" type="number" min="0.5" step="0.5" defaultValue={task.estimated_hours ?? ''} placeholder="f.eks. 6" />
+            </div>
+            <div className="space-y-2">
+              <Label>Ansvarlig</Label>
+              <div className="flex gap-1">
+                {Object.entries(TEAM_MEMBERS).map(([email, name]) => (
+                  <label key={email} className="flex-1">
+                    <input type="radio" name="assignee_email" value={email} defaultChecked={task.assignee_agent === email} className="sr-only peer" />
+                    <div className="flex items-center justify-center rounded-lg border py-1.5 text-xs font-medium text-muted-foreground cursor-pointer transition-all duration-150 peer-checked:bg-foreground peer-checked:text-background peer-checked:border-foreground hover:border-foreground/30">
+                      {name}
+                    </div>
+                  </label>
+                ))}
+              </div>
             </div>
           </div>
           <div className="space-y-2">

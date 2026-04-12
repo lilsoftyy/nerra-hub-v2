@@ -9,6 +9,9 @@ async function insertTask(formData: FormData) {
   const title = formData.get('title') as string;
   if (!title) return { error: 'Tittel er påkrevd' };
 
+  const estimatedHours = formData.get('estimated_hours') as string;
+  const assigneeEmail = formData.get('assignee_email') as string;
+
   const { error } = await supabase.from('tasks').insert({
     id: uuidv7(),
     title,
@@ -17,6 +20,9 @@ async function insertTask(formData: FormData) {
     category: (formData.get('category') as string) || null,
     company_id: (formData.get('company_id') as string) || null,
     due_date: (formData.get('due_date') as string) || null,
+    start_date: new Date().toISOString(),
+    estimated_hours: estimatedHours ? parseFloat(estimatedHours) : null,
+    assignee_agent: assigneeEmail || null,
   });
 
   if (error) return { error: error.message };
@@ -49,6 +55,9 @@ export async function updateTask(taskId: string, formData: FormData) {
   const title = formData.get('title') as string;
   if (!title) return { error: 'Tittel er påkrevd' };
 
+  const estimatedHours = formData.get('estimated_hours') as string;
+  const assigneeEmail = formData.get('assignee_email') as string;
+
   const { error } = await supabase.from('tasks').update({
     title,
     description: (formData.get('description') as string) || null,
@@ -56,8 +65,24 @@ export async function updateTask(taskId: string, formData: FormData) {
     category: (formData.get('category') as string) || null,
     company_id: (formData.get('company_id') as string) || null,
     due_date: (formData.get('due_date') as string) || null,
+    estimated_hours: estimatedHours ? parseFloat(estimatedHours) : null,
+    assignee_agent: assigneeEmail || null,
   }).eq('id', taskId);
 
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function updateTaskDueDate(taskId: string, dueDate: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from('tasks').update({ due_date: dueDate }).eq('id', taskId);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
+export async function updateTaskDates(taskId: string, startDate: string, dueDate: string) {
+  const supabase = await createClient();
+  const { error } = await supabase.from('tasks').update({ start_date: startDate, due_date: dueDate }).eq('id', taskId);
   if (error) return { error: error.message };
   return { success: true };
 }

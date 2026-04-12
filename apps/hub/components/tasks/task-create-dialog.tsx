@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/shared/toast-provider';
 import { taskPriorityLabels, taskCategoryLabels } from '@/lib/labels';
+import { TEAM_MEMBERS } from '@/lib/constants';
 import { selectClassName } from '@/lib/ui-utils';
 import { QuickDatePicker } from '@/components/tasks/quick-date-picker';
 import { createTaskFromDialog } from '@/app/(app)/tasks/actions';
@@ -75,7 +76,7 @@ export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
           <Label>Frist</Label>
           <QuickDatePicker />
         </div>
-        <div className="grid grid-cols-2 gap-3">
+        <div className="grid grid-cols-3 gap-3">
           <div className="space-y-2">
             <Label htmlFor="new-category">Kategori</Label>
             <select id="new-category" name="category" defaultValue="" className={selectClassName}>
@@ -86,14 +87,31 @@ export function TaskCreateDialog({ companies }: TaskCreateDialogProps) {
             </select>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="new-company">Kontakt</Label>
-            <select id="new-company" name="company_id" defaultValue="" className={selectClassName}>
-              <option value="">Ingen</option>
-              {companies.map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-            </select>
+            <Label htmlFor="new-hours">Timer</Label>
+            <Input id="new-hours" name="estimated_hours" type="number" min="0.5" step="0.5" placeholder="f.eks. 6" />
           </div>
+          <div className="space-y-2">
+            <Label>Ansvarlig</Label>
+            <div className="flex gap-1">
+              {Object.entries(TEAM_MEMBERS).map(([email, name]) => (
+                <label key={email} className="flex-1">
+                  <input type="radio" name="assignee_email" value={email} className="sr-only peer" />
+                  <div className="flex items-center justify-center rounded-lg border py-1.5 text-xs font-medium text-muted-foreground cursor-pointer transition-all duration-150 peer-checked:bg-foreground peer-checked:text-background peer-checked:border-foreground hover:border-foreground/30">
+                    {name}
+                  </div>
+                </label>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="new-company">Kontakt</Label>
+          <select id="new-company" name="company_id" defaultValue="" className={selectClassName}>
+            <option value="">Ingen</option>
+            {companies.map((c) => (
+              <option key={c.id} value={c.id}>{c.name}</option>
+            ))}
+          </select>
         </div>
         <Button type="submit" size="sm" className="w-full" disabled={saving}>
           {saving ? 'Oppretter...' : 'Opprett'}

@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { KanbanBoard } from '@/components/tasks/kanban-board';
-import { TaskTimeline } from '@/components/tasks/task-timeline';
+import { TaskViewSwitcher } from '@/components/tasks/task-view-switcher';
 
 export default async function TasksPage() {
   const supabase = await createClient();
@@ -8,7 +7,7 @@ export default async function TasksPage() {
   const [tasksResult, companiesResult] = await Promise.all([
     supabase
       .from('tasks')
-      .select('id, title, description, status, priority, category, due_date, created_at, company_id, companies(name)')
+      .select('id, title, description, status, priority, category, due_date, start_date, created_at, estimated_hours, assignee_agent, company_id, companies(name)')
       .in('status', ['open', 'in_progress', 'done'])
       .order('due_date', { ascending: true, nullsFirst: false }),
     supabase
@@ -18,7 +17,7 @@ export default async function TasksPage() {
       .order('name'),
   ]);
 
-  const kanbanTasks = (tasksResult.data ?? []).map((t) => ({
+  const tasks = (tasksResult.data ?? []).map((t) => ({
     ...t,
     companies: t.companies as unknown as { name: string } | null,
   }));
@@ -28,27 +27,10 @@ export default async function TasksPage() {
     name: c.name,
   }));
 
-  const timelineTasks = kanbanTasks.map((t) => ({
-    id: t.id,
-    title: t.title,
-    due_date: t.due_date,
-    created_at: t.created_at,
-    priority: t.priority,
-    status: t.status,
-    category: t.category,
-    companies: t.companies,
-  }));
-
   return (
     <div className="space-y-6">
       <h1 className="text-xl font-semibold tracking-tight">Oppgaver</h1>
-
-      <KanbanBoard tasks={kanbanTasks} companies={companies} />
-
-      <div>
-        <h2 className="mb-3 text-sm font-medium text-muted-foreground">Tidslinje</h2>
-        <TaskTimeline tasks={timelineTasks} />
-      </div>
+      <TaskViewSwitcher tasks={tasks} companies={companies} />
     </div>
   );
 }
