@@ -17,6 +17,11 @@ export const TEAM_MEMBERS: Record<string, string> = {
   'martin@nerra.no': 'Martin',
 };
 
+export const TEAM_AVATARS: Record<string, string> = {
+  'magnus@nerra.no': '/avatar-magnus.png',
+  'martin@nerra.no': '/avatar-martin.png',
+};
+
 /** Allowed email domain for Hub access */
 export const ALLOWED_DOMAIN = 'nerra.no';
 

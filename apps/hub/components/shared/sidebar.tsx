@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { TEAM_MEMBERS, TEAM_AVATARS } from '@/lib/constants';
 import {
   LayoutDashboard,
   Inbox,
@@ -55,6 +56,8 @@ interface SidebarProps {
 
 export function Sidebar({ userEmail, showLogout }: SidebarProps) {
   const pathname = usePathname();
+  const userName = TEAM_MEMBERS[userEmail] ?? userEmail.split('@')[0] ?? '';
+  const avatarSrc = TEAM_AVATARS[userEmail] ?? null;
 
   return (
     <aside className="flex h-screen w-44 flex-col bg-background">
@@ -103,14 +106,24 @@ export function Sidebar({ userEmail, showLogout }: SidebarProps) {
       </nav>
 
       {/* User section */}
-      <div className="border-t px-3 py-3">
-        <div className="flex items-center justify-between px-2">
-          <span className="truncate text-[12px] text-muted-foreground">
-            {userEmail}
-          </span>
-          {showLogout && (
-            <LogoutAction />
+      <div className="px-3 py-3">
+        <div className="flex flex-col items-center gap-2 px-2">
+          {avatarSrc && (
+            <img
+              src={avatarSrc}
+              alt={userName}
+              className="h-20 w-auto opacity-70"
+              style={{ filter: 'grayscale(0.1)' }}
+            />
           )}
+          <div className="flex items-center justify-between w-full">
+            <span className="truncate text-[12px] text-muted-foreground">
+              {userName}
+            </span>
+            {showLogout && (
+              <LogoutAction />
+            )}
+          </div>
         </div>
       </div>
     </aside>
