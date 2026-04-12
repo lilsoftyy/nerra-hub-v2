@@ -8,8 +8,8 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/shared/toast-provider';
-import { addContact, updateContact } from '@/app/(app)/customers/actions';
-import { Search, Loader2 } from 'lucide-react';
+import { addContact, updateContact, setPrimaryContact } from '@/app/(app)/customers/actions';
+import { Search, Loader2, Star } from 'lucide-react';
 
 interface Contact {
   id: string;
@@ -189,12 +189,22 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                   className="flex items-start justify-between p-3 rounded-lg border cursor-pointer transition-[background-color] duration-150 hover:bg-muted/30"
                   onClick={() => setEditingId(contact.id)}
                 >
-                  <div>
+                  <div className="flex items-start gap-2">
+                    <button
+                      onClick={async (e) => {
+                        e.stopPropagation();
+                        if (contact.is_primary) return;
+                        await setPrimaryContact(contact.id, companyId);
+                        router.refresh();
+                      }}
+                      className={`mt-0.5 shrink-0 transition-[color] duration-150 ${contact.is_primary ? 'text-amber-400' : 'text-muted-foreground/20 hover:text-amber-300'}`}
+                      title={contact.is_primary ? 'Hovedkontakt' : 'Sett som hovedkontakt'}
+                    >
+                      <Star className="size-4" strokeWidth={1.75} fill={contact.is_primary ? 'currentColor' : 'none'} />
+                    </button>
+                    <div>
                     <p className="font-medium">
                       {contact.full_name}
-                      {contact.is_primary && (
-                        <Badge variant="outline" className="ml-2 text-xs">Hovedkontakt</Badge>
-                      )}
                     </p>
                     {contact.role && <p className="text-sm text-muted-foreground">{contact.role}</p>}
                     {contact.email && <p className="text-sm">{contact.email}</p>}
@@ -202,6 +212,7 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                     {!contact.email && !contact.phone && (
                       <p className="text-xs text-muted-foreground/40 mt-1">Trykk for å redigere eller bruk AI-søk</p>
                     )}
+                    </div>
                   </div>
                   <button
                     onClick={(e) => { e.stopPropagation(); enrichContact(contact); }}

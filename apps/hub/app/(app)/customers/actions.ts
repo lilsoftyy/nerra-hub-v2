@@ -227,6 +227,16 @@ export async function deleteCompany(companyId: string) {
   return { success: true };
 }
 
+export async function setPrimaryContact(contactId: string, companyId: string) {
+  const supabase = await createClient();
+  // Fjern primary fra alle kontakter i firmaet
+  await supabase.from('contacts').update({ is_primary: false }).eq('company_id', companyId);
+  // Sett den valgte som primary
+  const { error } = await supabase.from('contacts').update({ is_primary: true }).eq('id', contactId);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
 export async function deleteContact(contactId: string) {
   const supabase = await createClient();
 
