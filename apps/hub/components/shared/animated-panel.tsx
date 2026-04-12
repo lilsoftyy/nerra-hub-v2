@@ -25,17 +25,21 @@ export function AnimatedPanel({
 }: AnimatedPanelProps) {
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
-  const [position, setPosition] = useState<{ top: number; left: number; right: number } | null>(null);
+  const [position, setPosition] = useState<{ top?: number; bottom?: number; left: number; right: number; openAbove: boolean } | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (open && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
+      const spaceBelow = window.innerHeight - rect.bottom;
+      const openAbove = spaceBelow < 300;
       setPosition({
-        top: rect.bottom + 8,
+        top: openAbove ? undefined : rect.bottom + 8,
+        bottom: openAbove ? window.innerHeight - rect.top + 8 : undefined,
         left: rect.left,
         right: window.innerWidth - rect.right,
+        openAbove,
       });
       requestAnimationFrame(() => setMounted(true));
     } else {
@@ -78,14 +82,16 @@ export function AnimatedPanel({
 
   const isVisible = mounted && !closing;
 
-  const transformOrigin =
-    anchor === 'bottom-right' ? 'top right' :
-    anchor === 'bottom-left' ? 'top left' : 'top center';
+  const above = position?.openAbove ?? false;
+
+  const transformOrigin = above
+    ? (anchor === 'bottom-right' ? 'bottom right' : anchor === 'bottom-left' ? 'bottom left' : 'bottom center')
+    : (anchor === 'bottom-right' ? 'top right' : anchor === 'bottom-left' ? 'top left' : 'top center');
 
   const panelPosition: React.CSSProperties = position ? (
-    anchor === 'bottom-right' ? { top: position.top, right: position.right } :
-    anchor === 'bottom-left' ? { top: position.top, left: position.left } :
-    { top: position.top, left: position.left }
+    anchor === 'bottom-right'
+      ? { ...(above ? { bottom: position.bottom } : { top: position.top }), right: position.right }
+      : { ...(above ? { bottom: position.bottom } : { top: position.top }), left: position.left }
   ) : {};
 
   return (
