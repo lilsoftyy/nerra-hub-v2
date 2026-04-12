@@ -24,7 +24,7 @@ export function Tooltip({ label, children }: TooltipProps) {
     <div className="relative inline-block" onMouseEnter={show} onMouseLeave={hide}>
       {children}
       {visible && (
-        <div className="absolute left-1/2 top-full z-50 mt-2 -translate-x-1/2 whitespace-nowrap text-[11px] text-muted-foreground/70">
+        <div className="absolute left-1/2 bottom-full z-50 mb-2 -translate-x-1/2 whitespace-nowrap text-[11px] text-muted-foreground/70">
           {label}
         </div>
       )}
