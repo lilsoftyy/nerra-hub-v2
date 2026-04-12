@@ -30,9 +30,9 @@ export async function runLeadResearchAgent(country: string): Promise<LeadResearc
   let firecrawlData = '';
   try {
     const queries = [
+      `fasadevask selskaper ${country}`,
       `facade cleaning companies ${country}`,
-      `Fassadenreinigung Unternehmen ${country}`,
-      `building maintenance facade wash ${country}`,
+      `building maintenance exterior cleaning ${country}`,
     ];
     const results = await Promise.all(queries.map((q) => firecrawlSearch(q, 5)));
     firecrawlData = results.filter(Boolean).join('\n\n---\n\n');
