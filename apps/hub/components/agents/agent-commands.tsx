@@ -32,8 +32,9 @@ function ResearchPanel({
   title: string; agentName: string; label: string; companies: Company[]; onRun: (agent: string, companyId: string, label: string) => void;
 }) {
   const [selected, setSelected] = useState('');
+  const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); if (selected) onRun(agentName, selected, label); };
   return (
-    <div className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <h3 className="text-base font-semibold">{title}</h3>
       <div className="space-y-2">
         <Label>Velg firma</Label>
@@ -42,17 +43,18 @@ function ResearchPanel({
           {companies.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
         </select>
       </div>
-      <Button size="sm" className="w-full" disabled={!selected} onClick={() => { onRun(agentName, selected, label); }}>
+      <Button type="submit" size="sm" className="w-full" disabled={!selected}>
         Kjør
       </Button>
-    </div>
+    </form>
   );
 }
 
 function LeadResearchPanel({ onRun }: { onRun: (country: string) => void }) {
   const [country, setCountry] = useState('');
+  const handleSubmit = (e: React.FormEvent) => { e.preventDefault(); if (country.trim()) onRun(country.trim()); };
   return (
-    <div className="space-y-3">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <h3 className="text-base font-semibold">Lead Research</h3>
       <div className="space-y-2">
         <Label>Land</Label>
@@ -62,12 +64,13 @@ function LeadResearchPanel({ onRun }: { onRun: (country: string) => void }) {
           onChange={(e) => setCountry(e.target.value)}
           placeholder="F.eks. Tyskland, Nederland, Østerrike"
           className={selectClassName}
+          autoFocus
         />
       </div>
-      <Button size="sm" className="w-full" disabled={!country.trim()} onClick={() => onRun(country.trim())}>
+      <Button type="submit" size="sm" className="w-full" disabled={!country.trim()}>
         Kjør
       </Button>
-    </div>
+    </form>
   );
 }
 
