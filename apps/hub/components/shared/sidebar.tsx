@@ -112,13 +112,13 @@ export function Sidebar({ userEmail, showLogout }: SidebarProps) {
             <img
               src={avatarSrc}
               alt={userName}
-              className="h-20 w-auto opacity-70"
+              className="h-40 w-auto opacity-70"
               style={{ filter: 'grayscale(0.1)' }}
             />
           )}
           <div className="flex items-center justify-between w-full">
             <span className="truncate text-[12px] text-muted-foreground">
-              {userName}
+              {userEmail}
             </span>
             {showLogout && (
               <LogoutAction />
