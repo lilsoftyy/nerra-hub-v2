@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/table';
 import { phaseLabels } from '@/lib/labels';
 import { phaseDotColors } from '@/lib/constants';
+import { CompanyRowActions } from '@/components/companies/company-row-actions';
 
 export default async function CompaniesPage({
   searchParams,
@@ -55,6 +56,7 @@ export default async function CompaniesPage({
               <TableHead>Ansatte</TableHead>
               <TableHead>Nettside</TableHead>
               <TableHead>Opprettet</TableHead>
+              <TableHead className="w-10" />
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -97,12 +99,15 @@ export default async function CompaniesPage({
                     <TableCell className="text-sm text-muted-foreground">
                       {new Intl.DateTimeFormat('nb-NO', { day: 'numeric', month: 'short' }).format(new Date(company.created_at))}
                     </TableCell>
+                    <TableCell>
+                      <CompanyRowActions companyId={company.id} companyName={company.name} />
+                    </TableCell>
                   </TableRow>
                 );
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={6} className="text-center text-muted-foreground py-12">
+                <TableCell colSpan={7} className="text-center text-muted-foreground py-12">
                   Ingen firma funnet.
                 </TableCell>
               </TableRow>

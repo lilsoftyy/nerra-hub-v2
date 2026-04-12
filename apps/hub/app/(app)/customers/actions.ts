@@ -217,6 +217,16 @@ export async function createContactFromLookup(data: {
   return { success: true, companyId };
 }
 
+export async function deleteCompany(companyId: string) {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('companies')
+    .update({ deleted_at: new Date().toISOString() })
+    .eq('id', companyId);
+  if (error) return { error: error.message };
+  return { success: true };
+}
+
 export async function deleteContact(contactId: string) {
   const supabase = await createClient();
 
