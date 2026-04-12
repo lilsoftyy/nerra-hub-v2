@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -47,6 +47,7 @@ const COLUMNS = [
 export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps) {
   const router = useRouter();
   const [tasks, setTasks] = useState(initialTasks);
+  useEffect(() => { setTasks(initialTasks); }, [initialTasks]);
   const [draggedTaskId, setDraggedTaskId] = useState<string | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
   const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
