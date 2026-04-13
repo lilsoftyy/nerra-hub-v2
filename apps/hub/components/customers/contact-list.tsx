@@ -7,8 +7,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/shared/toast-provider';
+import { Checkbox } from '@/components/ui/checkbox';
 import { addContact, updateContact, setPrimaryContact } from '@/app/(app)/customers/actions';
-import { Search, Loader2, Star } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 
 interface Contact {
   id: string;
@@ -159,6 +160,19 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                       />
                     </div>
                   </div>
+                  <div className="flex items-center gap-2 py-1">
+                    <Checkbox
+                      id={`primary_${contact.id}`}
+                      defaultChecked={contact.is_primary}
+                      onCheckedChange={async (checked) => {
+                        if (checked) {
+                          await setPrimaryContact(contact.id, companyId);
+                          router.refresh();
+                        }
+                      }}
+                    />
+                    <Label htmlFor={`primary_${contact.id}`} className="text-xs text-muted-foreground">Hovedkontakt</Label>
+                  </div>
                   <div className="flex items-center justify-between">
                     <button
                       type="button"
@@ -188,24 +202,12 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                   className="flex items-start justify-between p-3 rounded-lg border cursor-pointer transition-[background-color] duration-150 hover:bg-muted/30"
                   onClick={() => setEditingId(contact.id)}
                 >
-                  <div className="flex items-start gap-2">
-                    <button
-                      onMouseDown={(e) => e.stopPropagation()}
-                      onClick={async (e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        if (contact.is_primary) return;
-                        await setPrimaryContact(contact.id, companyId);
-                        router.refresh();
-                      }}
-                      className={`mt-0.5 shrink-0 transition-[color] duration-150 ${contact.is_primary ? 'text-amber-400' : 'text-muted-foreground/20 hover:text-amber-300'}`}
-                      title={contact.is_primary ? 'Hovedkontakt' : 'Sett som hovedkontakt'}
-                    >
-                      <Star className="size-4" strokeWidth={1.75} fill={contact.is_primary ? 'currentColor' : 'none'} />
-                    </button>
-                    <div>
+                  <div>
                     <p className="font-medium">
                       {contact.full_name}
+                      {contact.is_primary && (
+                        <span className="ml-2 text-[10px] text-muted-foreground/50">hovedkontakt</span>
+                      )}
                     </p>
                     {contact.role && <p className="text-sm text-muted-foreground">{contact.role}</p>}
                     {contact.email && <p className="text-sm">{contact.email}</p>}
@@ -213,7 +215,6 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                     {!contact.email && !contact.phone && (
                       <p className="text-xs text-muted-foreground/40 mt-1">Trykk for å redigere eller bruk AI-søk</p>
                     )}
-                    </div>
                   </div>
                   <button
                     onClick={(e) => { e.stopPropagation(); enrichContact(contact); }}
