@@ -36,6 +36,7 @@ interface Person {
   company_phase: string | null;
   company_country: string | null;
   contact_type: string;
+  is_primary: boolean;
 }
 
 const contactTypeLabels: Record<string, string> = {

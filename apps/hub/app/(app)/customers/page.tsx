@@ -24,6 +24,7 @@ export default async function CustomersPage() {
       company_phase: company?.phase ?? null,
       company_country: company?.country ?? null,
       contact_type: (c as Record<string, unknown>).contact_type as string ?? 'contact',
+      is_primary: c.is_primary,
     };
   });
 
