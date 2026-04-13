@@ -66,6 +66,13 @@ ${company.facade_team_size ? `- Fasadeteam: ${company.facade_team_size} personer
 ${contactInfo ? `- Kontakter: ${contactInfo}` : ''}
 ${company.notes ? `- Notater: ${company.notes}` : ''}
 
+## Søkestrategi
+
+1. Søk etter selskapets nettside og generell info
+2. For norske selskaper: søk i Brønnøysundregisteret (proff.no eller brreg.no) for org.nr og offisielle data
+3. For andre land: søk i tilsvarende selskapsregister
+4. Søk etter nøkkelpersoner på LinkedIn
+
 ## VIKTIG: Format og stil
 
 Skriv en KORT, LESBAR rapport for en forretningsperson.
@@ -77,7 +84,18 @@ Regler:
 4. Skriv i hele setninger, IKKE bare punktlister
 5. ALLTID norsk bokmål med korrekte æ, ø, å — uansett hvilket språk kildene er på. Oversett dansk/svensk/engelsk til norsk
 6. IKKE inkluder regulatorisk info, kilder eller tekniske detaljer
-7. Fokus: hvem er de, hva gjør de, og er de relevante for Nerra?`;
+7. Fokus: hvem er de, hva gjør de, og er de relevante for Nerra?
+
+## VIKTIG: Strukturerte data
+
+Etter rapporten, legg til en blokk med strukturerte data som starter med "---METADATA---" på en egen linje, fulgt av JSON:
+
+\`\`\`
+---METADATA---
+{"website":"https://example.com","org_number":"123456789","employee_count":500,"operational_area":"Norge"}
+\`\`\`
+
+Inkluder KUN felter du faktisk fant. Ikke gjett.`;
 
   const message = await anthropic.messages.create({
     model: 'claude-sonnet-4-20250514',
@@ -92,10 +110,30 @@ Regler:
     messages: [{ role: 'user', content: prompt }],
   });
 
-  const { content, summary } = cleanAgentContent(message);
+  const { content: rawContent, summary } = cleanAgentContent(message);
 
-  if (!content) {
+  if (!rawContent) {
     return { document_id: null, error: 'Agenten genererte ingen tekst' };
+  }
+
+  // Parse metadata og oppdater firma
+  let content = rawContent;
+  const metadataMatch = rawContent.match(/---METADATA---\s*\n?\s*(\{[\s\S]*?\})/);
+  if (metadataMatch) {
+    content = rawContent.replace(/---METADATA---[\s\S]*$/, '').trim();
+    try {
+      const meta = JSON.parse(metadataMatch[1]!) as Record<string, unknown>;
+      const updateData: Record<string, unknown> = {};
+      if (meta.website && !company.website) updateData.website = meta.website;
+      if (meta.org_number && !company.org_number) updateData.org_number = meta.org_number;
+      if (meta.employee_count && !company.employee_count) updateData.employee_count = meta.employee_count;
+      if (meta.operational_area && !company.operational_area) updateData.operational_area = meta.operational_area;
+      if (Object.keys(updateData).length > 0) {
+        await supabase.from('companies').update(updateData).eq('id', companyId);
+      }
+    } catch {
+      // Metadata-parsing feilet — ignorer
+    }
   }
 
   // Save document
