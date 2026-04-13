@@ -205,10 +205,10 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                 >
                   <div>
                     <p className="font-medium">
-                      {contact.is_primary && (
-                        <Badge variant="outline" className="mr-2 text-[10px]">Hovedkontakt</Badge>
-                      )}
                       {contact.full_name}
+                      {contact.is_primary && (
+                        <Badge variant="outline" className="ml-2 text-[10px]">Hovedkontakt</Badge>
+                      )}
                     </p>
                     {contact.role && <p className="text-sm text-muted-foreground">{contact.role}</p>}
                     {contact.email && <p className="text-sm">{contact.email}</p>}
