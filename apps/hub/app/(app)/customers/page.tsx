@@ -30,7 +30,10 @@ export default async function CustomersPage() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-xl font-semibold tracking-tight">Personer</h1>
+        <div className="flex items-baseline gap-2">
+          <h1 className="text-xl font-semibold tracking-tight">Personer</h1>
+          <span className="text-sm text-muted-foreground tabular-nums">{persons.length}</span>
+        </div>
         <div className="flex items-center gap-2">
           <AIContactLookup />
           <ManualAddDialog />

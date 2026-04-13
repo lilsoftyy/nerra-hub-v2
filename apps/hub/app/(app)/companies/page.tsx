@@ -35,7 +35,10 @@ export default async function CompaniesPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold tracking-tight">Firma</h1>
+      <div className="flex items-baseline gap-2">
+        <h1 className="text-xl font-semibold tracking-tight">Firma</h1>
+        <span className="text-sm text-muted-foreground tabular-nums">{companies?.length ?? 0}</span>
+      </div>
 
       <form>
         <Input

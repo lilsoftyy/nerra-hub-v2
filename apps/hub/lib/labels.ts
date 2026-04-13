@@ -1,6 +1,6 @@
 export const phaseLabels: Record<string, string> = {
   contact: 'Kontakt',
-  lead: 'Prospekt',
+  lead: 'Lead',
   qualification: 'Kvalifisering',
   sales: 'Salg',
   onboarding: 'Onboarding',
