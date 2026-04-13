@@ -33,7 +33,7 @@ export function PhaseSelector({ companyId, currentPhase }: { companyId: string; 
     <AnimatedPanel
       open={open}
       onClose={() => setOpen(false)}
-      width={200}
+      width={160}
       anchor="bottom-right"
       trigger={
         <button
@@ -47,17 +47,17 @@ export function PhaseSelector({ companyId, currentPhase }: { companyId: string; 
         </button>
       }
     >
-      <div className="space-y-0.5">
+      <div className="-m-2">
         {PHASES.map((phase) => (
           <button
             key={phase}
             onClick={() => handleChange(phase)}
             disabled={updating}
-            className={`flex w-full items-center gap-2.5 rounded-lg px-3 py-1.5 text-sm transition-[background-color] duration-150 ${
-              phase === currentPhase ? 'bg-foreground/[0.05] font-medium' : 'hover:bg-muted/50'
+            className={`flex w-full items-center gap-2 px-3 py-1.5 text-xs transition-[background-color] duration-150 ${
+              phase === currentPhase ? 'font-medium text-foreground' : 'text-muted-foreground hover:text-foreground'
             }`}
           >
-            <span className={`size-2 rounded-full ${phaseDotColors[phase] ?? 'bg-neutral-400'}`} />
+            <span className={`size-1.5 rounded-full ${phaseDotColors[phase] ?? 'bg-neutral-400'}`} />
             {phaseLabels[phase] ?? phase}
           </button>
         ))}
