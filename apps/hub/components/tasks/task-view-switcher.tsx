@@ -66,7 +66,7 @@ export function TaskViewSwitcher({ tasks, companies }: TaskViewSwitcherProps) {
       {view === 'board' && <KanbanBoard tasks={tasks} companies={companies} />}
       {view === 'list' && <TaskListView tasks={tasks} companies={companies} />}
 
-      <div>
+      <div className="hidden md:block">
         <h2 className="mb-3 text-sm font-medium text-muted-foreground">Tidslinje</h2>
         <TaskTimeline tasks={timelineTasks} />
       </div>
