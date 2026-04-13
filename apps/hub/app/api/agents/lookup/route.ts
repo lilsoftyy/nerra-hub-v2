@@ -22,8 +22,9 @@ export async function POST(request: NextRequest) {
     let webData = '';
     try {
       const results = await Promise.all([
-        firecrawlSearch(`${name} ${company} LinkedIn`, 3),
-        firecrawlSearch(`${company} facility management building maintenance cleaning company`, 3),
+        firecrawlSearch(`${name} ${company}`, 3),
+        firecrawlSearch(`${name} ${company} kontakt telefon email`, 3),
+        firecrawlSearch(`${company} ansatte team`, 2),
       ]);
       webData = results.filter(Boolean).join('\n\n---\n\n');
     } catch {
