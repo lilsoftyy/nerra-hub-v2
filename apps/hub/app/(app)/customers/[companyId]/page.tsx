@@ -12,7 +12,7 @@ import { ContactList } from '@/components/customers/contact-list';
 import { QualificationResponse } from '@/components/customers/qualification-response';
 import { SendQualificationButton } from '@/components/customers/send-qualification-button';
 import Link from 'next/link';
-import { FileText } from 'lucide-react';
+import { FileText, Check } from 'lucide-react';
 
 export default async function CustomerDetailPage({
   params,
@@ -123,7 +123,7 @@ export default async function CustomerDetailPage({
                   companyName={company.name}
                 />
                 {documents.some((d) => d.kind === 'research') && (
-                  <span className="text-xs text-emerald-600">Utført</span>
+                  <Check className="size-4 text-emerald-500" strokeWidth={2.5} />
                 )}
               </div>
               <div className="flex items-center gap-2">
@@ -134,7 +134,7 @@ export default async function CustomerDetailPage({
                   companyName={company.name}
                 />
                 {documents.some((d) => d.kind === 'customer_report') && (
-                  <span className="text-xs text-emerald-600">Utført</span>
+                  <Check className="size-4 text-emerald-500" strokeWidth={2.5} />
                 )}
               </div>
             </CardContent>
