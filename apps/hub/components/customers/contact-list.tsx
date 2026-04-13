@@ -190,8 +190,10 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                 >
                   <div className="flex items-start gap-2">
                     <button
+                      onMouseDown={(e) => e.stopPropagation()}
                       onClick={async (e) => {
                         e.stopPropagation();
+                        e.preventDefault();
                         if (contact.is_primary) return;
                         await setPrimaryContact(contact.id, companyId);
                         router.refresh();
