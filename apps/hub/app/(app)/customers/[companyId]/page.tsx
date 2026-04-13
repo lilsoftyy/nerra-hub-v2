@@ -115,7 +115,7 @@ export default async function CustomerDetailPage({
               <CardTitle className="text-base">Handlinger</CardTitle>
             </CardHeader>
             <CardContent className="space-y-1 -mt-2">
-              <SendQualificationButton contacts={contacts ?? []} />
+              <SendQualificationButton key={(contacts ?? []).find(c => c.is_primary)?.id ?? 'no-primary'} contacts={contacts ?? []} />
               <Link
                 href={`/contracts?company=${company.id}`}
                 className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-[background-color] duration-150 hover:bg-muted/50"

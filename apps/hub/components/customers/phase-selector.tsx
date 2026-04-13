@@ -5,11 +5,10 @@ import { useRouter } from 'next/navigation';
 import { AnimatedPanel } from '@/components/shared/animated-panel';
 import { useToast } from '@/components/shared/toast-provider';
 import { updateCompanyPhase } from '@/app/(app)/customers/actions';
-import { phaseLabels } from '@/lib/labels';
+import { phaseLabels, phaseColors } from '@/lib/labels';
 import { PHASES, phaseDotColors } from '@/lib/constants';
 import { ChevronDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
-import { phaseColors } from '@/lib/labels';
 
 export function PhaseSelector({ companyId, currentPhase }: { companyId: string; currentPhase: string }) {
   const router = useRouter();
@@ -17,8 +16,19 @@ export function PhaseSelector({ companyId, currentPhase }: { companyId: string; 
   const [open, setOpen] = useState(false);
   const [updating, setUpdating] = useState(false);
 
+  const currentIndex = PHASES.indexOf(currentPhase as typeof PHASES[number]);
+
   const handleChange = async (newPhase: string) => {
     if (newPhase === currentPhase || updating) return;
+
+    const newIndex = PHASES.indexOf(newPhase as typeof PHASES[number]);
+    if (newIndex < currentIndex) {
+      const confirmed = window.confirm(
+        `Flytte fra "${phaseLabels[currentPhase] ?? currentPhase}" tilbake til "${phaseLabels[newPhase] ?? newPhase}"?`
+      );
+      if (!confirmed) return;
+    }
+
     setUpdating(true);
     const result = await updateCompanyPhase(companyId, newPhase);
     if (result?.error) {

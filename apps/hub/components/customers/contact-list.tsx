@@ -164,7 +164,8 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                   <div className="flex items-center gap-2 py-1">
                     <Checkbox
                       id={`primary_${contact.id}`}
-                      defaultChecked={contact.is_primary}
+                      checked={contact.is_primary}
+                      disabled={contact.is_primary}
                       onCheckedChange={async (checked) => {
                         if (checked) {
                           await setPrimaryContact(contact.id, companyId);
