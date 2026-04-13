@@ -120,7 +120,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Søk..."
-          className="max-w-sm"
+          className="w-full md:max-w-sm"
         />
         {selectedEmails.length > 0 && (
           <AnimatedPanel
@@ -154,7 +154,54 @@ export function PersonsList({ persons }: { persons: Person[] }) {
         )}
       </div>
 
-      <div className="rounded-xl">
+      {/* Mobilvisning — kort */}
+      <div className="space-y-2 md:hidden">
+        {filtered.length > 0 ? (
+          filtered.map((p) => {
+            const typeLabel = contactTypeLabels[p.contact_type] ?? 'Kontakt';
+            const typeColor = contactTypeColors[p.contact_type] ?? '';
+            return (
+              <div
+                key={p.id}
+                className="rounded-xl border p-3 transition-[background-color] duration-150 active:bg-muted/30"
+              >
+                <div className="flex items-start justify-between">
+                  <div className="min-w-0 flex-1">
+                    <PersonDetailTrigger person={p} />
+                    {p.company_name && p.company_id && (
+                      <Link href={`/customers/${p.company_id}`} className="text-xs text-muted-foreground">
+                        {p.company_name}
+                      </Link>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    {p.is_primary && (
+                      <Badge variant="outline" className="text-[10px]">Hoved</Badge>
+                    )}
+                    {typeColor ? (
+                      <Badge className={`text-[10px] ${typeColor}`}>{typeLabel}</Badge>
+                    ) : (
+                      <Badge variant="outline" className="text-[10px]">{typeLabel}</Badge>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-1.5 flex items-center gap-3 text-xs text-muted-foreground">
+                  {p.email && (
+                    <a href={`mailto:${p.email}`} className="text-primary hover:underline truncate">
+                      {p.email}
+                    </a>
+                  )}
+                  {p.phone && <span>{p.phone}</span>}
+                </div>
+              </div>
+            );
+          })
+        ) : (
+          <p className="text-center text-muted-foreground py-8">Ingen personer funnet.</p>
+        )}
+      </div>
+
+      <div className="hidden md:block rounded-xl">
         <Table>
           <TableHeader>
             <TableRow>
