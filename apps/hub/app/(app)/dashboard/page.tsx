@@ -53,6 +53,7 @@ export default async function DashboardPage() {
   const todayStr = today.toISOString().split('T')[0];
 
   const [
+    contactsResult,
     companiesResult,
     openTasksResult,
     pendingProposalsResult,
@@ -65,6 +66,9 @@ export default async function DashboardPage() {
     activityResult,
     companiesListResult,
   ] = await Promise.all([
+    supabase
+      .from('contacts')
+      .select('id', { count: 'exact', head: true }),
     supabase
       .from('companies')
       .select('id', { count: 'exact', head: true })
@@ -130,6 +134,7 @@ export default async function DashboardPage() {
 
   const calendarEvents = await fetchUpcomingEvents(5);
 
+  const contactsCount = contactsResult.count ?? 0;
   const activeCompaniesCount = companiesResult.count ?? 0;
   const openTasksCount = openTasksResult.count ?? 0;
   const pendingProposalsCount = pendingProposalsResult.count ?? 0;
@@ -157,10 +162,10 @@ export default async function DashboardPage() {
   const todayHasContent = todayTasks.length > 0 || overdueTasks.length > 0 || pendingProposalsCount > 0 || todayEvents.length > 0;
 
   const stats = [
-    { label: 'Personer', value: activeCompaniesCount, href: '/customers' },
+    { label: 'Kontakter', value: contactsCount, href: '/customers' },
+    { label: 'Firma', value: activeCompaniesCount, href: '/companies' },
     { label: 'Åpne oppgaver', value: openTasksCount, href: '/tasks' },
     { label: 'Godkjenninger', value: pendingProposalsCount, href: undefined },
-    { label: 'I opplæring', value: trainingCompaniesCount, href: '/customers' },
   ];
 
   return (
