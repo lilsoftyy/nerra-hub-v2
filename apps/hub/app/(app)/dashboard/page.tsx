@@ -57,7 +57,6 @@ export default async function DashboardPage() {
     companiesResult,
     openTasksResult,
     pendingProposalsResult,
-    trainingCompaniesResult,
     myTasksResult,
     todayTasksResult,
     overdueTasksResult,
@@ -83,11 +82,6 @@ export default async function DashboardPage() {
       .from('proposals')
       .select('id', { count: 'exact', head: true })
       .eq('status', 'pending_approval'),
-    supabase
-      .from('companies')
-      .select('id', { count: 'exact', head: true })
-      .is('deleted_at', null)
-      .eq('phase', 'training'),
     supabase
       .from('tasks')
       .select('id, title, priority, due_date, status, company_id, companies(name)')
@@ -138,7 +132,6 @@ export default async function DashboardPage() {
   const activeCompaniesCount = companiesResult.count ?? 0;
   const openTasksCount = openTasksResult.count ?? 0;
   const pendingProposalsCount = pendingProposalsResult.count ?? 0;
-  const trainingCompaniesCount = trainingCompaniesResult.count ?? 0;
 
   const myTasks = myTasksResult.data ?? [];
   const todayTasks = todayTasksResult.data ?? [];
