@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { ClickableRow } from '@/components/shared/clickable-row';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import {
@@ -30,7 +30,6 @@ type SortKey = 'title' | 'kind' | 'company_name' | 'created_at';
 type SortDir = 'asc' | 'desc';
 
 export function DocumentsList({ documents }: { documents: Document[] }) {
-  const router = useRouter();
   const [search, setSearch] = useState('');
   const [sortKey, setSortKey] = useState<SortKey>('created_at');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
@@ -110,14 +109,10 @@ export function DocumentsList({ documents }: { documents: Document[] }) {
           <TableBody>
             {filtered.length > 0 ? (
               filtered.map((doc) => (
-                <TableRow
+                <ClickableRow
                   key={doc.id}
-                  className="cursor-pointer transition-[background-color] duration-150 hover:bg-primary/[0.04]"
-                  onClick={(e) => {
-                    const target = e.target as HTMLElement;
-                    if (target.closest('a') || target.closest('button')) return;
-                    router.push(`/documents/${doc.id}`);
-                  }}
+                  href={`/documents/${doc.id}`}
+                  className="transition-[background-color] duration-150 hover:bg-primary/[0.04]"
                 >
                   <TableCell>
                     <Link href={`/documents/${doc.id}`} className="text-sm font-medium hover:underline">
@@ -135,7 +130,7 @@ export function DocumentsList({ documents }: { documents: Document[] }) {
                   <TableCell className="text-sm text-muted-foreground tabular-nums">
                     {formatShortDate(doc.created_at)}
                   </TableCell>
-                </TableRow>
+                </ClickableRow>
               ))
             ) : (
               <TableRow>

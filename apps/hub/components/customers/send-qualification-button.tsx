@@ -17,12 +17,10 @@ interface Contact {
 }
 
 interface SendQualificationButtonProps {
-  companyId: string;
-  companyName: string;
   contacts: Contact[];
 }
 
-export function SendQualificationButton({ companyName, contacts }: SendQualificationButtonProps) {
+export function SendQualificationButton({ contacts }: SendQualificationButtonProps) {
   const primaryContact = contacts.find((c) => c.is_primary) ?? contacts[0];
   const email = primaryContact?.email;
   const qualificationUrl = 'https://dwa-qualification.vercel.app';
