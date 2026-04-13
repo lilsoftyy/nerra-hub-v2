@@ -2,10 +2,10 @@ import { createClient } from '@/lib/supabase/server';
 import { notFound } from 'next/navigation';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { PhaseChangeButton } from '@/components/customers/phase-change-button';
+import { PhaseSelector } from '@/components/customers/phase-selector';
 import { PhaseChecklist } from '@/components/customers/phase-checklist';
 import { ActivityLog } from '@/components/shared/activity-log';
-import { GdprSection } from '@/components/customers/gdpr-section';
+import { CompanySettingsMenu } from '@/components/customers/company-settings-menu';
 import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 import { CustomerEditForm } from '@/components/customers/customer-edit-form';
 import { ContactList } from '@/components/customers/contact-list';
@@ -14,8 +14,7 @@ import { CreateContractForm } from '@/components/contracts/create-contract-form'
 import { SendQualificationButton } from '@/components/customers/send-qualification-button';
 import Link from 'next/link';
 import { FileText, FileSignature } from 'lucide-react';
-import { PHASES } from '@/lib/constants';
-import { phaseLabels, phaseColors } from '@/lib/labels';
+import { phaseLabels } from '@/lib/labels';
 
 export default async function CustomerDetailPage({
   params,
@@ -63,8 +62,6 @@ export default async function CustomerDetailPage({
   const qualificationResponse = qualificationResult.data;
   const documents = documentsResult.data ?? [];
 
-  const currentPhaseIndex = (PHASES as readonly string[]).indexOf(company.phase);
-  const nextPhase = currentPhaseIndex < PHASES.length - 1 ? PHASES[currentPhaseIndex + 1] : null;
 
   return (
     <div className="space-y-6">
@@ -73,9 +70,7 @@ export default async function CustomerDetailPage({
         <div>
           <h1 className="text-xl font-semibold tracking-tight">{company.name}</h1>
           <div className="flex items-center gap-3 mt-1">
-            <Badge variant="secondary" className={phaseColors[company.phase] ?? ''}>
-              {phaseLabels[company.phase] ?? company.phase}
-            </Badge>
+            <PhaseSelector companyId={company.id} currentPhase={company.phase} />
             <span className="text-sm text-muted-foreground">{company.country}</span>
             {company.flagged && (
               <Badge variant="destructive">Flagget</Badge>
@@ -95,18 +90,12 @@ export default async function CustomerDetailPage({
         <div className="flex items-center gap-2">
           <Link
             href={`/contracts?company=${company.id}`}
-            className="flex size-12 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]"
+            className="flex size-10 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]"
             title="Opprett kontrakt"
           >
-            <FileSignature className="size-5" strokeWidth={1.75} aria-hidden="true" />
+            <FileSignature className="size-4" strokeWidth={1.75} aria-hidden="true" />
           </Link>
-          {nextPhase && (
-            <PhaseChangeButton
-              companyId={company.id}
-              nextPhase={nextPhase}
-              nextPhaseLabel={phaseLabels[nextPhase] ?? nextPhase}
-            />
-          )}
+          <CompanySettingsMenu companyId={company.id} companyName={company.name} />
         </div>
       </div>
 
@@ -130,7 +119,6 @@ export default async function CustomerDetailPage({
         {/* Sidebar */}
         <div className="space-y-6">
           <PhaseChecklist items={checklistItems ?? []} companyId={company.id} />
-          <GdprSection companyId={company.id} companyName={company.name} />
           <Card>
             <CardHeader>
               <CardTitle className="text-base">AI-agenter</CardTitle>
