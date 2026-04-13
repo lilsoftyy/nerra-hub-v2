@@ -154,7 +154,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
         )}
       </div>
 
-      <div className="rounded-xl border">
+      <div className="rounded-xl">
         <Table>
           <TableHeader>
             <TableRow>

@@ -87,7 +87,7 @@ export function DocumentsList({ documents }: { documents: Document[] }) {
         className="max-w-sm"
       />
 
-      <div className="rounded-xl border">
+      <div className="rounded-xl">
         <Table>
           <TableHeader>
             <TableRow>

@@ -49,7 +49,7 @@ export default async function CompaniesPage({
         />
       </form>
 
-      <div className="rounded-xl border">
+      <div className="rounded-xl">
         <Table>
           <TableHeader>
             <TableRow>
