@@ -32,7 +32,8 @@ export default async function AppLayout({ children }: { children: React.ReactNod
       </a>
       <Sidebar userEmail={userEmail} showLogout={!isDev} />
       <main id="main-content" className="flex-1 overflow-y-auto">
-        <div className="px-10 py-8">
+        <div className="px-4 py-4 md:px-10 md:py-8">
+          <div className="h-14 shrink-0 md:hidden" />
           {children}
         </div>
       </main>
