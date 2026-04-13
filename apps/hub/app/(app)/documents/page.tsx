@@ -19,7 +19,17 @@ export default async function DocumentsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold tracking-tight">Dokumenter</h1>
+      <div className="flex items-center justify-between">
+        <h1 className="text-xl font-semibold tracking-tight">Dokumenter</h1>
+        <a
+          href="https://nerra-qualification.vercel.app"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
+        >
+          Kvalifiseringsskjema
+        </a>
+      </div>
       <DocumentsList documents={docs} />
     </div>
   );

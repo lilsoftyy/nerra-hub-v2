@@ -108,7 +108,7 @@ export function DocumentsList({ documents }: { documents: Document[] }) {
           <TableBody>
             {filtered.length > 0 ? (
               filtered.map((doc) => (
-                <TableRow key={doc.id}>
+                <TableRow key={doc.id} className="transition-[background-color] duration-150 hover:bg-primary/[0.04]">
                   <TableCell>
                     <Link href={`/documents/${doc.id}`} className="text-sm font-medium hover:underline">
                       {doc.title}

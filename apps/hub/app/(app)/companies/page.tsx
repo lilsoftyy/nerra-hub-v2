@@ -66,12 +66,9 @@ export default async function CompaniesPage({
             {companies && companies.length > 0 ? (
               companies.map((company) => {
                 return (
-                  <TableRow key={company.id}>
+                  <TableRow key={company.id} className="transition-[background-color] duration-150 hover:bg-primary/[0.04]">
                     <TableCell>
-                      <Link
-                        href={`/customers/${company.id}`}
-                        className="text-sm font-medium hover:underline"
-                      >
+                      <Link href={`/customers/${company.id}`} className="text-sm font-medium hover:text-primary transition-[color] duration-150">
                         {company.name}
                       </Link>
                     </TableCell>

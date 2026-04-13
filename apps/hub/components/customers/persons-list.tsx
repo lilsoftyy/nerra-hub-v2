@@ -185,7 +185,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                 const typeLabel = contactTypeLabels[p.contact_type] ?? 'Kontakt';
                 const typeColor = contactTypeColors[p.contact_type] ?? '';
                 return (
-                  <TableRow key={p.id} className={selected.has(p.id) ? 'bg-primary/[0.03]' : ''}>
+                  <TableRow key={p.id} className={`transition-[background-color] duration-150 hover:bg-primary/[0.04] ${selected.has(p.id) ? 'bg-primary/[0.03]' : ''}`}>
                     <TableCell>
                       <PersonDetailTrigger person={p} />
                     </TableCell>
