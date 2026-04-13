@@ -176,7 +176,7 @@ export default async function DashboardPage() {
               {formatNorwegianDate(today)}
             </p>
           </div>
-          <div className="shrink-0 w-[420px]">
+          <div className="hidden md:block shrink-0 w-[420px]">
             <PorscheTracker savedAmount={11_400} />
           </div>
         </div>
@@ -227,7 +227,7 @@ export default async function DashboardPage() {
       </header>
 
       {/* Stats */}
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
         {stats.map((stat) => {
           const content = (
             <Card key={stat.label}>
