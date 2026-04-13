@@ -131,6 +131,7 @@ export function Sidebar({ userEmail, showLogout }: SidebarProps) {
                     <Link
                       key={item.href}
                       href={item.href}
+                      onClick={() => setMobileOpen(false)}
                       className={cn(
                         'flex items-center gap-2.5 rounded-xl px-2.5 py-2 text-[13px] font-medium transition-[color,background-color] duration-200',
                         isActive
