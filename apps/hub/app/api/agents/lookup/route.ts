@@ -35,13 +35,6 @@ export async function POST(request: NextRequest) {
     const message = await anthropic.messages.create({
       model: 'claude-sonnet-4-20250514',
       max_tokens: 1024,
-      tools: [
-        {
-          type: 'web_search_20250305',
-          name: 'web_search',
-          max_uses: 5,
-        },
-      ],
       messages: [{
         role: 'user',
         content: `${webData ? `## Data fra nettet\n\n${webData}\n\n---\n\n` : ''}Finn informasjon om denne personen og selskapet basert på dataen over:
@@ -75,29 +68,7 @@ Viktig:
       }],
     });
 
-    // Håndter at Claude kan returnere end_turn eller tool_use (trenger flere runder)
-    let finalMessage = message;
-    // Kjør samtalen videre hvis Claude brukte verktøy og ikke ga endelig svar
-    while (finalMessage.stop_reason === 'tool_use') {
-      finalMessage = await anthropic.messages.create({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        tools: [
-          {
-            type: 'web_search_20250305',
-            name: 'web_search',
-            max_uses: 5,
-          },
-        ],
-        messages: [
-          { role: 'user', content: `${webData ? `## Data fra nettet\n\n${webData}\n\n---\n\n` : ''}Finn informasjon om personen "${name}" hos "${company}". Returner KUN gyldig JSON.` },
-          { role: 'assistant', content: finalMessage.content },
-          { role: 'user', content: 'Gi meg nå det endelige svaret som ren JSON.' },
-        ],
-      });
-    }
-
-    const rawText = finalMessage.content
+    const rawText = message.content
       .filter((block) => block.type === 'text')
       .map((block) => 'text' in block ? block.text : '')
       .join('');
