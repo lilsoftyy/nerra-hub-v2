@@ -85,10 +85,10 @@ export function DocumentsList({ documents }: { documents: Document[] }) {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
         placeholder="Søk..."
-        className="max-w-sm"
+        className="w-full md:max-w-sm"
       />
 
-      <div className="rounded-xl">
+      <div className="rounded-xl overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>
