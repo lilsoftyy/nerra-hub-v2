@@ -79,12 +79,6 @@ export function CustomerEditForm({ company }: { company: Company }) {
                 <dd>{company.employee_count}</dd>
               </>
             )}
-            {company.facade_team_size && (
-              <>
-                <dt className="text-muted-foreground">Fasadeteam</dt>
-                <dd>{company.facade_team_size} personer</dd>
-              </>
-            )}
             {company.notes && (
               <>
                 <dt className="text-muted-foreground col-span-2">Notater</dt>
@@ -132,12 +126,6 @@ export function CustomerEditForm({ company }: { company: Company }) {
             <div className="space-y-2">
               <Label htmlFor="employee_count">Ansatte</Label>
               <Input id="employee_count" name="employee_count" type="number" defaultValue={company.employee_count ?? ''} />
-            </div>
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="facade_team_size">Fasadeteam (antall)</Label>
-              <Input id="facade_team_size" name="facade_team_size" type="number" defaultValue={company.facade_team_size ?? ''} />
             </div>
           </div>
           <div className="space-y-2">
