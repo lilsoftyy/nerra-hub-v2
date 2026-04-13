@@ -46,11 +46,40 @@ export default async function CompaniesPage({
           name="search"
           placeholder="Søk etter firma..."
           defaultValue={params.search ?? ''}
-          className="max-w-sm"
+          className="w-full md:max-w-sm"
         />
       </form>
 
-      <div className="rounded-xl">
+      {/* Mobilvisning */}
+      <div className="space-y-2 md:hidden">
+        {companies && companies.length > 0 ? (
+          companies.map((company) => (
+            <Link
+              key={company.id}
+              href={`/customers/${company.id}`}
+              className="block rounded-xl border p-3 transition-[background-color] duration-150 active:bg-muted/30"
+            >
+              <div className="flex items-center justify-between">
+                <p className="font-medium text-sm">{company.name}</p>
+                <div className="flex items-center gap-1.5">
+                  <span className={`size-2 rounded-full ${phaseDotColors[company.phase] ?? 'bg-neutral-400'}`} />
+                  <span className="text-xs text-muted-foreground">
+                    {phaseLabels[company.phase] ?? company.phase}
+                  </span>
+                </div>
+              </div>
+              <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
+                {company.country && <span>{company.country}</span>}
+                {company.employee_count && <span>{company.employee_count} ansatte</span>}
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p className="text-center text-muted-foreground py-8">Ingen firma funnet.</p>
+        )}
+      </div>
+
+      <div className="hidden md:block rounded-xl">
         <Table>
           <TableHeader>
             <TableRow>
