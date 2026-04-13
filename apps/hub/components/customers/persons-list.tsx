@@ -162,6 +162,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                 Navn<SortIcon active={sortKey === 'full_name'} direction={sortDir} />
               </TableHead>
               <TableHead>E-post</TableHead>
+              <TableHead className="w-8" />
               <TableHead>Telefon</TableHead>
               <TableHead className={headClass} onClick={() => handleSort('company_name')}>
                 Selskap<SortIcon active={sortKey === 'company_name'} direction={sortDir} />
@@ -193,6 +194,9 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                         <a href={`mailto:${p.email}`} className="text-sm text-primary hover:underline">{p.email}</a>
                       ) : <span className="text-xs text-muted-foreground">—</span>}
                     </TableCell>
+                    <TableCell>
+                      {p.email && <QuickEmailButton email={p.email} name={p.full_name} />}
+                    </TableCell>
                     <TableCell className="text-sm text-muted-foreground">{p.phone ?? '—'}</TableCell>
                     <TableCell>
                       {p.company_id ? (
@@ -215,12 +219,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                       {countryName(p.company_country)}
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center gap-1">
-                        <div className="w-7">
-                          {p.email && <QuickEmailButton email={p.email} name={p.full_name} />}
-                        </div>
-                        <PersonEditButton contactId={p.id} fullName={p.full_name} email={p.email} phone={p.phone} role={p.role} contactType={p.contact_type} />
-                      </div>
+                      <PersonEditButton contactId={p.id} fullName={p.full_name} email={p.email} phone={p.phone} role={p.role} contactType={p.contact_type} />
                     </TableCell>
                     <TableCell>
                       <Checkbox
@@ -233,7 +232,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={9} className="text-center text-muted-foreground py-12">
+                <TableCell colSpan={10} className="text-center text-muted-foreground py-12">
                   Ingen personer funnet.
                 </TableCell>
               </TableRow>
