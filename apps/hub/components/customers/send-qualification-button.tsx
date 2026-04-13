@@ -29,8 +29,9 @@ export function SendQualificationButton({ companyName, contacts }: SendQualifica
 
   const [open, setOpen] = useState(false);
   const [subject, setSubject] = useState(`Qualification Form — Drone Wash Academy`);
+  const firstName = primaryContact?.full_name?.split(' ')[0] ?? '';
   const [body, setBody] = useState(
-    `Hi ${primaryContact?.full_name ?? ''},\n\nWe are sending you a short qualification form regarding drone-based facade washing.\n\nPlease fill out the form here: ${qualificationUrl}\n\nBest regards,\nNerra / Drone Wash Academy`
+    `Hi ${firstName},\n\nWe are sending you a short qualification form regarding drone-based facade washing.\n\nPlease fill out the form here: ${qualificationUrl}\n\nBest regards,\nNerra / Drone Wash Academy`
   );
 
   const handleSend = () => {
