@@ -13,7 +13,7 @@ import { QualificationResponse } from '@/components/customers/qualification-resp
 import { CreateContractForm } from '@/components/contracts/create-contract-form';
 import { SendQualificationButton } from '@/components/customers/send-qualification-button';
 import Link from 'next/link';
-import { FileText, FileSignature } from 'lucide-react';
+import { FileText } from 'lucide-react';
 
 export default async function CustomerDetailPage({
   params,
@@ -88,16 +88,7 @@ export default async function CustomerDetailPage({
             ))}
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <Link
-            href={`/contracts?company=${company.id}`}
-            className="flex size-10 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]"
-            title="Opprett kontrakt"
-          >
-            <FileSignature className="size-4" strokeWidth={1.75} aria-hidden="true" />
-          </Link>
-          <CompanySettingsMenu companyId={company.id} companyName={company.name} />
-        </div>
+        <CompanySettingsMenu companyId={company.id} companyName={company.name} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

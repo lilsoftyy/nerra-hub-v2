@@ -12,6 +12,7 @@ interface AnimatedPanelProps {
   width?: number;
   anchor?: 'bottom-right' | 'bottom-left' | 'bottom-center';
   showClose?: boolean;
+  transparent?: boolean;
 }
 
 export function AnimatedPanel({
@@ -22,6 +23,7 @@ export function AnimatedPanel({
   width = 400,
   anchor = 'bottom-right',
   showClose = true,
+  transparent = false,
 }: AnimatedPanelProps) {
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
@@ -112,7 +114,7 @@ export function AnimatedPanel({
           />
           <div
             ref={panelRef}
-            className="fixed z-50 rounded-2xl bg-popover p-5 text-sm ring-1 ring-foreground/10"
+            className={`fixed z-50 text-sm ${transparent ? 'p-2' : 'rounded-2xl bg-popover p-5 ring-1 ring-foreground/10'}`}
             style={{
               width,
               ...panelPosition,
@@ -120,7 +122,7 @@ export function AnimatedPanel({
               transform: isVisible ? 'scale(1)' : 'scale(0.95)',
               opacity: isVisible ? 1 : 0,
               transition: 'transform 200ms cubic-bezier(0.23, 1, 0.32, 1), opacity 150ms cubic-bezier(0.23, 1, 0.32, 1)',
-              boxShadow: '0 8px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)',
+              boxShadow: transparent ? 'none' : '0 8px 30px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04)',
             }}
           >
             {showClose && (

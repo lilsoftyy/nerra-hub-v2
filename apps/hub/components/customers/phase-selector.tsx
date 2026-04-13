@@ -34,7 +34,8 @@ export function PhaseSelector({ companyId, currentPhase }: { companyId: string; 
       open={open}
       onClose={() => setOpen(false)}
       width={160}
-      anchor="bottom-right"
+      anchor="bottom-left"
+      transparent
       trigger={
         <button
           onClick={() => setOpen(true)}
