@@ -12,7 +12,7 @@ export function CompanySettingsMenu({ companyId, companyName }: { companyId: str
     <AnimatedPanel
       open={open}
       onClose={() => setOpen(false)}
-      width={320}
+      width={240}
       anchor="bottom-right"
       trigger={
         <button
