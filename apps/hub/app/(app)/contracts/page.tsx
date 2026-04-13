@@ -41,7 +41,40 @@ export default async function ContractsPage() {
         <NewContractButton companies={companies} />
       </div>
 
-      <div className="rounded-md border">
+      {/* Mobilvisning */}
+      <div className="space-y-2 md:hidden">
+        {contracts && contracts.length > 0 ? (
+          contracts.map((contract) => {
+            const company = contract.companies as unknown as { name: string } | null;
+            return (
+              <Link
+                key={contract.id}
+                href={`/contracts/${contract.id}`}
+                className="block rounded-xl border p-3 transition-[background-color] duration-150 active:bg-muted/30"
+              >
+                <div className="flex items-center justify-between">
+                  <p className="font-medium text-sm">{company?.name ?? '-'}</p>
+                  <Badge className={contractStatusColors[contract.status] ?? ''}>
+                    {contractStatusLabels[contract.status] ?? contract.status}
+                  </Badge>
+                </div>
+                <div className="mt-1 flex items-center gap-3 text-xs text-muted-foreground">
+                  {contract.total != null && (
+                    <span>{contract.total.toLocaleString('nb-NO')} {contract.currency ?? 'NOK'}</span>
+                  )}
+                  {contract.valid_until && (
+                    <span>Gyldig til {new Date(contract.valid_until).toLocaleDateString('nb-NO')}</span>
+                  )}
+                </div>
+              </Link>
+            );
+          })
+        ) : (
+          <p className="text-center text-muted-foreground py-8">Ingen kontrakter.</p>
+        )}
+      </div>
+
+      <div className="hidden md:block rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
