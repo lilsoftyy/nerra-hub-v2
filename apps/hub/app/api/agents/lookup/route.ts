@@ -49,7 +49,7 @@ export async function POST(request: NextRequest) {
 Personnavn: ${name}
 Selskap: ${company}
 
-VIKTIG KONTEKST: Vi driver med Drone Wash Academy — dronebasert fasadevask. Vi søker etter selskaper innen facility management, eiendomsservice, bygningsvedlikehold og rengjøring. Hvis selskapsnavnet er tvetydig (f.eks. "ISS"), finn selskapet som er relevant for denne bransjen (f.eks. ISS Facility Services, ikke ISS governance).
+VIKTIG KONTEKST: Vi driver Drone Wash Academy — vi tilbyr opplæring og implementering av dronebasert fasadevask for selskaper som allerede driver med fasadevask, bygningsvedlikehold og facility management. Vi leter etter selskaper som kan ha nytte av å implementere droner i sin eksisterende drift. Hvis selskapsnavnet er tvetydig (f.eks. "ISS"), finn selskapet som er relevant for denne bransjen (f.eks. ISS Facility Services, ikke ISS governance).
 
 Returner følgende i JSON-format (ingenting annet, bare ren JSON):
 
