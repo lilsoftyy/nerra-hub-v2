@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import { DocumentsList } from '@/components/documents/documents-list';
+import { ClipboardList } from 'lucide-react';
 
 export default async function DocumentsPage() {
   const supabase = await createClient();
@@ -25,9 +26,12 @@ export default async function DocumentsPage() {
           href="https://nerra-qualification.vercel.app"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-xs text-muted-foreground transition-[color] duration-150 hover:text-foreground"
+          className="flex flex-col items-center gap-1 text-muted-foreground transition-[color] duration-150 hover:text-foreground"
         >
-          Kvalifiseringsskjema
+          <div className="flex size-10 items-center justify-center rounded-full border transition-[background-color] duration-150 hover:bg-muted/50">
+            <ClipboardList className="size-4" strokeWidth={1.75} />
+          </div>
+          <span className="text-[10px]">Kvalifiseringsskjema</span>
         </a>
       </div>
       <DocumentsList documents={docs} />

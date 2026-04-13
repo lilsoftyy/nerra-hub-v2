@@ -11,6 +11,7 @@ import { CustomerEditForm } from '@/components/customers/customer-edit-form';
 import { ContactList } from '@/components/customers/contact-list';
 import { QualificationResponse } from '@/components/customers/qualification-response';
 import { CreateContractForm } from '@/components/contracts/create-contract-form';
+import { SendQualificationButton } from '@/components/customers/send-qualification-button';
 import Link from 'next/link';
 import { FileText, FileSignature } from 'lucide-react';
 import { PHASES } from '@/lib/constants';
@@ -157,6 +158,11 @@ export default async function CustomerDetailPage({
                   <span className="text-xs text-emerald-600">Utført</span>
                 )}
               </div>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardContent className="pt-4 pb-4">
+              <SendQualificationButton companyId={company.id} companyName={company.name} contacts={contacts ?? []} />
             </CardContent>
           </Card>
           <CreateContractForm companyId={company.id} companyName={company.name} />
