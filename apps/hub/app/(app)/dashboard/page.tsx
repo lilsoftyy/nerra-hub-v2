@@ -54,7 +54,6 @@ export default async function DashboardPage() {
 
   const [
     contactsResult,
-    companiesResult,
     openTasksResult,
     pendingProposalsResult,
     myTasksResult,
@@ -68,10 +67,6 @@ export default async function DashboardPage() {
     supabase
       .from('contacts')
       .select('id', { count: 'exact', head: true }),
-    supabase
-      .from('companies')
-      .select('id', { count: 'exact', head: true })
-      .is('deleted_at', null),
     supabase
       .from('tasks')
       .select('id', { count: 'exact', head: true })
@@ -127,7 +122,6 @@ export default async function DashboardPage() {
   const calendarEvents = await fetchUpcomingEvents(5);
 
   const contactsCount = contactsResult.count ?? 0;
-  const activeCompaniesCount = companiesResult.count ?? 0;
   const openTasksCount = openTasksResult.count ?? 0;
   const pendingProposalsCount = pendingProposalsResult.count ?? 0;
 
@@ -154,7 +148,6 @@ export default async function DashboardPage() {
 
   const stats = [
     { label: 'Kontakter', value: contactsCount, href: '/customers' },
-    { label: 'Firma', value: activeCompaniesCount, href: '/companies' },
     { label: 'Åpne oppgaver', value: openTasksCount, href: '/tasks' },
     { label: 'Godkjenninger', value: pendingProposalsCount, href: undefined },
   ];
@@ -223,7 +216,7 @@ export default async function DashboardPage() {
       </header>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+      <div className="grid grid-cols-3 gap-3 md:gap-4">
         {stats.map((stat) => {
           const content = (
             <Card key={stat.label}>
