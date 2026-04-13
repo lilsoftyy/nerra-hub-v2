@@ -1,6 +1,6 @@
 'use client';
 
-import { ClipboardList, Mail } from 'lucide-react';
+import { ClipboardList } from 'lucide-react';
 import { buildMailtoUrl } from '@/lib/ui-utils';
 
 interface Contact {
@@ -16,7 +16,7 @@ interface SendQualificationButtonProps {
   contacts: Contact[];
 }
 
-export function SendQualificationButton({ companyName, contacts }: SendQualificationButtonProps) {
+export function SendQualificationButton({ contacts }: SendQualificationButtonProps) {
   const primaryContact = contacts.find((c) => c.is_primary) ?? contacts[0];
   const email = primaryContact?.email;
 

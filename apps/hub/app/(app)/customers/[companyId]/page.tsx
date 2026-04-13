@@ -14,7 +14,6 @@ import { CreateContractForm } from '@/components/contracts/create-contract-form'
 import { SendQualificationButton } from '@/components/customers/send-qualification-button';
 import Link from 'next/link';
 import { FileText, FileSignature } from 'lucide-react';
-import { phaseLabels } from '@/lib/labels';
 
 export default async function CustomerDetailPage({
   params,
@@ -68,9 +67,11 @@ export default async function CustomerDetailPage({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">{company.name}</h1>
-          <div className="flex items-center gap-3 mt-1">
+          <div className="flex items-center gap-3">
+            <h1 className="text-xl font-semibold tracking-tight">{company.name}</h1>
             <PhaseSelector companyId={company.id} currentPhase={company.phase} />
+          </div>
+          <div className="flex items-center gap-3 mt-1">
             <span className="text-sm text-muted-foreground">{company.country}</span>
             {company.flagged && (
               <Badge variant="destructive">Flagget</Badge>
