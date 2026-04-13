@@ -17,7 +17,7 @@ export function CompanySettingsMenu({ companyId, companyName }: { companyId: str
       trigger={
         <button
           onClick={() => setOpen(true)}
-          className="flex size-10 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]"
+          className="flex size-8 items-center justify-center text-muted-foreground/40 transition-[color,transform] duration-150 hover:text-foreground hover:scale-110 active:scale-95"
           title="Innstillinger"
         >
           <Settings className="size-4" strokeWidth={1.75} />
