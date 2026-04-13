@@ -27,7 +27,7 @@ export function AnimatedPanel({
 }: AnimatedPanelProps) {
   const [mounted, setMounted] = useState(false);
   const [closing, setClosing] = useState(false);
-  const [position, setPosition] = useState<{ top?: number; bottom?: number; left: number; right: number; openAbove: boolean } | null>(null);
+  const [position, setPosition] = useState<{ top?: number; bottom?: number; left: number; right: number; openAbove: boolean; isMobile: boolean } | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
 
@@ -36,12 +36,14 @@ export function AnimatedPanel({
       const rect = triggerRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
       const openAbove = spaceBelow < 400;
+      const isMobile = window.innerWidth < 640;
       setPosition({
         top: openAbove ? undefined : rect.bottom + 8,
         bottom: openAbove ? window.innerHeight - rect.top + 8 : undefined,
-        left: rect.left,
-        right: window.innerWidth - rect.right,
+        left: isMobile ? 16 : rect.left,
+        right: isMobile ? 16 : window.innerWidth - rect.right,
         openAbove,
+        isMobile,
       });
       requestAnimationFrame(() => setMounted(true));
     } else {
@@ -116,7 +118,7 @@ export function AnimatedPanel({
             ref={panelRef}
             className={`fixed z-50 text-sm ${transparent ? 'p-2' : 'rounded-2xl bg-popover p-5 ring-1 ring-foreground/10'}`}
             style={{
-              width,
+              width: position?.isMobile ? 'auto' : width,
               ...panelPosition,
               transformOrigin,
               transform: isVisible ? 'scale(1)' : 'scale(0.95)',
