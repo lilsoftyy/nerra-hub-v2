@@ -243,7 +243,7 @@ export function QuickActions() {
   const [calendarOpen, setCalendarOpen] = useState(false);
   const [taskOpen, setTaskOpen] = useState(false);
 
-  const iconClass = "flex size-12 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]";
+  const iconClass = "flex size-14 md:size-12 items-center justify-center rounded-full border text-muted-foreground transition-[color,background-color,transform] duration-150 ease-[cubic-bezier(0.23,1,0.32,1)] hover:bg-muted/50 hover:text-foreground active:scale-[0.93]";
 
   return (
     <div className="flex items-center gap-2">
