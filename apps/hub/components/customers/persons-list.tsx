@@ -167,6 +167,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                 Selskap<SortIcon active={sortKey === 'company_name'} direction={sortDir} />
               </TableHead>
               <TableHead>Type</TableHead>
+              <TableHead>Hoved</TableHead>
               <TableHead>Land</TableHead>
               <TableHead className="w-16" />
               <TableHead className="w-10">
@@ -205,6 +206,11 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                         <Badge variant="outline" className="text-[10px]">{typeLabel}</Badge>
                       )}
                     </TableCell>
+                    <TableCell>
+                      {p.is_primary && (
+                        <Badge variant="outline" className="text-[10px]">Hoved</Badge>
+                      )}
+                    </TableCell>
                     <TableCell className="text-sm text-muted-foreground">
                       {countryName(p.company_country)}
                     </TableCell>
@@ -225,7 +231,7 @@ export function PersonsList({ persons }: { persons: Person[] }) {
               })
             ) : (
               <TableRow>
-                <TableCell colSpan={8} className="text-center text-muted-foreground py-12">
+                <TableCell colSpan={9} className="text-center text-muted-foreground py-12">
                   Ingen personer funnet.
                 </TableCell>
               </TableRow>

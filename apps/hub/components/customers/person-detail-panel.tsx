@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/shared/toast-provider';
 import { updateContact } from '@/app/(app)/customers/actions';
-import { Search, Loader2, Star } from 'lucide-react';
+import { Search, Loader2 } from 'lucide-react';
 
 interface Person {
   id: string;
@@ -96,10 +96,7 @@ export function PersonDetailTrigger({ person }: { person: Person }) {
           onClick={() => setOpen(true)}
           className="text-left"
         >
-          <p className="text-sm font-medium hover:text-primary transition-[color] duration-150">
-            {person.is_primary && <Star className="inline size-3 text-amber-400 mr-1" strokeWidth={1.75} fill="currentColor" />}
-            {person.full_name}
-          </p>
+          <p className="text-sm font-medium hover:text-primary transition-[color] duration-150">{person.full_name}</p>
           {person.role && <p className="text-xs text-muted-foreground">{person.role}</p>}
         </button>
       }
