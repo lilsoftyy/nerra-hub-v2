@@ -216,7 +216,9 @@ export function PersonsList({ persons }: { persons: Person[] }) {
                     </TableCell>
                     <TableCell>
                       <div className="flex items-center gap-1">
-                        {p.email && <QuickEmailButton email={p.email} name={p.full_name} />}
+                        <div className="w-7">
+                          {p.email && <QuickEmailButton email={p.email} name={p.full_name} />}
+                        </div>
                         <PersonEditButton contactId={p.id} fullName={p.full_name} email={p.email} phone={p.phone} role={p.role} contactType={p.contact_type} />
                       </div>
                     </TableCell>
