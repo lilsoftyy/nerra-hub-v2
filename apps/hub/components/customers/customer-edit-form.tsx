@@ -104,7 +104,7 @@ export function CustomerEditForm({ company }: { company: Company }) {
               <Input id="name" name="name" defaultValue={company.name} required />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="country">Land (ISO)</Label>
+              <Label htmlFor="country">Land</Label>
               <Input id="country" name="country" defaultValue={company.country} maxLength={2} required />
             </div>
           </div>

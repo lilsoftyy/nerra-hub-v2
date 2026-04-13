@@ -39,7 +39,7 @@ export default function NewCustomerPage() {
                 )}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="country">Land (ISO) *</Label>
+                <Label htmlFor="country">Land *</Label>
                 <Input id="country" name="country" placeholder="NO" maxLength={2} required />
                 {state?.error?.country && (
                   <p className="text-sm text-red-600">{state.error.country[0]}</p>
