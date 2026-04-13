@@ -12,6 +12,7 @@ import {
 import { phaseLabels } from '@/lib/labels';
 import { phaseDotColors } from '@/lib/constants';
 import { CompanyRowActions } from '@/components/companies/company-row-actions';
+import { ClickableRow } from '@/components/shared/clickable-row';
 
 export default async function CompaniesPage({
   searchParams,
@@ -66,7 +67,7 @@ export default async function CompaniesPage({
             {companies && companies.length > 0 ? (
               companies.map((company) => {
                 return (
-                  <TableRow key={company.id} className="transition-[background-color] duration-150 hover:bg-primary/[0.04]">
+                  <ClickableRow key={company.id} href={`/customers/${company.id}`} className="transition-[background-color] duration-150 hover:bg-primary/[0.04]">
                     <TableCell>
                       <Link href={`/customers/${company.id}`} className="text-sm font-medium hover:text-primary transition-[color] duration-150">
                         {company.name}
@@ -102,7 +103,7 @@ export default async function CompaniesPage({
                     <TableCell>
                       <CompanyRowActions companyId={company.id} companyName={company.name} />
                     </TableCell>
-                  </TableRow>
+                  </ClickableRow>
                 );
               })
             ) : (

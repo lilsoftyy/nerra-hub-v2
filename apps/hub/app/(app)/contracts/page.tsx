@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
 import Link from 'next/link';
+import { ClickableRow } from '@/components/shared/clickable-row';
 import { Badge } from '@/components/ui/badge';
 import {
   Table,
@@ -57,7 +58,7 @@ export default async function ContractsPage() {
               contracts.map((contract) => {
                 const company = contract.companies as unknown as { name: string } | null;
                 return (
-                  <TableRow key={contract.id} className="cursor-pointer hover:bg-muted/50">
+                  <ClickableRow key={contract.id} href={`/contracts/${contract.id}`} className="cursor-pointer transition-[background-color] duration-150 hover:bg-primary/[0.04]">
                     <TableCell>
                       <Link
                         href={`/contracts/${contract.id}`}
@@ -91,7 +92,7 @@ export default async function ContractsPage() {
                         ? new Date(contract.signed_at).toLocaleDateString('nb-NO')
                         : '-'}
                     </TableCell>
-                  </TableRow>
+                  </ClickableRow>
                 );
               })
             ) : (
