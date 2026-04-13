@@ -114,11 +114,11 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-4">
+      <div className="flex gap-4 overflow-x-auto pb-2 md:grid md:grid-cols-3 md:overflow-visible md:pb-0">
         {columns.map((column) => (
           <div
             key={column.id}
-            className={`min-h-[200px] rounded-lg border bg-muted/30 p-3 transition-[background-color,border-color] duration-150 ${
+            className={`min-h-[200px] min-w-[260px] flex-1 rounded-lg border bg-muted/30 p-3 transition-[background-color,border-color] duration-150 md:min-w-0 ${
               dragOverColumn === column.id
                 ? 'border-primary/30 bg-primary/5'
                 : 'border-transparent'
