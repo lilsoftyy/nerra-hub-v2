@@ -25,13 +25,13 @@ interface SendQualificationButtonProps {
 export function SendQualificationButton({ companyName, contacts }: SendQualificationButtonProps) {
   const primaryContact = contacts.find((c) => c.is_primary) ?? contacts[0];
   const email = primaryContact?.email;
-  const qualificationUrl = 'https://nerra-qualification.vercel.app';
+  const qualificationUrl = 'https://dwa-qualification.vercel.app';
 
   const [open, setOpen] = useState(false);
   const [subject, setSubject] = useState(`Qualification Form — Drone Wash Academy`);
   const firstName = primaryContact?.full_name?.split(' ')[0] ?? '';
   const [body, setBody] = useState(
-    `Hi ${firstName},\n\nWe are sending you a short qualification form regarding drone-based facade washing.\n\nPlease fill out the form here: ${qualificationUrl}\n\nBest regards,\nNerra / Drone Wash Academy`
+    `Hi ${firstName},\n\nI am sending you a short qualification form regarding Drone Wash Academy.\n\nPlease fill out the form here: ${qualificationUrl}\n\nBest regards,\nMartin & Magnus / Drone Wash Academy`
   );
 
   const handleSend = () => {

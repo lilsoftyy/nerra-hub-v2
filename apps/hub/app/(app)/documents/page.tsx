@@ -23,7 +23,7 @@ export default async function DocumentsPage() {
       <div className="flex items-center justify-between">
         <h1 className="text-xl font-semibold tracking-tight">Dokumenter</h1>
         <a
-          href="https://nerra-qualification.vercel.app"
+          href="https://dwa-qualification.vercel.app"
           target="_blank"
           rel="noopener noreferrer"
           className="flex flex-col items-center gap-1 text-muted-foreground transition-[color] duration-150 hover:text-foreground"
