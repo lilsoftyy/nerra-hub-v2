@@ -10,7 +10,6 @@ import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 import { CustomerEditForm } from '@/components/customers/customer-edit-form';
 import { ContactList } from '@/components/customers/contact-list';
 import { QualificationResponse } from '@/components/customers/qualification-response';
-import { CreateContractForm } from '@/components/contracts/create-contract-form';
 import { SendQualificationButton } from '@/components/customers/send-qualification-button';
 import Link from 'next/link';
 import { FileText } from 'lucide-react';
@@ -141,11 +140,24 @@ export default async function CustomerDetailPage({
             </CardContent>
           </Card>
           <Card>
-            <CardContent className="pt-4 pb-4">
+            <CardHeader>
+              <CardTitle className="text-base">Handlinger</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-1 -mt-2">
               <SendQualificationButton companyId={company.id} companyName={company.name} contacts={contacts ?? []} />
+              <Link
+                href={`/contracts?company=${company.id}`}
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-[background-color] duration-150 hover:bg-muted/50"
+              >
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                  <FileText className="size-4 text-primary" strokeWidth={1.75} />
+                </div>
+                <div className="text-left">
+                  <p className="font-medium text-sm">Opprett kontrakt</p>
+                </div>
+              </Link>
             </CardContent>
           </Card>
-          <CreateContractForm companyId={company.id} companyName={company.name} />
         </div>
       </div>
     </div>

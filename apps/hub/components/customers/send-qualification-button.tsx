@@ -28,9 +28,9 @@ export function SendQualificationButton({ companyName, contacts }: SendQualifica
   const qualificationUrl = 'https://nerra-qualification.vercel.app';
 
   const [open, setOpen] = useState(false);
-  const [subject, setSubject] = useState(`Kvalifiseringsskjema — Drone Wash Academy`);
+  const [subject, setSubject] = useState(`Qualification Form — Drone Wash Academy`);
   const [body, setBody] = useState(
-    `Hei ${primaryContact?.full_name ?? ''},\n\nVi sender deg et kort kvalifiseringsskjema i forbindelse med dronebasert fasadevask.\n\nFyll ut skjemaet her: ${qualificationUrl}\n\nMed vennlig hilsen\nNerra / Drone Wash Academy`
+    `Hi ${primaryContact?.full_name ?? ''},\n\nWe are sending you a short qualification form regarding drone-based facade washing.\n\nPlease fill out the form here: ${qualificationUrl}\n\nBest regards,\nNerra / Drone Wash Academy`
   );
 
   const handleSend = () => {
