@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/shared/toast-provider';
+import { Badge } from '@/components/ui/badge';
 import { Checkbox } from '@/components/ui/checkbox';
 import { addContact, updateContact, setPrimaryContact } from '@/app/(app)/customers/actions';
 import { Search, Loader2 } from 'lucide-react';
@@ -204,10 +205,10 @@ export function ContactList({ contacts, companyId, companyName }: { contacts: Co
                 >
                   <div>
                     <p className="font-medium">
-                      {contact.full_name}
                       {contact.is_primary && (
-                        <span className="ml-2 text-[10px] text-muted-foreground/50">hovedkontakt</span>
+                        <Badge variant="outline" className="mr-2 text-[10px]">Hovedkontakt</Badge>
                       )}
+                      {contact.full_name}
                     </p>
                     {contact.role && <p className="text-sm text-muted-foreground">{contact.role}</p>}
                     {contact.email && <p className="text-sm">{contact.email}</p>}
