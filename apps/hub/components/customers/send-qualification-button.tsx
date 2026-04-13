@@ -77,7 +77,7 @@ export function SendQualificationButton({ companyName, contacts }: SendQualifica
         </div>
         <div className="space-y-1.5">
           <Label htmlFor="qual-body">Melding</Label>
-          <Textarea id="qual-body" value={body} onChange={(e) => setBody(e.target.value)} rows={6} />
+          <Textarea id="qual-body" value={body} onChange={(e) => setBody(e.target.value)} rows={5} />
         </div>
         <Button type="submit" size="sm" className="w-full">
           {email ? 'Åpne i e-postklient' : 'Åpne skjema'}

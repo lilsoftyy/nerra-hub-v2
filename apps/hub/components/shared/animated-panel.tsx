@@ -35,7 +35,7 @@ export function AnimatedPanel({
     if (open && triggerRef.current) {
       const rect = triggerRef.current.getBoundingClientRect();
       const spaceBelow = window.innerHeight - rect.bottom;
-      const openAbove = spaceBelow < 300;
+      const openAbove = spaceBelow < 400;
       setPosition({
         top: openAbove ? undefined : rect.bottom + 8,
         bottom: openAbove ? window.innerHeight - rect.top + 8 : undefined,
