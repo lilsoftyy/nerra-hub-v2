@@ -112,6 +112,25 @@ export default async function CustomerDetailPage({
           <PhaseChecklist items={checklistItems ?? []} companyId={company.id} />
           <Card>
             <CardHeader>
+              <CardTitle className="text-base">Handlinger</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-1 -mt-2">
+              <SendQualificationButton companyId={company.id} companyName={company.name} contacts={contacts ?? []} />
+              <Link
+                href={`/contracts?company=${company.id}`}
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-[background-color] duration-150 hover:bg-muted/50"
+              >
+                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+                  <FileText className="size-4 text-primary" strokeWidth={1.75} />
+                </div>
+                <div className="text-left">
+                  <p className="font-medium text-sm">Opprett kontrakt</p>
+                </div>
+              </Link>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
               <CardTitle className="text-base">AI-agenter</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3">
@@ -137,25 +156,6 @@ export default async function CustomerDetailPage({
                   <Check className="size-4 text-emerald-500" strokeWidth={2.5} />
                 )}
               </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base">Handlinger</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-1 -mt-2">
-              <SendQualificationButton companyId={company.id} companyName={company.name} contacts={contacts ?? []} />
-              <Link
-                href={`/contracts?company=${company.id}`}
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-[background-color] duration-150 hover:bg-muted/50"
-              >
-                <div className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary/10">
-                  <FileText className="size-4 text-primary" strokeWidth={1.75} />
-                </div>
-                <div className="text-left">
-                  <p className="font-medium text-sm">Opprett kontrakt</p>
-                </div>
-              </Link>
             </CardContent>
           </Card>
         </div>
