@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     try {
       const results = await Promise.all([
         firecrawlSearch(`${name} ${company} LinkedIn`, 3),
-        firecrawlSearch(`${company} contact email website`, 3),
+        firecrawlSearch(`${company} facility management building maintenance cleaning company`, 3),
       ]);
       webData = results.filter(Boolean).join('\n\n---\n\n');
     } catch {
@@ -48,6 +48,8 @@ export async function POST(request: NextRequest) {
 
 Personnavn: ${name}
 Selskap: ${company}
+
+VIKTIG KONTEKST: Vi driver med Drone Wash Academy — dronebasert fasadevask. Vi søker etter selskaper innen facility management, eiendomsservice, bygningsvedlikehold og rengjøring. Hvis selskapsnavnet er tvetydig (f.eks. "ISS"), finn selskapet som er relevant for denne bransjen (f.eks. ISS Facility Services, ikke ISS governance).
 
 Returner følgende i JSON-format (ingenting annet, bare ren JSON):
 
