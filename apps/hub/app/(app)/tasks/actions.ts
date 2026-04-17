@@ -4,6 +4,8 @@ import { createClient } from '@/lib/supabase/server';
 import { v7 as uuidv7 } from 'uuid';
 import { redirect } from 'next/navigation';
 
+const ALLOWED_NEW_TASK_STATUSES = new Set(['open', 'in_progress']);
+
 async function insertTask(formData: FormData) {
   const supabase = await createClient();
   const title = formData.get('title') as string;
@@ -11,11 +13,14 @@ async function insertTask(formData: FormData) {
 
   const estimatedHours = formData.get('estimated_hours') as string;
   const assigneeEmail = formData.get('assignee_email') as string;
+  const rawStatus = (formData.get('status') as string) || 'open';
+  const status = ALLOWED_NEW_TASK_STATUSES.has(rawStatus) ? rawStatus : 'open';
 
   const { error } = await supabase.from('tasks').insert({
     id: uuidv7(),
     title,
     description: (formData.get('description') as string) || null,
+    status,
     priority: (formData.get('priority') as string) || 'medium',
     category: (formData.get('category') as string) || null,
     company_id: (formData.get('company_id') as string) || null,

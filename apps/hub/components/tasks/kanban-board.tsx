@@ -127,16 +127,11 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
             onDragLeave={handleDragLeave}
             onDrop={(e) => handleDrop(e, column.id)}
           >
-            <div className="mb-3 flex items-center justify-between px-1">
-              <div className="flex items-center gap-2">
-                <h3 className="text-sm font-medium">{column.label}</h3>
-                <span className="text-xs text-muted-foreground tabular-nums">
-                  {column.tasks.length}
-                </span>
-              </div>
-              {column.id === 'open' && (
-                <TaskCreateDialog companies={companies} />
-              )}
+            <div className="mb-3 flex items-center gap-2 px-1">
+              <h3 className="text-sm font-medium">{column.label}</h3>
+              <span className="text-xs text-muted-foreground tabular-nums">
+                {column.tasks.length}
+              </span>
             </div>
 
             <div className="space-y-2">
@@ -206,6 +201,15 @@ export function KanbanBoard({ tasks: initialTasks, companies }: KanbanBoardProps
                     {column.id === 'in_progress' && 'Dra oppgaver hit for å starte'}
                     {column.id === 'done' && 'Dra ferdige oppgaver hit'}
                   </p>
+                </div>
+              )}
+
+              {(column.id === 'open' || column.id === 'in_progress') && (
+                <div className="flex justify-center pt-2">
+                  <TaskCreateDialog
+                    companies={companies}
+                    defaultStatus={column.id as 'open' | 'in_progress'}
+                  />
                 </div>
               )}
             </div>

@@ -49,7 +49,7 @@ export function RefreshAgentCard() {
         disabled={running}
         aria-label="Oppdater kundedata fra epost og møter"
         className={cn(
-          'group/refresh relative flex h-14 md:h-12 items-center gap-2.5 overflow-hidden rounded-full border pl-3 pr-4',
+          'group/refresh relative flex h-11 md:h-10 items-center gap-2 overflow-hidden rounded-full border pl-2.5 pr-3',
           'bg-transparent',
           'transition-[transform,background-color,border-color] duration-200 ease-[cubic-bezier(0.23,1,0.32,1)]',
           'hover:bg-muted/50 hover:border-primary/25',
@@ -77,7 +77,7 @@ export function RefreshAgentCard() {
         >
           <Bot
             aria-hidden="true"
-            className="size-6 text-muted-foreground transition-colors duration-300 group-hover/refresh:text-foreground"
+            className="size-5 text-muted-foreground transition-colors duration-300 group-hover/refresh:text-foreground"
             strokeWidth={1.75}
           />
         </div>
@@ -91,8 +91,8 @@ export function RefreshAgentCard() {
           )}
         >
           <svg
-            width="22"
-            height="22"
+            width="18"
+            height="18"
             viewBox="0 0 24 24"
             fill="none"
             strokeWidth={2.2}
