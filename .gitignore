@@ -34,3 +34,6 @@ npm-debug.log*
 pnpm-debug.log*
 .vercel
 .github/
+
+# Claude Code lokale konfigurasjoner
+.claude/

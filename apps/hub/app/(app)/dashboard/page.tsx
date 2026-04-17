@@ -14,11 +14,11 @@ import {
   formatTimeRange,
   formatRelativeTime,
 } from '@/lib/formatters';
-import { AgentTriggerButton } from '@/components/shared/agent-trigger-button';
 import { ProposalActions } from '@/components/dashboard/proposal-actions';
 import { TaskCreateDialog } from '@/components/tasks/task-create-dialog';
 import { QuickActions } from '@/components/dashboard/quick-actions';
 import { PorscheTracker } from '@/components/dashboard/porsche-tracker';
+import { RefreshAgentCard } from '@/components/dashboard/refresh-agent-card';
 import {
   Bell,
   Calendar,
@@ -26,7 +26,6 @@ import {
   AlertCircle,
   Plus,
   ArrowRight,
-  Bot,
 } from 'lucide-react';
 
 const dashboardActionLabels: Record<string, string> = {
@@ -244,7 +243,10 @@ export default async function DashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <QuickActions />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <QuickActions />
+        <RefreshAgentCard />
+      </div>
 
       {/* Main grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
@@ -339,25 +341,6 @@ export default async function DashboardPage() {
                   <p className="mt-1 text-xs text-muted-foreground/60">Agentene har ikke foreslått noe ennå</p>
                 </div>
               )}
-            </CardContent>
-          </Card>
-
-          {/* Agenter */}
-          <Card>
-            <CardHeader className="pb-3">
-              <div className="flex items-center gap-2">
-                <Bot className="size-4 text-muted-foreground" strokeWidth={1.75} aria-hidden="true" />
-                <CardTitle className="text-sm font-medium">Agenter</CardTitle>
-              </div>
-            </CardHeader>
-            <CardContent className="pt-0">
-              <AgentTriggerButton
-                agent="agent_3_project"
-                label="Kjør prosjektagent"
-              />
-              <p className="mt-2 text-xs text-muted-foreground">
-                Sjekker alle kunder og foreslår faseoverganger basert på fullførte sjekkpunkter.
-              </p>
             </CardContent>
           </Card>
         </div>
